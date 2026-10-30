@@ -1,6 +1,107 @@
 # Phản hồi Review Kiến trúc của Codex
 
-Tài liệu gồm bốn phần: **Vòng 4** (mới nhất), **Vòng 3**, **Vòng 2** và **Vòng 1** (giữ nguyên làm lịch sử).
+Tài liệu gồm năm phần: **SG-001** (mới nhất), **Vòng 4**, **Vòng 3**, **Vòng 2** và **Vòng 1** (giữ nguyên làm lịch sử).
+
+## SG-001 – Phản hồi RR-002 vòng 1/3 (2026-10-30)
+
+**Nguồn:** báo cáo `# Review RR-002` trong [PHASE-00-REVIEW.md](docs/operations/reviews/PHASE-00-REVIEW.md), kết luận **APPROVED**. Kết luận và việc đóng finding thuộc về Codex; phần này chỉ ghi nhận.
+
+| Mã | Kết luận của Codex | Phản hồi của Claude |
+|---|---|---|
+| F-001 | **CLOSED** | Ghi nhận, không có bất đồng |
+| F-002 | **CLOSED** | Ghi nhận, không có bất đồng |
+
+Không có finding mới. RR-002 chuyển `ANSWERED`. Không có RR đang mở.
+
+**Claude đã kiểm tra khi nhận lại lượt:** 9/9 hash nhóm A khớp RR-002; 51118 byte cũ của báo cáo khớp SHA-256 bằng `tail -c`; phần mới 6091 byte có đúng một báo cáo `# Review RR-002`; không có đường dẫn nhóm C. SHA-256 không chứng minh ai đã viết phần mới.
+
+**Sau khi có APPROVED:** chỉ cập nhật trạng thái trong `TASKS.md` (phần sau `## Review Requests`), `REVIEW_RESPONSE.md`, `CHANGELOG.md`, `HANDOFF_TO_CHATGPT.md`. Các file đã review khác giữ nguyên hash. Vì vậy dòng trạng thái ở `AI_REVIEW_WORKFLOW.md:7` vẫn ghi chờ Codex.
+
+**Không thực hiện:** đóng SG-001, nghiệm thu workflow, commit, push, chuyển phase. Những việc đó thuộc Project Owner.
+
+## SG-001 – Phản hồi RR-001 vòng 0/3 (2026-10-30)
+
+**Nguồn:** báo cáo `# Review RR-001` trong [PHASE-00-REVIEW.md](docs/operations/reviews/PHASE-00-REVIEW.md), kết luận **CHANGES REQUESTED**. Quyền ghi file này đến từ SG-001 Amendment A01 do Project Owner phê duyệt. Phần này không sửa báo cáo Codex và không đóng finding.
+
+| Mã | Mức | Lập trường | Trạng thái |
+|---|---|---|---|
+| F-001 | MEDIUM | Đồng ý, đã tự xác minh | `FIX IMPLEMENTED — PENDING CODEX VERIFICATION` |
+| F-002 | MEDIUM | Đồng ý, đã tự xác minh | `FIX IMPLEMENTED — PENDING CODEX VERIFICATION` |
+
+### F-001
+
+- **Nguyên nhân:** mục 7 của workflow dùng một allowlist cho toàn bộ working tree, nên báo cáo hợp lệ của Codex bị coi là thay đổi ngoài phạm vi. Mục 7 cũng vừa bảo dừng, vừa gọi trường hợp đó là finding.
+- **Biện pháp:** chia file thành ba nhóm A (Claude-owned), B (Codex-owned review artifact), C (Unrelated). Nhóm A đối chiếu SHA-256. Nhóm B ghi số byte và SHA-256 lúc bàn giao, và sau báo cáo phải chứng minh nội dung cũ còn nguyên, có đúng một báo cáo mới cùng mã RR. Nhóm C luôn dừng. Làm rõ: nội dung sai trong nhóm A là finding; đường dẫn nhóm C là lỗi đầu vào.
+- **Không nới lỏng:** không có cơ chế bỏ qua working tree. Không mặc định tin file nhóm B. Hash không khớp vẫn dừng.
+- **Giới hạn:** SHA-256 không chứng minh ai đã sửa file. Kiểm tra chứng minh nội dung cũ còn nguyên, không chứng minh phần mới do Codex viết.
+
+### F-002
+
+- **Nguyên nhân:** mục 9 bắt buộc ghi `REVIEW_RESPONSE.md`, trong khi SG-001 cấm file này. Tôi đã nêu rủi ro này khi bàn giao RR-001.
+- **Biện pháp:** Project Owner cấp quyền qua Amendment A01, chỉ để phản hồi finding và tạo Review Request. Workflow ghi rõ: file ngoài allowlist thì dừng xin Owner; chỉ báo cáo Codex mới đóng được finding; sau PASS, file ngoài allowlist như `CURRENT_STATUS.md` không bị ghi mà được nêu trong tóm tắt.
+
+### File đã sửa trong vòng này
+
+| File | Phần sửa |
+|---|---|
+| `TASKS.md` | Thêm Amendment A01; RR-001 thành `ANSWERED`; đăng RR-002 |
+| `docs/operations/AI_REVIEW_WORKFLOW.md` | Mục 3, 4, 6, 7, 9, 10, 11, 13; bảng trạng thái; sửa tham chiếu mục ở bảng luồng |
+| `AGENTS.md`, `CLAUDE.md` | Làm rõ reviewer artifact, giới hạn SHA-256, điều kiện dừng |
+| `CHANGELOG.md`, `HANDOFF_TO_CHATGPT.md` | Ghi nhận thay đổi |
+| `REVIEW_RESPONSE.md` | Phần này |
+
+`docs/operations/README.md` và `docs/workflows/README.md` không đổi so với RR-001, nhưng vẫn khác baseline Git nên nằm trong snapshot.
+
+### Bằng chứng đã chạy
+
+| Kiểm tra | Kết quả |
+|---|---|
+| Phân loại `git status --porcelain` | 8 đường dẫn nhóm A, 1 nhóm B, 0 nhóm C (trước khi sửa `REVIEW_RESPONSE.md`) |
+| Báo cáo RR-001 so với baseline Git | 42994 byte cũ khớp SHA-256 ở cuối file; `git diff --numstat` là +50, −0; có một tiêu đề `# Review RR-001` |
+| Thử chuẩn trên bản sao tạm: thêm báo cáo lên đầu | Được chấp nhận |
+| Thử phủ định trên bản sao tạm: sửa kết luận cũ | Bị từ chối, hash khác |
+| Trường Amendment A01 | Đủ 8 trường, mỗi trường 1 lần; vẫn 1 SG |
+| Liên kết, chuỗi giống secret | 0 liên kết hỏng, 0 file khớp mẫu |
+| File được bảo vệ | Không có diff ở `DECISIONS.md`, `PROJECT_MASTER.md`, `ARCHITECTURE.md`, `TECH_STACK.md`, `CURRENT_STATUS.md`, `IMPLEMENTATION_PLAN.md`, `.gitignore`, `REVIEW_REPORT.md` |
+
+Lần chạy đầu của bước phân loại, liên kết và secret bị lỗi cú pháp shell nên không được dùng; kết quả trên là lần chạy lại.
+
+### Chưa thể kiểm chứng
+
+- Chưa hoàn tất vòng FIX → RE-REVIEW thực tế; đây là lần đầu dùng quy tắc nhóm A, B, C.
+- Không xác minh được ai đã sửa file.
+- Chưa có commit theo từng vòng, nên bằng chứng dựa trên SHA-256 và bàn giao tuần tự.
+- `CURRENT_STATUS.md:21` vẫn ghi lượt là Chủ dự án vì file ngoài SG-001; `TASKS.md` có giá trị quyết định.
+
+### Review Request RR-002: bản đối chiếu
+
+**Bản có hiệu lực nằm ở `TASKS.md`, mục `## Review Requests`.** Phần này chỉ là bản đối chiếu, không phải yêu cầu thứ hai. Hash của chính `REVIEW_RESPONSE.md` chỉ có trong `TASKS.md`.
+
+- Scope Grant: SG-001
+- Amendment: A01
+- Review Request: RR-002, tiếp nối RR-001
+- Vòng: 1/3
+- Previous review: vòng 0/3, RR-001, CHANGES REQUESTED
+- Findings: F-001, F-002
+- Baseline Git: def8fdf0b7871abada7dad228e31c1ee96dae7b3
+- SHA-256 (nhóm A):
+  - `AGENTS.md` 599da96de01f938e589341f529ef891fecf6a17e11c6c11dc6928ee7e27d351a
+  - `CHANGELOG.md` d614efc545bcc0aa7e2e5da279470c7a47cfeed57dc122d165902ddbf0a0186e
+  - `CLAUDE.md` dfabb9407e1e4e6e8e131170709800035df0a465c56826b601422f5922d083e4
+  - `HANDOFF_TO_CHATGPT.md` bf528c532f3356ffa3b1fb160e844273c9841f593b202b993f4420480fc1a2b2
+  - `docs/operations/AI_REVIEW_WORKFLOW.md` 90305710bd3cedda08534e6d99db8283dea9388fab2f42c350cba2c310b394fc
+  - `docs/operations/README.md` 039a53b45de3b87bbe82d60f96d1af338180015e326c9f15b42d98314f7564cd
+  - `docs/workflows/README.md` 75b3b3ec997b2acba1000bdee8d90497c3adac7d546aebd68180b6a384013e0f
+  - `TASKS.md` (phần trước `## Review Requests`) b7b81a64b8164557c503fa9677a8aec4ef7f566711afb79838983d3b2d109a7e
+- Reviewer artifact (nhóm B) lúc bàn giao:
+  - `docs/operations/reviews/PHASE-00-REVIEW.md` 51118 b89b19418301f1ebe577e5928d19ec0a1795ad2fc9096eec55937e204cc10944
+- Thay đổi kỳ vọng ở reviewer artifact: một báo cáo `# Review RR-002` mới ở đầu file; toàn bộ nội dung cũ giữ nguyên
+- Lệnh đã chạy và kết quả thật: xem mục "Bằng chứng đã chạy" ở trên
+- Chưa kiểm tra được: xem mục "Chưa thể kiểm chứng" ở trên
+- Mục tiêu re-review: xác minh F-001, F-002 và hồi quy liên quan
+- END-OF-REVIEW-REQUEST
+
+---
 
 ## Vòng 4 – Ghi nhận D-023 và khắc phục R4-01 (2026-10-30)
 

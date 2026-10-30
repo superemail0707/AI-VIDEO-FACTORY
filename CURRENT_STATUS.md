@@ -1,6 +1,6 @@
 # AI VIDEO FACTORY – CURRENT STATUS
 
-Cập nhật lần cuối: 2026-10-30 (Phase 0 được Project Owner nghiệm thu)
+Cập nhật lần cuối: 2026-10-30 (workflow mức B được nghiệm thu, SG-001 đã đóng)
 
 | Mục | Trạng thái |
 |---|---|
@@ -11,15 +11,17 @@ Cập nhật lần cuối: 2026-10-30 (Phase 0 được Project Owner nghiệm t
 | Căn cứ nghiệm thu | Codex Final F-01 Verification: PASS ([báo cáo](docs/operations/reviews/PHASE-00-REVIEW.md)) |
 | Application code | **NOT IMPLEMENTED** |
 | Runtime testing | **NOT PERFORMED** |
-| Git checkpoint | **INITIAL COMMIT CREATED LOCALLY — NOT PUSHED.** Project Owner cho phép commit; push cần cho phép riêng |
-| Review gần nhất | Codex Final F-01 Verification: PASS — READY FOR OWNER ACCEPTANCE. Phản hồi các vòng trước tại [REVIEW_RESPONSE.md](REVIEW_RESPONSE.md) |
+| Git checkpoint | Commit `def8fdf` đã có trên `origin/main`. Commit workflow được Project Owner cho phép, chỉ ở cục bộ. **Mỗi lần commit hay push cần cho phép riêng** |
+| Workflow Claude–Codex | **Mức B: Project Owner nghiệm thu** (2026-10-30). Mức C chưa đạt. Xem [AI_REVIEW_WORKFLOW.md](docs/operations/AI_REVIEW_WORKFLOW.md) |
+| Scope Grant | SG-001 **DONE**. Không có Scope Grant hay Review Request đang mở |
+| Review gần nhất | Codex RR-002: **APPROVED**, F-001 và F-002 CLOSED ([báo cáo](docs/operations/reviews/PHASE-00-REVIEW.md)). Phản hồi tại [REVIEW_RESPONSE.md](REVIEW_RESPONSE.md) |
 | D-023 | **APPROVED** (Project Owner, 2026-10-30) |
 | Q-13 | **ANSWERED — OPTION C** |
 | TikTok Direct Post | **POLICY BLOCKED** |
 | R4-01 | **CLOSED** (Codex focused re-review, ở mức tài liệu) |
 | F-01 | **CLOSED** (Codex Final F-01 Verification) |
 | Lượt làm việc | Chủ dự án (Claude đã dừng) |
-| Git | Nhánh `main`, có commit đầu tiên. Đã có remote `origin`, không do Claude tạo; chưa push |
+| Git | Nhánh `main`. `origin/main` ở `def8fdf`; commit workflow chưa push. Chưa xác định repo từ xa riêng tư hay công khai |
 | Phase tiếp theo | **Phase 1: NOT AUTHORIZED.** Cổng đầu vào vẫn hiệu lực: quyết định D-013, D-017; trả lời Q-03, Q-06; kế hoạch Phase 1 được xác nhận |
 
 ## Tình trạng tính năng
@@ -50,7 +52,7 @@ D-001 đến D-007 và **D-023** đã được Chủ dự án duyệt. D-008 thu
 - **R3-01 (HIGH):** đã có quyết định D-023, nhưng rủi ro chính sách **chưa được giải quyết**: Direct Post vẫn `POLICY BLOCKED`.
 - **R4-01 (LOW):** Codex đã đóng ở mức tài liệu.
 - **F-01 (LOW):** Codex đã đóng.
-- **Git push:** chưa được phép. Cần xác nhận URL `origin` và repo từ xa là riêng tư hay công khai. Kết quả chuẩn bị ở báo cáo Phase 0, mục "Chuẩn bị Git checkpoint".
+- **Git push:** commit workflow chưa được phép push. Repo từ xa là riêng tư hay công khai vẫn chưa được xác nhận.
 - R3-02, R3-03: Codex xác nhận PASS ở mức đặc tả; chưa kiểm thử.
 - FI-43 chưa chứng minh tác vụ trong daemon Ollama đã kết thúc trước job mới.
 - B3: Phase 2 bị chặn cho tới khi có quyết định về D-009, D-010, D-011, D-015 (`.env`), D-016, D-018, D-020.

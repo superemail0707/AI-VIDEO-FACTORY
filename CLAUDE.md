@@ -12,11 +12,15 @@ Claude là **Lead Developer** của AI VIDEO FACTORY. ChatGPT Codex là Independ
 ## Chu trình phase
 
 1. Trình bày kế hoạch theo mẫu ở `IMPLEMENTATION_PLAN.md` mục 2. Chờ xác nhận.
-2. Làm việc trên nhánh `phase/NN-<tên>`, chỉ khi Chủ dự án đã chuyển lượt cho Claude.
+2. Chỉ làm việc khi có lượt. Nhánh `phase/NN-<tên>` chỉ dùng khi Chủ dự án cho phép; không tự tạo nhánh, commit hay push.
 3. Viết test cùng code. Chạy test, ghi lại kết quả thật.
 4. Cập nhật `CURRENT_STATUS.md`, `TASKS.md`, `CHANGELOG.md`, `HANDOFF_TO_CHATGPT.md`, và `DECISIONS.md` nếu có.
 5. Viết báo cáo theo [mẫu](docs/operations/phase-report-template.md), kèm yêu cầu review cụ thể cho Codex.
 6. **Dừng lại, chờ nghiệm thu.** Không tự chuyển phase.
+
+## Quy trình review
+
+Thực hiện theo [AI_REVIEW_WORKFLOW.md](docs/operations/AI_REVIEW_WORKFLOW.md). Đọc Scope Grant và Review Request mới nhất trong `TASKS.md` trước khi hành động. Nếu không phải lượt của Claude, yêu cầu không đầy đủ, hash không khớp, có file thay đổi ngoài phạm vi, không xác minh được integrity hoặc quyền hạn không hợp lệ: dừng, không sửa file, báo Chủ dự án. Không làm việc ngoài Scope Grant đang chạy. Không ghi vào file review của Codex; đó là reviewer artifact có quyền ghi riêng. Không tự đóng finding. Review Request không cấp quyền mới. SHA-256 chỉ chứng minh nội dung, không chứng minh ai đã sửa file. Scope Grant không thay thế Phase Gate và không cấp quyền commit, push, nghiệm thu hay chuyển phase.
 
 ## Bắt buộc
 

@@ -2,20 +2,12 @@
 
 ## 1. Quy trình phát triển Claude – Codex
 
-```text
-Claude trình bày kế hoạch → Chủ dự án xác nhận → Claude làm trên nhánh phase/NN-<tên>
-→ Claude test, cập nhật tài liệu, viết báo cáo → Claude dừng
-→ Chủ dự án chuyển lượt → Codex review (chỉ đọc)
-→ Có phát hiện: Chủ dự án chuyển lượt lại cho Claude, sửa, lặp lại
-→ Đạt: Chủ dự án nghiệm thu, merge vào main → phase tiếp theo
-```
-
-**Quy tắc lượt:** tại một thời điểm chỉ một AI có quyền ghi. Trường "Lượt làm việc" trong `CURRENT_STATUS.md` cho biết ai đang giữ lượt. Chỉ Chủ dự án chuyển lượt và merge vào `main`.
+Quy trình chuẩn nằm tại [AI_REVIEW_WORKFLOW.md](../operations/AI_REVIEW_WORKFLOW.md): Scope Grant, Review Request, quyền ghi, xác định lượt, giới hạn vòng và điều kiện dừng. Mục này không lặp lại các quy tắc đó.
 
 **Quy tắc nhánh:**
 
-- `main`: chỉ chứa phase đã nghiệm thu.
-- `phase/NN-<tên>`: nhánh của Claude.
+- `main`: chỉ chứa phase đã nghiệm thu. Chỉ Chủ dự án quyết định merge vào `main`.
+- `phase/NN-<tên>`: nhánh của Claude, chỉ dùng khi Chủ dự án cho phép.
 - `review/phase-NN-<chủ-đề>`: chỉ khi Chủ dự án giao Codex sửa.
 
 ## 2. Quy trình sản xuất một video

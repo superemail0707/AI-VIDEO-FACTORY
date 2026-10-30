@@ -4,6 +4,47 @@ Ghi lại thay đổi đáng chú ý theo từng phase. Định dạng dựa tr�
 
 ## [Unreleased]
 
+### Workflow mức B được nghiệm thu (2026-10-30)
+
+Project Owner nghiệm thu tài liệu workflow mức B và đóng SG-001 sau khi Codex kết luận `APPROVED` tại RR-002. Đã dùng 1/3 vòng. Chỉ cập nhật dòng trạng thái trong workflow, không đổi quy tắc. Mức C chưa đạt. Không thay đổi phase.
+
+Sau đó, theo cho phép của Project Owner: dọn trạng thái cũ trong `CURRENT_STATUS.md`, `HANDOFF_TO_CHATGPT.md`, `TASKS.md`, và tạo một commit cục bộ trên `main`. Commit này chưa push.
+
+### RR-002 vòng 1/3 (2026-10-30)
+
+Codex kết luận `APPROVED`, đóng F-001 và F-002, không có finding mới. RR-002 chuyển `ANSWERED`. Workflow chưa được Project Owner nghiệm thu; SG-001 vẫn `ACTIVE`.
+
+### SG-001 Amendment A01 (2026-10-30, chờ Codex vòng 1/3)
+
+#### Changed
+
+- `TASKS.md`: ghi Amendment A01 do Project Owner phê duyệt; RR-001 chuyển `ANSWERED`; đăng RR-002 tiếp nối, vòng 1/3, không đặt lại bộ đếm.
+- `docs/operations/AI_REVIEW_WORKFLOW.md`: F-001, chia file thành nhóm A, B, C, thêm kiểm tra reviewer artifact theo số byte và SHA-256; F-002, quy định phản hồi finding, trạng thái `FIX IMPLEMENTED — PENDING CODEX VERIFICATION` và đường sau PASS.
+- `AGENTS.md`, `CLAUDE.md`: làm rõ reviewer artifact, giới hạn của SHA-256 và điều kiện dừng.
+- `REVIEW_RESPONSE.md`: phản hồi F-001, F-002.
+
+#### Không có
+
+- Code, script điều phối, cài đặt, commit, push, tạo nhánh, sửa báo cáo Codex, đóng finding, nghiệm thu workflow.
+
+### Workflow Claude–Codex mức B (2026-10-30, chờ Codex review)
+
+#### Added
+
+- `docs/operations/AI_REVIEW_WORKFLOW.md`: Scope Grant, Review Request, kiểm tra đầu vào, quyền ghi, giới hạn 3 vòng, điều kiện dừng, mức A, B, C.
+- `TASKS.md`: mục Scope Grants, Review Requests, SG-001, RR-001.
+
+#### Changed
+
+- `AGENTS.md`: lượt có thể đến từ Review Request hợp lệ trong Scope Grant; thêm kết luận `BLOCKED`; trỏ tới workflow.
+- `CLAUDE.md`: nhánh phase chỉ dùng khi Chủ dự án cho phép; trỏ tới workflow.
+- `docs/workflows/README.md`: thay mục quy trình lặp lại bằng liên kết; giữ quy tắc nhánh.
+- `docs/operations/README.md`: thêm chỉ mục.
+
+#### Không có
+
+- Code ứng dụng, script điều phối, cài đặt, commit, push, tạo nhánh, thay đổi quyết định. Workflow chưa được kiểm chứng bằng một vòng thực tế.
+
 ### Phase 0 – Nghiệm thu
 
 `2026-10-30 — Phase 0 accepted by Project Owner following Codex Final F-01 PASS.`

@@ -1,3 +1,108 @@
+# Review RR-002
+
+- Scope Grant: **SG-001**, Amendment **A01** | Vòng: **1/3** | Baseline Git: `def8fdf0b7871abada7dad228e31c1ee96dae7b3`.
+- Ngày: 2026-10-30.
+- Kết luận: **APPROVED**.
+- Phạm vi: xác minh F-001/F-002 từ RR-001 và hồi quy quyền ghi, integrity, bộ đếm, AGENTS/CLAUDE. Không mở rộng sang thiết kế ứng dụng.
+
+## Kết luận finding
+
+| Finding | Kết luận Codex | Bằng chứng |
+|---|---|---|
+| **F-001** – Reviewer artifact nằm ngoài allowlist Claude làm kẹt vòng sau | **CLOSED** | Workflow mục 4, 6, 7 tách nhóm A/B/C; nhóm B có byte count/hash riêng, được xác minh mà không cấp Claude quyền sửa. RR-002 đã liệt kê báo cáo như nhóm B và vượt kiểm tra đầu vào thực tế |
+| **F-002** – REVIEW_RESPONSE bắt buộc nhưng bị SG cấm | **CLOSED** | SG-001 Amendment A01 cho Claude ghi REVIEW_RESPONSE chỉ để phản hồi finding/RR liên quan SG-001. Workflow mục 9 yêu cầu dừng nếu file phản hồi vẫn ngoài quyền; mục 11 không buộc sửa CURRENT_STATUS ngoài allowlist. Phản hồi thực tế đúng phạm vi này |
+
+Không có finding mới còn mở trong phạm vi re-review.
+
+## Đã tự xác minh
+
+### Đầu vào và lượt
+
+- HEAD đúng baseline; RR-001 ANSWERED, RR-002 là RR OPEN duy nhất trong TASKS, tiếp nối RR-001, vòng tăng **0/3 → 1/3**, SG-001 ACTIVE, Amendment A01 APPROVED được ghi ngay dưới SG gốc. Không tạo SG mới hoặc reset vòng.
+- RR-002 có END-OF-REVIEW-REQUEST; chưa có báo cáo cùng mã trước lượt này. TASKS quyết định lượt khi CURRENT_STATUS chưa được cập nhật, đúng quy tắc đã khai báo.
+- **9/9 hash nhóm A khớp**, gồm TASKS tính prefix trước `## Review Requests`. Reviewer artifact nhóm B đúng **51.118 byte**, SHA-256 `b89b19418301f1ebe577e5928d19ec0a1795ad2fc9096eec55937e204cc10944`.
+- `git status --porcelain -z --untracked-files=all`: **9 đường dẫn nhóm A, 1 nhóm B, 0 nhóm C**. Mọi file thay đổi được xác định, không bỏ qua working tree. Việc báo cáo Codex thành modified không còn bị hiểu là Claude sửa ngoài quyền.
+
+### Integrity của reviewer artifact
+
+- Chạy đúng `tail -c 51118 docs/operations/reviews/PHASE-00-REVIEW.md | shasum -a 256` trước khi ghi: khớp hash nhóm B của RR-002.
+- Đối chiếu file hiện hành với báo cáo ở baseline Git: **42.994 byte nội dung lịch sử ở cuối còn nguyên**, có đúng một heading `# Review RR-001` thêm lên đầu. Đây là so sánh nội dung, không chứng minh danh tính tác giả.
+- Kiểm tra logic trong bộ nhớ: thêm prefix báo cáo mới thì hash của suffix cũ vẫn khớp; đổi một byte trong suffix thì bị phát hiện. Không sửa file nguồn để thử phủ định.
+- Phần kiểm tra Python đầu tiên lỗi cú pháp do bytes literal chứa tiếng Việt; không dùng kết quả đó. Lần chạy sửa lại với prefix ASCII cho ra kết quả nêu trên. Lệnh tail đã chạy và đối chiếu độc lập.
+
+### Quyền hạn và phản hồi
+
+- A01 giữ nguyên SG gốc, giới hạn vòng và các file bị cấm khác; chỉ bổ sung REVIEW_RESPONSE có giới hạn và xác định file Codex được ghi. CURRENT_STATUS vẫn ngoài quyền Claude; không bị sửa và không cần sửa để hoàn tất phản hồi.
+- REVIEW_RESPONSE ghi F-001/F-002 là **FIX IMPLEMENTED — PENDING CODEX VERIFICATION**, không tự đóng finding hoặc thay đổi kết luận RR-001. Hai finding được đóng bởi báo cáo RR-002 này.
+- Bản đối chiếu RR-002 trong REVIEW_RESPONSE nêu rõ chỉ TASKS có hiệu lực, không phải RR thứ hai; chỉ TASKS có trạng thái OPEN. Không có hai yêu cầu có thẩm quyền song song.
+- AGENTS và CLAUDE thống nhất với workflow: reviewer artifact có quyền ghi riêng; hash chỉ chứng minh nội dung; input/integrity sai thì dừng; không tự đóng finding, nghiệm thu, chuyển phase, commit, push hoặc cấp quyền ngoài SG.
+- `git diff --name-only HEAD --` đối với CURRENT_STATUS, DECISIONS, PROJECT_MASTER, ARCHITECTURE, TECH_STACK, IMPLEMENTATION_PLAN, `.gitignore`, REVIEW_REPORT không có kết quả. Không có thay đổi các cổng/kiến trúc/quyết định được bảo vệ trong vòng này.
+- Mức A/B/C vẫn được mô tả thận trọng. Đã quan sát một lượt FIX → RE-REVIEW có đầu vào hợp lệ và báo cáo thực tế, nhưng chưa kết luận toàn bộ quy trình mức B đã hoàn tất hoặc mức C đã đạt. Không cấp quyền tự gọi công cụ còn lại.
+
+## Chưa thể xác minh
+
+- Không có bản gốc chỉ đạo Owner cấp A01 trong snapshot ngoài lời chép ở TASKS; không chứng minh được tác giả file bằng hash. Yêu cầu trực tiếp hiện tại cho phép thực hiện review; không suy ra quyền khác từ đó.
+- Không kiểm chứng nội dung đầy đủ "12 yêu cầu" Owner từng giao vì bản gốc không được cung cấp; kết luận APPROVED áp dụng cho F-001/F-002 và hồi quy được RR-002 yêu cầu.
+- Không chạy điều phối tự động, mở công cụ chéo, runtime test ứng dụng, commit hoặc kết nối remote. Chưa quan sát bước Claude phản hồi PASS và Owner nghiệm thu workflow sau báo cáo này.
+
+## Bàn giao
+
+Theo mục 5 và 11, **lượt tiếp theo thuộc Claude để phản hồi kết quả APPROVED trong các file được cấp quyền và tóm tắt cho Owner**; sau phản hồi chuyển Owner. Không sửa CURRENT_STATUS ngoài SG, không tự đóng SG, nghiệm thu, commit/push hoặc bắt đầu Phase 1 nếu chưa có quyền thích hợp. Codex không cập nhật trạng thái RR trong TASKS.
+
+Chỉ thêm một báo cáo RR-002 lên đầu reviewer artifact; giữ nguyên toàn bộ 51.118 byte đã được RR-002 chốt, không sửa tài liệu Claude.
+
+---
+
+# Review RR-001
+
+- Scope Grant: **SG-001** | Vòng: **0/3** | Baseline Git: `def8fdf0b7871abada7dad228e31c1ee96dae7b3`.
+- Ngày: 2026-10-30.
+- Kết luận: **CHANGES REQUESTED**.
+- Phạm vi: tính nhất quán workflow, quyền ghi, bàn giao và kiểm tra đầu vào; không review lại thiết kế sản phẩm đã duyệt.
+- Đầu vào **hợp lệ trước khi ghi báo cáo**: đúng lượt Codex, RR OPEN có end marker, tham chiếu SG-001 ACTIVE, vòng 0/3, HEAD đúng baseline; 8/8 hash khớp (TASKS dùng phần trước Review Requests); đúng 8 đường dẫn thay đổi, đều trong allowlist; chưa có báo cáo RR-001 trước lượt này.
+
+### [MEDIUM] F-001 – Quy tắc toàn bộ working tree trong allowlist chặn chính đầu ra hợp lệ của reviewer
+
+- Vị trí: `docs/operations/AI_REVIEW_WORKFLOW.md:70`, `:114`, `:123–133`; `TASKS.md:84–85`.
+- Bằng chứng: Codex được yêu cầu ghi báo cáo vào `docs/operations/reviews/PHASE-00-REVIEW.md`. File này nằm ngoài allowlist ghi của Claude trong SG-001. Mục 7 lại yêu cầu mọi file thay đổi đều trong allowlist và dừng ngay nếu không đạt, không phân biệt file Claude sửa với đầu ra hợp lệ của Codex.
+- Tình huống gây lỗi: sau báo cáo này, file review thành modified. Ở RR kế tiếp, nếu Claude không liệt kê/hash nó thì thất bại kiểm tra danh sách; nếu liệt kê/hash nó thì vẫn thất bại kiểm tra allowlist. Claude không được sửa/revert file Codex, không được tự commit để làm sạch cây. Như vậy vòng re-review không thể đi tiếp theo các quy tắc hiện tại mà không sửa quy tắc hoặc xin Owner xử lý.
+- Kiểm chứng: trước báo cáo, phép so sánh tập đường dẫn cho `changed − SG_allowlist = []`; thêm đúng file review được mục 8 yêu cầu thì kết quả là `['docs/operations/reviews/PHASE-00-REVIEW.md']`. Đây là xác minh điều kiện workflow bằng dữ liệu thực và phép toán tập, không phải lỗi application runtime.
+- Yêu cầu khắc phục: tách **allowlist quyền ghi của Claude** khỏi **tập file cần xác minh của snapshot**, khai báo đầu ra reviewer được phép thay đổi và cách kiểm tra hash/bảo toàn nó trong vòng sau. Không cấp Claude quyền sửa báo cáo Codex. Làm rõ ngoài allowlist nào là lỗi đầu vào phải dừng, ngoài allowlist nào là finding có thể ghi báo cáo; hiện mục 7 vừa nói dừng không ghi, vừa gọi trường hợp đó là finding.
+- Trong phạm vi SG: **có** đối với việc sửa quy tắc workflow trong file được phép. Không hàm ý mở rộng SG hoặc quyền ghi của Claude.
+
+### [MEDIUM] F-002 – SG-001 không cho phép ghi phản hồi bắt buộc của bước FIX
+
+- Vị trí: `TASKS.md:84–85`; `docs/operations/AI_REVIEW_WORKFLOW.md:74`, `:84–85`, `:168`, `:193`.
+- Bằng chứng: bước 9.3 bắt buộc phản hồi từng finding vào `REVIEW_RESPONSE.md`, và bảng lượt yêu cầu phản hồi sau báo cáo. SG-001 lại cấm rõ ràng sửa REVIEW_RESPONSE và CURRENT_STATUS. Bảng quyền ghi không ghi đè allowlist theo chính mục 4.
+- Tình huống gây lỗi: khi nhận báo cáo có finding, Claude không thể hoàn tất bước FIX và RR mới đúng mẫu mà vẫn giữ phạm vi. Bỏ phản hồi thì vi phạm quy trình; tự ghi REVIEW_RESPONSE thì vi phạm quyền. Theo mục 10, trường hợp cần file ngoài allowlist phải chuyển Owner, không được tự xử lý.
+- Kiểm chứng: đối chiếu membership của SG-001 cho kết quả `REVIEW_RESPONSE.md in allowlist = False`; cùng lúc mục 9.3 quy định file này bắt buộc. Không viết thử vào file bị cấm.
+- Yêu cầu khắc phục: Owner quyết định một trong hai đường: cấp quyền rõ ràng cho file phản hồi cần thiết; hoặc cho phép sửa workflow để phản hồi cùng mã RR trong một file đã được cấp quyền (ví dụ TASKS/HANDOFF). Quy định cả đường sau PASS, không buộc ghi CURRENT_STATUS khi file đó ngoài SG. Việc giữ CURRENT_STATUS ngoài SG tự nó không sai vì TASKS được quy định là nguồn quyết định lượt; điểm chặn bắt buộc hiện tại là REVIEW_RESPONSE.
+- Trong phạm vi SG: **không** nếu giải quyết bằng sửa REVIEW_RESPONSE hay mở rộng SG; chỉ Owner cấp quyền đó. **Có** đối với đề xuất sửa workflow sang nơi phản hồi đã được cho phép, nếu vẫn đúng yêu cầu Owner. Reviewer không tự chọn hoặc áp dụng cách sửa.
+
+## Đã tự xác minh
+
+- Đọc workflow mới nhất, AGENTS, CLAUDE, SG/RR trong TASKS, phần trạng thái hiện hành và diff của cả 7 file tracked thay đổi; đọc thêm file workflow untracked.
+- Baseline HEAD khớp; 8/8 hash trong RR-001 khớp file thực, gồm hash prefix TASKS đúng theo lệnh `sed '/^## Review Requests/,$d' TASKS.md | shasum -a 256`. RR đầy đủ, vòng đầu 0/3 và chưa vượt giới hạn.
+- Quyền Owner được giữ: không có quyền mới tự nghiệm thu, duyệt Proposed, commit/push/tạo nhánh, cài đặt hoặc vượt Phase Gate. Các chỉ dẫn AGENTS/CLAUDE cùng trỏ workflow; không có nội dung cho Codex sửa file Claude.
+- Giới hạn ba vòng gắn SG, không gắn RR; đổi RR/đổi tên SG không được đặt lại bộ đếm; hết vòng hoặc bất đồng phải chuyển Owner. Không thấy đường reset được quy định cho AI ngoài Owner.
+- Workflow ghi A có tài liệu; B được phép nhưng chưa hoàn tất một vòng thực tế; C chưa đạt. Các cập nhật không tự tuyên bố đã kiểm chứng B/C. Review này chưa chứng minh cả chu trình FIX → RE-REVIEW → OWNER ACCEPTANCE vận hành được.
+- TASKS là nguồn lượt theo quy tắc mới; CURRENT_STATUS còn ghi Owner nhưng workflow đã quy định cách phân xử, không tự coi đó là quyền sửa CURRENT_STATUS.
+- Working tree trước báo cáo chỉ có đúng tám đường dẫn trong SG; không có code ứng dụng, script điều phối, thay đổi kiến trúc/tech stack trong diff. Phase 0 ACCEPTED, Phase 1 NOT AUTHORIZED, TikTok POLICY BLOCKED vẫn giữ.
+
+## Chưa thể xác minh
+
+- Không có nguyên bản đầy đủ "12 yêu cầu" hay "mục 6 của yêu cầu" mà SG nhắc tới trong ngữ cảnh được cung cấp; không thể công nhận tự kiểm tra `grep` là đã chứng minh đủ các yêu cầu chưa thấy. Phạm vi thực hiện là yêu cầu Owner hiện tại và RR-001 hiện hành.
+- Lời Owner trong SG là bản chép của Claude; không có bản ghi gốc trong RR để xác thực độc lập. Yêu cầu trực tiếp hiện tại của Owner cho phép review, nhưng không được suy ra quyền sửa các file bị SG cấm.
+- Không kiểm chứng khả năng gọi công cụ chéo hoặc hoàn tất vận hành mức B; không mở tool/chat khác, không chạy tự động hóa, không cài đặt. Các nhận định về PATH/app trong mục 13 không được nâng thành kết luận độc lập của reviewer.
+
+## Bàn giao và điều kiện dừng
+
+RR-001 đã có kết quả; không đánh dấu ANSWERED thay Claude vì TASKS chỉ đọc với Codex. **Chuyển Owner xử lý vướng quyền phản hồi F-002 theo mục 10**, trước khi Claude thực hiện bước FIX bắt buộc. Finding này không cấp thêm quyền và không cho phép Claude tự mở rộng SG. Sau khi quyền/đường phản hồi hợp lệ được làm rõ, Claude sửa trong allowlist, giữ nguyên lịch sử báo cáo, tăng vòng đúng SG và đăng RR mới.
+
+Chỉ thêm báo cáo này vào file review được cho phép; không sửa tài liệu Claude, Git index/config, nhánh hoặc commit. Các báo cáo trước được giữ nguyên bên dưới.
+
+---
+
 # PHASE 00 — ACCEPTANCE & GIT CHECKPOINT REVIEW
 
 - Ngày: 2026-10-30.

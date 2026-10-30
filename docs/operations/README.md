@@ -2,6 +2,7 @@
 
 | Nội dung | Vị trí |
 |---|---|
+| Quy trình phối hợp Claude – Codex | [AI_REVIEW_WORKFLOW.md](AI_REVIEW_WORKFLOW.md) |
 | Mẫu báo cáo phase | [phase-report-template.md](phase-report-template.md) |
 | Báo cáo phase | [phase-reports/](phase-reports/) |
 | Kết quả review của Codex | `reviews/` (tạo khi có review đầu tiên) |

@@ -1,6 +1,6 @@
 # HANDOFF TO CHATGPT – AI VIDEO FACTORY
 
-Cập nhật lần cuối: 2026-10-30, sau khi Project Owner nghiệm thu Phase 0. Tệp này được duy trì sau mọi phase và giữ lại lịch sử còn liên quan.
+Cập nhật lần cuối: 2026-10-30, sau khi Project Owner nghiệm thu workflow mức B. Tệp này được duy trì sau mọi phase và giữ lại lịch sử còn liên quan.
 
 ## 1. Trạng thái hiện tại
 
@@ -14,18 +14,23 @@ Cập nhật lần cuối: 2026-10-30, sau khi Project Owner nghiệm thu Phase 
 | TikTok Direct Post | **POLICY BLOCKED** |
 | R4-01 | **CLOSED** (Codex focused re-review, ở mức tài liệu) |
 | F-01 | **CLOSED** (Codex Final F-01 Verification) |
-| Git checkpoint | **INITIAL COMMIT CREATED LOCALLY — NOT PUSHED.** Push cần cho phép riêng |
+| Git checkpoint | Commit `def8fdf` đã có trên `origin/main`. Commit workflow chỉ ở cục bộ. Mỗi lần commit hay push cần cho phép riêng |
 | Kết luận Codex mới nhất | **PASS — READY FOR OWNER ACCEPTANCE** (Final F-01 Verification) |
 | Kết luận Codex vòng 4 | **APPROVED WITH CHANGES**, chỉ cho hồ sơ Phase 0 (`docs/operations/reviews/PHASE-00-REVIEW.md`) |
 | Kết luận Codex vòng 3 | CHANGES REQUESTED |
 | Kết luận Codex vòng 1 | NEEDS REVISION |
 | Vòng 2 | Phát hiện do Chủ dự án chuyển; repo không có tệp báo cáo gốc |
 | Quy tắc D-023 | Phê duyệt phương án C chỉ cho phép tiếp tục đánh giá khả năng tích hợp. Quyết định này không cấp quyền triển khai TikTok Direct Post API. Mở cổng cần G1–G5 (`docs/deployment/platform-verification.md` mục 3) |
-| Lượt làm việc | Chủ dự án. Claude đã dừng |
+| Workflow Claude–Codex | Mức B theo phê duyệt có điều kiện; tài liệu ở `docs/operations/AI_REVIEW_WORKFLOW.md`; Codex **APPROVED** tại RR-002; **Project Owner nghiệm thu** ngày 2026-10-30; mức C chưa đạt |
+| SG-001 | **DONE** (Project Owner đóng, 2026-10-30); Amendment A01 đã áp dụng; đã dùng 1/3 vòng |
+| RR-001 | Vòng 0/3: CHANGES REQUESTED, finding F-001, F-002 |
+| RR-002 | Vòng 1/3: **APPROVED**, trạng thái `ANSWERED` |
+| F-001, F-002 | **CLOSED** (Codex, RR-002) |
+| Lượt làm việc | Project Owner. Không có RR đang mở. Claude đã dừng |
 | Code ứng dụng | **NOT IMPLEMENTED** |
 | Runtime testing | **NOT PERFORMED** |
 | Phần mềm cài cho dự án, model AI, credentials | **Chưa có** |
-| Git | Nhánh `main`, có commit đầu tiên. Đã có remote `origin`, không do Claude tạo; chưa push |
+| Git | Nhánh `main`. `origin/main` ở `def8fdf`; commit workflow chưa push. Chưa xác định repo từ xa riêng tư hay công khai |
 
 ## 2. Phân biệt trạng thái
 
@@ -129,6 +134,10 @@ Tất cả là `Proposed`. Không có mục nào được duyệt thay cho Chủ
 - D-023 `Approved`, phương án C; hai trạng thái độc lập; cổng G1–G5 ở `platform-verification.md` mục 3.
 - `IMPLEMENTATION_PLAN.md`, `publishing-reliability.md`: bỏ cách viết khiến quyết định có thể bị hiểu là điều kiện đủ.
 
+**Workflow mức B:** thêm `docs/operations/AI_REVIEW_WORKFLOW.md`; cập nhật `AGENTS.md`, `CLAUDE.md`, `TASKS.md`, `docs/workflows/README.md`, `docs/operations/README.md`. SG-001 và RR-001 nằm trong `TASKS.md`.
+
+**Amendment A01:** Project Owner cấp thêm `REVIEW_RESPONSE.md` cho Claude và xác nhận reviewer artifact của Codex. Workflow chia file thành nhóm A, B, C. Vòng kế tiếp là 1/3, không đặt lại bộ đếm.
+
 **Thay đổi kiến trúc:** không đổi blueprint, không thêm Agent, không đổi bộ công nghệ.
 
 ## 7. Lệnh và kiểm tra
@@ -162,4 +171,4 @@ Lệnh `.gitignore` và kết quả đầy đủ: `docs/operations/phase-reports
 
 ## 10. Bước tiếp theo đề xuất
 
-Project Owner quyết định có cho phép push không, rồi quyết định D-013, D-017 và trả lời Q-03, Q-06 trước Phase 1. Claude không tự push hay bắt đầu Phase 1.
+Không có Scope Grant đang chạy. Project Owner quyết định có push commit workflow không. Trước Phase 1, Project Owner quyết định D-013, D-017 và trả lời Q-03, Q-06 trước Phase 1. Claude không tự commit, push hay bắt đầu Phase 1.
