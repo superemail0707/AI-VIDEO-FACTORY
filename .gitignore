@@ -1,0 +1,122 @@
+# Git applies the LAST matching rule, so order matters here:
+# the test-fixture allowlist comes first and the secret rules come last,
+# so a secret is never re-included by a fixture exception.
+
+# === Test fixtures: deny by default, allow reviewed text formats only ===
+# Audio/video fixtures are generated at test time, not committed.
+/tests/fixtures/**
+!/tests/fixtures/**/
+!/tests/fixtures/**/*.json
+!/tests/fixtures/**/*.txt
+!/tests/fixtures/**/*.md
+!/tests/fixtures/**/*.csv
+!/tests/fixtures/**/*.svg
+!/tests/fixtures/**/*.srt
+!/tests/fixtures/**/*.vtt
+
+# === Runtime data ===
+/workspace/
+/data/
+/output/
+/outputs/
+/renders/
+/logs/
+*.log
+
+# === Databases ===
+*.sqlite
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+*.db
+*.db-shm
+*.db-wal
+
+# === AI models ===
+/models/
+*.gguf
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.onnx
+
+# === Generated media ===
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.avi
+*.wav
+*.mp3
+*.m4a
+*.aac
+*.flac
+
+# === Python ===
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# === Streamlit local secrets ===
+.streamlit/secrets.toml
+
+# === macOS ===
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# === Editors ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# === Local AI tool settings ===
+.claude/settings.local.json
+
+# === Temporary ===
+tmp/
+temp/
+*.tmp
+*.bak
+
+# === Secrets: never commit. Keep this block last ===
+.env
+.env.*
+*.env
+!/.env.example
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.jks
+*.keystore
+credentials*.json
+client_secret*.json
+token*.json
+oauth*.json
+service-account*.json
+secrets/
+.secrets/
+# Sensitive names stay ignored inside fixtures whatever the extension
+/tests/fixtures/**/*secret*
+/tests/fixtures/**/*token*
+/tests/fixtures/**/*credential*
+/tests/fixtures/**/*password*
+/tests/fixtures/**/*oauth*
+/tests/fixtures/**/*.env
