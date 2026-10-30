@@ -1,6 +1,6 @@
 # HANDOFF TO CHATGPT – AI VIDEO FACTORY
 
-Cập nhật lần cuối: 2026-10-30, sau khi Project Owner nghiệm thu workflow mức B. Tệp này được duy trì sau mọi phase và giữ lại lịch sử còn liên quan.
+Cập nhật lần cuối: 2026-10-30, sau khi push `fb3a19f` và xác nhận repo công khai. Tệp này được duy trì sau mọi phase và giữ lại lịch sử còn liên quan.
 
 ## 1. Trạng thái hiện tại
 
@@ -14,7 +14,7 @@ Cập nhật lần cuối: 2026-10-30, sau khi Project Owner nghiệm thu workfl
 | TikTok Direct Post | **POLICY BLOCKED** |
 | R4-01 | **CLOSED** (Codex focused re-review, ở mức tài liệu) |
 | F-01 | **CLOSED** (Codex Final F-01 Verification) |
-| Git checkpoint | Commit `def8fdf` đã có trên `origin/main`. Commit workflow chỉ ở cục bộ. Mỗi lần commit hay push cần cho phép riêng |
+| Git checkpoint | Commit `def8fdf` và `fb3a19f` đã có trên `origin/main` (Project Owner cho phép; Claude xác minh hash khớp). Mỗi lần commit hay push tiếp theo cần cho phép riêng |
 | Kết luận Codex mới nhất | **PASS — READY FOR OWNER ACCEPTANCE** (Final F-01 Verification) |
 | Kết luận Codex vòng 4 | **APPROVED WITH CHANGES**, chỉ cho hồ sơ Phase 0 (`docs/operations/reviews/PHASE-00-REVIEW.md`) |
 | Kết luận Codex vòng 3 | CHANGES REQUESTED |
@@ -30,7 +30,7 @@ Cập nhật lần cuối: 2026-10-30, sau khi Project Owner nghiệm thu workfl
 | Code ứng dụng | **NOT IMPLEMENTED** |
 | Runtime testing | **NOT PERFORMED** |
 | Phần mềm cài cho dự án, model AI, credentials | **Chưa có** |
-| Git | Nhánh `main`. `origin/main` ở `def8fdf`; commit workflow chưa push. Chưa xác định repo từ xa riêng tư hay công khai |
+| Git | Nhánh `main` ở `fb3a19f`, trùng `origin/main`; working tree sạch. **Repo từ xa CÔNG KHAI** (Project Owner xác nhận): không đẩy secret, credentials, dữ liệu vận hành, model hay media |
 
 ## 2. Phân biệt trạng thái
 
@@ -158,7 +158,8 @@ Lệnh `.gitignore` và kết quả đầy đủ: `docs/operations/phase-reports
 10. Luồng TikTok Upload vào inbox chưa xác minh: không rõ intended use và audit có áp dụng hay không.
 11. F-01 đã đóng. `REVIEW_RESPONSE.md` Vòng 4 giữ nguyên làm lịch sử, nên vẫn trích câu chữ cũ.
 12. `PROJECT_MASTER.md:8, 44` đã được sửa theo chỉ đạo của Project Owner: trạng thái nghiệm thu đã đồng bộ, tên máy đã bỏ.
-13. `user.name` và `user.email` vẫn chưa được cấu hình. Commit đầu tiên dùng danh tính do Project Owner chọn, truyền riêng cho commit đó; commit sau cần danh tính được cấu hình hoặc chỉ định lại. Chi tiết ở báo cáo Phase 0, mục "Chuẩn bị Git checkpoint".
+13. `user.name` và `user.email` vẫn chưa được cấu hình. Hai commit đã tạo dùng danh tính `superemail0707` với email noreply do Project Owner chọn, truyền riêng cho từng commit; commit sau cần danh tính được cấu hình hoặc chỉ định lại. Chi tiết ở báo cáo Phase 0, mục "Chuẩn bị Git checkpoint".
+14b. **Repo công khai.** Quét `HEAD` sau push: không secret, tên máy, đường dẫn cá nhân hay email; chỉ có tên tài khoản GitHub. Lịch sử Git không xóa sạch được nếu lỡ đẩy nội dung nhạy cảm, nên quét trước mỗi commit. Q-07 (sao lưu dữ liệu) cần tính tới việc này.
 14. `refs/codex/turn-diffs/...` tồn tại trong `.git`. Khi push chỉ đẩy `main`, không dùng `git push --mirror`.
 
 ## 9. Trở ngại còn lại
@@ -171,4 +172,4 @@ Lệnh `.gitignore` và kết quả đầy đủ: `docs/operations/phase-reports
 
 ## 10. Bước tiếp theo đề xuất
 
-Không có Scope Grant đang chạy. Project Owner quyết định có push commit workflow không. Trước Phase 1, Project Owner quyết định D-013, D-017 và trả lời Q-03, Q-06 trước Phase 1. Claude không tự commit, push hay bắt đầu Phase 1.
+Không có Scope Grant đang chạy. Trước Phase 1, Project Owner quyết định D-013, D-017 và trả lời Q-03, Q-06. Claude không tự commit, push hay bắt đầu Phase 1.

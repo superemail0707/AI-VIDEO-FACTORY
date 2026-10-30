@@ -38,8 +38,10 @@ Trạng thái: `[ ]` chưa làm, `[~]` đang làm, `[x]` xong và có kiểm ch�
 - [x] Project Owner cho phép commit và chọn danh tính Git
 - [x] Commit đầu tiên trên `main`, thực hiện cục bộ
 - [x] Push commit đầu tiên `def8fdf` lên `origin/main`, do Project Owner thực hiện; Claude xác minh hash khớp
-- [x] Commit workflow mức B trên `main`, thực hiện cục bộ theo cho phép của Project Owner
-- [ ] (Owner) Quyết định có push commit workflow không
+- [x] Commit workflow mức B `fb3a19f` trên `main`, theo cho phép của Project Owner
+- [x] Push `fb3a19f` lên `origin/main`; Claude xác minh hash khớp, không có `refs/codex/...` trên remote
+- [x] Project Owner xác nhận repo từ xa **công khai**; Claude quét `HEAD`: không secret, tên máy, đường dẫn cá nhân hay email
+- [ ] (Owner) Q-07: chọn nơi sao lưu dữ liệu, vì repo công khai không dùng được cho dữ liệu hay secret
 
 ## Cổng trước Phase 1
 

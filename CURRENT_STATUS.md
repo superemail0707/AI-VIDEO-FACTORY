@@ -1,6 +1,6 @@
 # AI VIDEO FACTORY – CURRENT STATUS
 
-Cập nhật lần cuối: 2026-10-30 (workflow mức B được nghiệm thu, SG-001 đã đóng)
+Cập nhật lần cuối: 2026-10-30 (đã push `fb3a19f`, repo công khai)
 
 | Mục | Trạng thái |
 |---|---|
@@ -11,7 +11,7 @@ Cập nhật lần cuối: 2026-10-30 (workflow mức B được nghiệm thu, S
 | Căn cứ nghiệm thu | Codex Final F-01 Verification: PASS ([báo cáo](docs/operations/reviews/PHASE-00-REVIEW.md)) |
 | Application code | **NOT IMPLEMENTED** |
 | Runtime testing | **NOT PERFORMED** |
-| Git checkpoint | Commit `def8fdf` đã có trên `origin/main`. Commit workflow được Project Owner cho phép, chỉ ở cục bộ. **Mỗi lần commit hay push cần cho phép riêng** |
+| Git checkpoint | Commit `def8fdf` và `fb3a19f` đã có trên `origin/main` (Project Owner cho phép commit và push; Claude xác minh hash khớp). **Mỗi lần commit hay push tiếp theo cần cho phép riêng** |
 | Workflow Claude–Codex | **Mức B: Project Owner nghiệm thu** (2026-10-30). Mức C chưa đạt. Xem [AI_REVIEW_WORKFLOW.md](docs/operations/AI_REVIEW_WORKFLOW.md) |
 | Scope Grant | SG-001 **DONE**. Không có Scope Grant hay Review Request đang mở |
 | Review gần nhất | Codex RR-002: **APPROVED**, F-001 và F-002 CLOSED ([báo cáo](docs/operations/reviews/PHASE-00-REVIEW.md)). Phản hồi tại [REVIEW_RESPONSE.md](REVIEW_RESPONSE.md) |
@@ -21,7 +21,7 @@ Cập nhật lần cuối: 2026-10-30 (workflow mức B được nghiệm thu, S
 | R4-01 | **CLOSED** (Codex focused re-review, ở mức tài liệu) |
 | F-01 | **CLOSED** (Codex Final F-01 Verification) |
 | Lượt làm việc | Chủ dự án (Claude đã dừng) |
-| Git | Nhánh `main`. `origin/main` ở `def8fdf`; commit workflow chưa push. Chưa xác định repo từ xa riêng tư hay công khai |
+| Git | Nhánh `main` ở `fb3a19f`, trùng `origin/main`; working tree sạch. **Repo từ xa là CÔNG KHAI** (Project Owner xác nhận) |
 | Phase tiếp theo | **Phase 1: NOT AUTHORIZED.** Cổng đầu vào vẫn hiệu lực: quyết định D-013, D-017; trả lời Q-03, Q-06; kế hoạch Phase 1 được xác nhận |
 
 ## Tình trạng tính năng
@@ -52,7 +52,7 @@ D-001 đến D-007 và **D-023** đã được Chủ dự án duyệt. D-008 thu
 - **R3-01 (HIGH):** đã có quyết định D-023, nhưng rủi ro chính sách **chưa được giải quyết**: Direct Post vẫn `POLICY BLOCKED`.
 - **R4-01 (LOW):** Codex đã đóng ở mức tài liệu.
 - **F-01 (LOW):** Codex đã đóng.
-- **Git push:** commit workflow chưa được phép push. Repo từ xa là riêng tư hay công khai vẫn chưa được xác nhận.
+- **Repo công khai:** mọi nội dung đã push ai cũng đọc được. Quét `HEAD` không thấy secret, tên máy, đường dẫn cá nhân hay email; chỉ có tên tài khoản GitHub. Không commit credentials, dữ liệu vận hành, model hay media; quét trước mỗi commit. Lịch sử Git không thể xóa sạch nếu lỡ đẩy nội dung nhạy cảm.
 - R3-02, R3-03: Codex xác nhận PASS ở mức đặc tả; chưa kiểm thử.
 - FI-43 chưa chứng minh tác vụ trong daemon Ollama đã kết thúc trước job mới.
 - B3: Phase 2 bị chặn cho tới khi có quyết định về D-009, D-010, D-011, D-015 (`.env`), D-016, D-018, D-020.
@@ -71,7 +71,7 @@ D-001 đến D-007 và **D-023** đã được Chủ dự án duyệt. D-008 thu
 | Q-04 | Athena được truy cập internet, hay chỉ dùng nguồn do bạn cung cấp? | Chỉ dùng nguồn cung cấp ở MVP | Phase 8 |
 | Q-05 | Đã có Facebook Page, kênh YouTube, tài khoản TikTok chưa? Có sẵn sàng làm thủ tục duyệt app không? | – | Phase 15 |
 | Q-06 | Máy có thể cắm điện và chạy qua đêm không? Thời gian tối đa chấp nhận được cho một video? | Chạy qua đêm, tối đa 8 giờ | Phase 1 |
-| Q-07 | Sao lưu ở đâu: Git remote riêng tư, ổ ngoài, hay cả hai? | Remote riêng tư cho code, ổ ngoài cho dữ liệu | Phase 2 |
+| Q-07 | Sao lưu ở đâu? Repo hiện **công khai**, nên không dùng được cho dữ liệu hay secret; cần nơi khác (remote riêng tư, ổ ngoài, hay cả hai)? | Remote riêng tư hoặc ổ ngoài cho dữ liệu; repo công khai chỉ cho tài liệu và code | Phase 2 |
 | Q-08 | Đối tượng khán giả có trẻ em không? | Không | Phase 8 |
 | Q-09 | ~~Điền `HANDOFF_TO_CHATGPT.md` sau khi đóng `vi`?~~ | Đã trả lời: Chủ dự án yêu cầu tạo ngay | – |
 | Q-10 | Quyết định D-013, D-017 | Duyệt | Phase 1 |
