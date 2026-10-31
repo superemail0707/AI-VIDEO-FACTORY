@@ -4,6 +4,27 @@ Ghi lại thay đổi đáng chú ý theo từng phase. Định dạng dựa tr�
 
 ## [Unreleased]
 
+### Phase 1 – Bắt đầu bước 1.0 (2026-10-31)
+
+#### Added
+
+- `docs/operations/phase-reports/PHASE-01-PLAN.md`: kế hoạch Phase 1, Project Owner xác nhận 2026-10-31.
+- `docs/testing/phase1-candidates.md`: dự thảo danh sách ứng viên và license, chờ Owner duyệt.
+
+#### Changed (bản sửa sau Codex pre-approval review)
+
+- `docs/testing/phase1-candidates.md` viết lại: phân loại A, B, C; hồ sơ từng ứng viên (nguồn, revision, quantization, voice ID, license, chuỗi quyền, tài nguyên, điểm chưa xác minh); tách bốn trạng thái phương pháp, kế hoạch, danh sách, quyền tải.
+- Loại Piper `vais1000` (chuỗi quyền qua lessac/Blizzard 2013 chỉ cho nghiên cứu) và VieNeu-TTS 0.3B, 0.5B (dữ liệu CC BY-NC). Không còn TTS tiếng Việt nào đủ điều kiện nhóm B.
+- `CURRENT_STATUS.md`, `HANDOFF_TO_CHATGPT.md`, `TASKS.md`: đồng bộ; Codex re-review BLOCKED vì chưa có Scope Grant.
+
+#### Changed
+
+- D-013, D-017 `Approved`; Q-03 (có kiếm tiền), Q-06 (4 giờ) đã trả lời. Cập nhật `DECISIONS.md`, `IMPLEMENTATION_PLAN.md`, `CURRENT_STATUS.md`, `TASKS.md`, `HANDOFF_TO_CHATGPT.md`.
+
+#### Không có
+
+- Cài đặt, tải model, code ứng dụng, commit, push. Bước 1.0 chỉ đọc tài liệu.
+
 ### Workflow mức B được nghiệm thu (2026-10-30)
 
 Project Owner nghiệm thu tài liệu workflow mức B và đóng SG-001 sau khi Codex kết luận `APPROVED` tại RR-002. Đã dùng 1/3 vòng. Chỉ cập nhật dòng trạng thái trong workflow, không đổi quy tắc. Mức C chưa đạt. Không thay đổi phase.

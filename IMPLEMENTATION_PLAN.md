@@ -27,7 +27,7 @@
 | Phase | Tên | Kết quả | Trạng thái |
 |---|---|---|---|
 | 0 | Hồ sơ dự án | Bộ tài liệu | **ACCEPTED** (Project Owner, 2026-10-30), mức tài liệu và thiết kế |
-| 1 | Môi trường & đo đạc nền | Công cụ cài đặt, số đo thực, spike TTS | Chưa làm |
+| 1 | Môi trường & đo đạc nền | Công cụ cài đặt, số đo thực, spike TTS | Kế hoạch đã xác nhận (2026-10-31); đang ở bước 1.0, chưa cài đặt gì |
 | 2 | Nền tảng lõi | Config, DB, Queue, API, Worker | Chưa làm |
 | 3 | Factory Manager | Pipeline chạy với Agent giả lập | Chưa làm |
 | 4 | Spielberg cơ bản | Spec cảnh → MP4 | Chưa làm |
@@ -53,7 +53,7 @@
 **Mục tiêu:** bộ tài liệu quản lý, không code. **Nghiệm thu:** Codex review; **Chủ dự án là người duy nhất tuyên bố nghiệm thu.** Review lần 1 kết luận NEEDS REVISION, Bản sửa 1 đã xử lý. Bản sửa 2 xử lý các phát hiện của review lần 2. Review lần 3 kết luận CHANGES REQUESTED; Bản sửa 3 xử lý R3-01, R3-02, R3-03. Review lần 4 kết luận APPROVED WITH CHANGES cho hồ sơ Phase 0; bản cập nhật D-023 xử lý R4-01. Việc ghi nhận D-023 không phải nghiệm thu Phase 0. **Project Owner nghiệm thu Phase 0 ngày 2026-10-30**, căn cứ Codex Final F-01 Verification: PASS. Nghiệm thu không xác nhận code đã triển khai, không xác nhận runtime test đã pass và không cho phép bắt đầu Phase 1.
 
 ### Phase 1 – Môi trường & đo đạc nền
-**Điều kiện vào:** Phase 0 được nghiệm thu, D-013 và D-017 được quyết định, có trả lời Q-03 và Q-06.
+**Điều kiện vào:** Phase 0 được nghiệm thu (đã có), D-013 và D-017 được quyết định (đã duyệt 2026-10-31), có trả lời Q-03 và Q-06 (đã trả lời 2026-10-31). **Kế hoạch chi tiết đã được Chủ dự án xác nhận ngày 2026-10-31** ([PHASE-01-PLAN.md](docs/operations/phase-reports/PHASE-01-PLAN.md)). Chỉ bước 1.0 được phép; cài đặt và tải model cần xác nhận từng lệnh.
 **Mục tiêu:** cài công cụ đã duyệt và thay giả định bằng số đo.
 **Dự kiến cài (sẽ xin xác nhận từng lệnh):** Python, FFmpeg, Ollama, một LLM để benchmark, thư viện rasterize ứng viên, ứng viên TTS của spike.
 **Đo:** tốc độ LLM tiếng Việt, tốc độ rasterize SVG, tốc độ mã hóa `h264_videotoolbox` và `libx264`, faster-whisper; RAM đỉnh; **render bền 30 phút để xem giảm xung nhiệt**.
@@ -174,13 +174,13 @@
 
 ## 6. Cổng quyết định trước phase
 
-Mọi mục trong bảng hiện vẫn là `Proposed`, **trừ D-023** là `Approved` với phạm vi hẹp nêu trong dòng của nó. Không có mục `Proposed` nào được coi là đã duyệt. Chủ dự án quyết định từng mục; một phase không được bắt đầu khi mục bắt buộc của nó chưa được quyết định. Khuyến nghị chi tiết ở `DECISIONS.md`.
+Mọi mục trong bảng hiện vẫn là `Proposed`, **trừ D-013, D-017 và D-023** là `Approved` với phạm vi nêu trong dòng của từng mục. Không có mục `Proposed` nào được coi là đã duyệt. Chủ dự án quyết định từng mục; một phase không được bắt đầu khi mục bắt buộc của nó chưa được quyết định. Khuyến nghị chi tiết ở `DECISIONS.md`.
 
 | Quyết định | Nội dung | Trạng thái | Phase đầu tiên dùng | Phải quyết định trước | Khuyến nghị của Lead |
 |---|---|---|---|---|---|
 | D-023 | Tiếp tục đánh giá TikTok Direct Post có kiểm soát (phương án C) | **Approved** (Project Owner). Direct Post integration: **`POLICY BLOCKED`** | 16 | Đã quyết định. Mở cổng triển khai cần G1–G5, gồm quyết định riêng | – |
-| D-013 | Benchmark rasterize | Proposed | 1 | Phase 1 | Duyệt |
-| D-017 | Không dùng công cụ không chính thức | Proposed | 1 | Phase 1 | Duyệt |
+| D-013 | Benchmark rasterize (chỉ duyệt phương pháp) | **Approved** (Project Owner, 2026-10-31) | 1 | Đã quyết định | – |
+| D-017 | Không dùng công cụ không chính thức | **Approved** (Project Owner, 2026-10-31) | 1 | Đã quyết định | – |
 | D-009 | Ba tiến trình | Proposed | 2 | Phase 2 | Duyệt có điều kiện |
 | D-010 | Hợp đồng artifact | Proposed | 2 | Phase 2 | Duyệt |
 | D-011 | Lease, heartbeat | Proposed | 2 | Phase 2 | Duyệt có điều kiện, cùng D-018 |

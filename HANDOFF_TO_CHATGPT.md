@@ -1,21 +1,21 @@
 # HANDOFF TO CHATGPT – AI VIDEO FACTORY
 
-Cập nhật lần cuối: 2026-10-30, sau khi push `fb3a19f` và xác nhận repo công khai. Tệp này được duy trì sau mọi phase và giữ lại lịch sử còn liên quan.
+Cập nhật lần cuối: 2026-10-31, sau khi Owner trả lời "1B, 2A, 4a, 4b" (Amendment A02 của SG-002). Tệp này được duy trì sau mọi phase và giữ lại lịch sử còn liên quan.
 
 ## 1. Trạng thái hiện tại
 
 | Mục | Giá trị |
 |---|---|
-| Phase hiện tại | Phase 0 – Hồ sơ dự án, đã nghiệm thu |
-| Tình trạng | **Phase 0: ACCEPTED** (Project Owner, 2026-10-30), chỉ ở mức tài liệu và thiết kế. **Phase 1: NOT AUTHORIZED** |
-| Cổng đầu vào Phase 1 | Vẫn hiệu lực: quyết định D-013, D-017; trả lời Q-03, Q-06; kế hoạch Phase 1 được xác nhận |
+| Phase hiện tại | **Phase 1 – Môi trường & đo đạc nền, bước 1.0.** Phase 0 đã nghiệm thu |
+| Tình trạng | **Phase 0: ACCEPTED** (Project Owner, 2026-10-30), mức tài liệu và thiết kế. **Phase 1: PLAN CONFIRMED — step 1.0 only** (Owner xác nhận kế hoạch 2026-10-31; `docs/operations/phase-reports/PHASE-01-PLAN.md`). Chưa được phép cài đặt hay tải model; mỗi lệnh cần xác nhận riêng |
+| Cổng đầu vào Phase 1 | Q-03 (video **có** kiếm tiền, license phải cho phép thương mại) và Q-06 (chạy qua đêm, tối đa **4 giờ** cho một video, Owner đã xác nhận) đã trả lời 2026-10-31. D-013 và D-017 đã duyệt 2026-10-31. **Kế hoạch chi tiết Phase 1 đã được Owner xác nhận** (2026-10-31). Không còn cổng đầu vào Phase 1 nào chờ; Owner đã chọn tiêu chuẩn nhóm B là S2 (2026-10-31, nguyên văn "Chọn S2"); Codex đã APPROVED phân loại theo S2 tại RR-005; việc đang chờ là: Owner chọn hướng TTS tiếng Việt, Owner duyệt danh sách model, và quyền tải, cài, chạy từng bước |
 | D-023 | **APPROVED — OPTION C** (Project Owner, 2026-10-30) |
 | Q-13 | **ANSWERED — OPTION C** |
 | TikTok Direct Post | **POLICY BLOCKED** |
 | R4-01 | **CLOSED** (Codex focused re-review, ở mức tài liệu) |
 | F-01 | **CLOSED** (Codex Final F-01 Verification) |
-| Git checkpoint | Commit `def8fdf` và `fb3a19f` đã có trên `origin/main` (Project Owner cho phép; Claude xác minh hash khớp). Mỗi lần commit hay push tiếp theo cần cho phép riêng |
-| Kết luận Codex mới nhất | **PASS — READY FOR OWNER ACCEPTANCE** (Final F-01 Verification) |
+| Git checkpoint | Commit `def8fdf`, `fb3a19f`, `e83ecec` đã có trên `origin/main` (Project Owner cho phép; Claude xác minh hash khớp). Mỗi lần commit hay push tiếp theo cần cho phép riêng |
+| Kết luận Codex mới nhất | **Phase 1.0 hồ sơ nghiên cứu: APPROVED tại RR-004** (vòng 1/3) **và phân loại theo S2 APPROVED tại RR-005** (vòng 2/3). Không phải PASS về license thương mại cuối cùng, danh sách benchmark hay quyền thực thi. **Chọn tiêu chuẩn S2 không thay việc Owner duyệt từng ứng viên và rủi ro dư kèm theo.** (Phase 0: PASS — READY FOR OWNER ACCEPTANCE tại Final F-01 Verification, đã nghiệm thu.) |
 | Kết luận Codex vòng 4 | **APPROVED WITH CHANGES**, chỉ cho hồ sơ Phase 0 (`docs/operations/reviews/PHASE-00-REVIEW.md`) |
 | Kết luận Codex vòng 3 | CHANGES REQUESTED |
 | Kết luận Codex vòng 1 | NEEDS REVISION |
@@ -26,11 +26,22 @@ Cập nhật lần cuối: 2026-10-30, sau khi push `fb3a19f` và xác nhận re
 | RR-001 | Vòng 0/3: CHANGES REQUESTED, finding F-001, F-002 |
 | RR-002 | Vòng 1/3: **APPROVED**, trạng thái `ANSWERED` |
 | F-001, F-002 | **CLOSED** (Codex, RR-002) |
-| Lượt làm việc | Project Owner. Không có RR đang mở. Claude đã dừng |
+| SG-002 | **ACTIVE** (Project Owner, 2026-10-31): hồ sơ ứng viên Phase 1.0 và Codex re-review; giới hạn 3 vòng; đã dùng vòng 0, 1 và 2 (RR-003, 004, 005); còn **một vòng cuối (3/3)**. Claude không tự đóng; chỉ Owner quyết định đóng |
+| SG-002 Amendment A01 | **APPROVED** (Owner, 2026-10-31): bốn file (`CHANGELOG.md`, `CURRENT_STATUS.md`, `DECISIONS.md`, `IMPLEMENTATION_PLAN.md`) là nhóm A **chỉ đọc**; không đặt lại bộ đếm |
+| SG-002 Amendment A02 | **APPROVED** (Owner, 2026-10-31, lời "1B, 2A, 4a, 4b"): Claude được ghi D-024 (tiêu chuẩn S2) vào `DECISIONS.md` và đồng bộ `CURRENT_STATUS.md`; `CHANGELOG.md` vẫn chỉ đọc; không đặt lại bộ đếm. Hai file đó đổi hash so với ảnh chụp RR-005 (thay đổi hợp lệ theo A02) |
+| Mã 1B | Danh sách model: **chỉ Qwen3 4B `q4_K_M`**, kèm rủi ro dư; 8B chưa duyệt. Không phải quyền tải, cài, chạy |
+| Mã 2A | Nghiên cứu TTS bằng tài liệu: VieNeu v3 Turbo **không có tệp LICENSE trong kho Hugging Face** (chỉ metadata và README), giữ nhóm A; ViZipVoice nhóm A; VietTTS, viXTTS nhóm C. **Vẫn không có TTS tiếng Việt nhóm B (R1)**. Các thay đổi này chưa được Codex review |
+| D-024 | **APPROVED** (Owner, S2). **Mã 2G và 4c (Owner, 2026-10-31, nguyên văn "2G, 4C- xác nhận 1-8"):** điều 9 của PHASE-01-PLAN.md **bị bác**; điều 1–8 **được xác nhận**. R1 vẫn mở (báo Owner trước Phase 4 và 5). Mã 3a–3g, 4d, 4e, 4f **chưa trả lời**; chưa có quyền tải, cài, chạy. `CURRENT_STATUS.md` chưa phản ánh 2G/4c (ngoài phạm vi A02) |
+| RR-003 | Vòng 0/3: **CHANGES REQUESTED** (Codex), `ANSWERED` |
+| RR-004 | Vòng 1/3: **APPROVED** (Codex), `ANSWERED`. Reviewer artifact `docs/operations/reviews/PHASE-01-REVIEW.md` |
+| P1-001, P1-002 | **CLOSED** (Codex, RR-004) |
+| Quyết định S2 | **Owner chọn S2 ngày 2026-10-31** (nguyên văn "Chọn S2"). Dữ liệu huấn luyện không công bố là rủi ro dư do Owner chấp nhận, chỉ cho ứng viên thỏa ba điều kiện, chỉ cho phân loại. Không phải kết luận pháp lý, duyệt danh sách hay quyền tải, cài, chạy. Chưa ghi vào `DECISIONS.md` (ngoài allowlist) |
+| RR-005 | Vòng 2/3: **APPROVED** (Codex), `ANSWERED`. Phân loại Qwen3 4B, 8B lên nhóm B theo S2 được chấp nhận để **trình Owner**, không phải "đã duyệt" hay "sẵn sàng chạy" |
+| Lượt làm việc | **Project Owner.** Không có RR đang mở. Claude đã dừng. `CURRENT_STATUS.md` đã đồng bộ theo A02. Còn vòng 3/3 của SG-002; chưa dùng. Claude không tự đóng SG-002, không commit, không push |
 | Code ứng dụng | **NOT IMPLEMENTED** |
 | Runtime testing | **NOT PERFORMED** |
-| Phần mềm cài cho dự án, model AI, credentials | **Chưa có** |
-| Git | Nhánh `main` ở `fb3a19f`, trùng `origin/main`; working tree sạch. **Repo từ xa CÔNG KHAI** (Project Owner xác nhận): không đẩy secret, credentials, dữ liệu vận hành, model hay media |
+| Phần mềm cài cho dự án, model AI, credentials | **Đã có (2026-10-31, Amendment A03):** Ollama 0.40.13 (Homebrew, kèm 10 gói phụ thuộc gồm `python@3.15`, `mlx`; Homebrew nâng lên 7.0.11) và model `qwen3:4b-q4_K_M` (digest khớp hồ sơ, SHA-256 blob tự tính). Đã tải thêm `qwen3:8b-q4_K_M` (A06, digest khớp, chưa chạy). **Đã đo thô Qwen3 4B** (A04, A05): nạp nguội 2.56 s, 34 token/s, RSS đỉnh 3,277 MB, `format` JSON schema 9/9 hợp lệ so với 2/9 không `format`; **Đo thô 8B (A07, không cô lập):** nạp 3.6 s, ~19 token/s, RSS đỉnh 5,796 MB, swap tăng ~740 MB; `format` giúp chia cảnh nhưng 8B ít lỗi hơn 4B khi không `format` (8/9 so với 2/9). Không bật dịch vụ nền. Credentials: chưa có |
+| Git | Nhánh `main` ở `e83ecec`, trùng `origin/main`. **Working tree không sạch:** tài liệu Phase 1 và trạng thái chưa commit, chưa push. **Repo từ xa CÔNG KHAI** (Project Owner xác nhận): không đẩy secret, credentials, dữ liệu vận hành, model hay media |
 
 ## 2. Phân biệt trạng thái
 
@@ -101,7 +112,7 @@ Tất cả là `Proposed`. Không có mục nào được duyệt thay cho Chủ
 
 | Trước phase | Quyết định | Khuyến nghị |
 |---|---|---|
-| 1 | D-013, D-017 | Duyệt |
+| 1 | ~~D-013, D-017~~ | **Đã duyệt 2026-10-31** (D-013 chỉ duyệt phương pháp benchmark) |
 | 2 | D-010, D-016, D-018, D-020 | Duyệt |
 | 2 | D-009, D-011 (cùng D-018), D-015 (`.env`) | Duyệt có điều kiện |
 | 4 | D-012 | Duyệt có điều kiện, sau số đo Phase 1 |
@@ -109,7 +120,7 @@ Tất cả là `Proposed`. Không có mục nào được duyệt thay cho Chủ
 | 13 | D-022 | Duyệt |
 | 15 | D-019, D-021, D-015 (Keychain) | Duyệt |
 
-Đã duyệt: D-001 đến D-007, D-023 (chỉ cho đánh giá, không cấp quyền triển khai). Lead Developer: D-008.
+Đã duyệt: D-001 đến D-007, D-013, D-017, D-023 (chỉ cho đánh giá, không cấp quyền triển khai), D-024 (tiêu chuẩn S2, chỉ phân loại). Lead Developer: D-008.
 
 ## 6. Lịch sử thay đổi
 
@@ -164,12 +175,12 @@ Lệnh `.gitignore` và kết quả đầy đủ: `docs/operations/phase-reports
 
 ## 9. Trở ngại còn lại
 
-1. Phase 0 đã nghiệm thu, nhưng Phase 1 chưa được phép bắt đầu. Nghiệm thu không xác nhận code đã triển khai hay runtime test đã pass.
-2. Phase 1 cần D-013, D-017, Q-03, Q-06 và kế hoạch được xác nhận.
+1. Phase 0 đã nghiệm thu. Phase 1 chỉ được phép ở bước 1.0 (không cài đặt, không tải). Nghiệm thu không xác nhận code đã triển khai hay runtime test đã pass.
+2. Cài đặt và tải model ở các bước sau cần xác nhận từng lệnh; danh sách ứng viên bước 1.0 cần Owner duyệt trước. Q-03, Q-06 đã trả lời; ngân sách 4 giờ chặt hơn giả định 8 giờ, nên mục tiêu một video mỗi ngày (R2) càng cần số đo thực.
 3. Phase 2 cần các quyết định ở mục 5.
 4. Chưa có bằng chứng về TTS tiếng Việt, tốc độ render, nhiệt, RAM.
 5. Chính sách nền tảng chưa đủ cho bất kỳ adapter nào; TikTok Direct Post `POLICY BLOCKED`; Facebook chưa xác minh.
 
 ## 10. Bước tiếp theo đề xuất
 
-Không có Scope Grant đang chạy. Trước Phase 1, Project Owner quyết định D-013, D-017 và trả lời Q-03, Q-06. Claude không tự commit, push hay bắt đầu Phase 1.
+SG-002 `ACTIVE` với Amendment A01. RR-003 (vòng 0/3) bị `CHANGES REQUESTED`; Claude đã sửa P1-001 và P1-002; **Codex kết luận APPROVED tại RR-004 (vòng 1/3) và đóng cả hai finding.** **Sau đó Owner chọn S2** (nguyên văn "Chọn S2"). Claude chuyển Qwen3 4B và 8B `q4_K_M` lên **nhóm B theo S2** (LICENSE Apache-2.0 và Ollama MIT đã đọc; dữ liệu huấn luyện không công bố là rủi ro dư do Owner chấp nhận; giới hạn định danh đi cùng hồ sơ) và đăng RR-005 (vòng 2/3); **Codex kết luận APPROVED, không có finding mới**. Lượt thuộc về Owner; bảng quyết định cuối cùng ở `REVIEW_RESPONSE.md`. Bước 1.0: `docs/testing/phase1-candidates.md`. **Piper `vais1000` bị loại** (tinh chỉnh từ lessac, dữ liệu Blizzard 2013 chỉ cho nghiên cứu); VieNeu-TTS 0.3B và 0.5B bị loại (dữ liệu CC BY-NC); VieNeu v3 Turbo, Kokoro, Piper `ljspeech` nhóm A. Chưa có TTS tiếng Việt nào đủ điều kiện (R1). Báo cáo pre-approval gốc của Codex không có trong repo. Owner cần quyết định (độc lập nhau): hướng TTS tiếng Việt (`phase1-candidates.md` mục 7); duyệt danh sách model; quyền tải, cài, chạy từng bước; Amendment cho `CURRENT_STATUS.md` (đang lệch, còn ghi Qwen3 nhóm B theo cách cũ và lượt cũ). Claude không tự cài đặt, tải model, commit hay push.

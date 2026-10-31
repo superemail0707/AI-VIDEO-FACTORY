@@ -79,6 +79,23 @@ Mục này có **hai trạng thái độc lập**:
 
 **Không suy ra từ quyết định này:** nghiệm thu Phase 0, cho phép bắt đầu Phase 1, hay thay đổi trạng thái D-009 đến D-022.
 
+### D-013 – Chọn thư viện rasterize SVG bằng benchmark
+Ngày 2026-10-31. `Approved`, Project Owner ("Duyệt cả hai", trả lời yêu cầu duyệt D-013 và D-017). Nội dung đề xuất ngày 2026-10-30 được duyệt nguyên văn: chốt ở Phase 1 giữa resvg, CairoSVG và trình duyệt headless bằng benchmark trên máy mục tiêu, vì đây là chỗ nghẽn có khả năng lớn nhất nhưng chưa có số đo.
+- **Phạm vi của phê duyệt:** chỉ duyệt **phương pháp** đo. Việc chọn thư viện cuối cùng vẫn trình Project Owner sau khi có số liệu.
+- **Không suy ra:** cho phép cài đặt, cho phép bắt đầu Phase 1, hay chọn sẵn thư viện nào. Mỗi lệnh cài đặt vẫn cần giải thích và xác nhận.
+
+### D-017 – Không dùng TTS hoặc công cụ đăng bài không chính thức
+Ngày 2026-10-31. `Approved`, Project Owner ("Duyệt cả hai"). Nội dung đề xuất ngày 2026-10-30 được duyệt nguyên văn: loại `edge-tts` và thư viện tương tự, kể cả miễn phí, vì trái nguyên tắc local-first và nguyên tắc dùng API chính thức, và có rủi ro điều khoản dịch vụ.
+- **Áp dụng cho:** danh sách ứng viên của spike TTS ở Phase 1; mọi công cụ TTS, đăng bài hay nguồn nội dung dùng dịch vụ không chính thức hoặc không được hỗ trợ.
+- **Kết hợp Q-03:** ứng viên còn phải có license cho phép thương mại.
+- **Không suy ra:** cho phép bắt đầu Phase 1, hay duyệt bất kỳ ứng viên cụ thể nào.
+
+### D-024 – Tiêu chuẩn bằng chứng S2 cho ứng viên nhóm B (Phase 1.0)
+Ngày 2026-10-31. `Approved`, Project Owner ("Chọn S2"; ghi vào file theo "1B, 2A, 4a, 4b", mã 4a). Chi tiết: [phase1-candidates.md](docs/testing/phase1-candidates.md) mục 7.1.
+- **Nội dung:** một ứng viên chỉ được xếp nhóm B khi (i) đã đọc toàn văn LICENSE của đúng artifact và runtime; (ii) đã ghi revision hoặc digest và nêu rõ phần chưa xác định được; (iii) không có bằng chứng trái ngược. Dữ liệu huấn luyện không công bố là rủi ro dư do Project Owner chấp nhận bằng văn bản, đi kèm artifact.
+- **Phạm vi hẹp:** chỉ là tiêu chuẩn **phân loại**. Không phải kết luận pháp lý, không phải duyệt danh sách model, không phải quyền tải, cài hay chạy. Không áp dụng cho TTS tiếng Việt.
+- **Không suy ra:** duyệt bất kỳ ứng viên nào. Việc duyệt từng ứng viên là quyết định riêng (Qwen3 4B `q4_K_M` được duyệt vào danh sách theo mã 1B, ghi tại `phase1-candidates.md`; 8B chưa duyệt).
+
 ## Quyết định trong thẩm quyền Lead Developer
 
 ### D-008 – Ngôn ngữ tài liệu
@@ -101,7 +118,7 @@ Ngày 2026-10-30. `Proposed`. **Lý do:** máy cá nhân có thể ngủ hoặc 
 Ngày 2026-10-30. `Proposed`. **Lý do:** 14.400 khung hình mỗi video 10 phút ở 24 fps. Giả định 100–200 KB/ảnh, tức 1,4–2,9 GB tệp tạm mỗi video. Tạm thời lưu khung hình chỉ khi debug.
 
 ### D-013 – Chọn thư viện rasterize SVG bằng benchmark
-Ngày 2026-10-30. `Proposed`. Chốt ở Phase 1 giữa resvg, CairoSVG và trình duyệt headless. **Lý do:** đây là chỗ nghẽn có khả năng lớn nhất, nhưng chưa có số đo.
+Đã được duyệt ngày 2026-10-31. Xem mục "Đã duyệt". Bản ghi này giữ làm lịch sử: ngày 2026-10-30, `Proposed`, chốt ở Phase 1 giữa resvg, CairoSVG và trình duyệt headless.
 
 ### D-014 – Đầu ra mặc định 1080p, 24 fps, H.264/AAC, 16:9
 Ngày 2026-10-30. `Proposed`. **Lý do:** 24 fps ít hơn 20% khung hình so với 30 fps và phù hợp hoạt hình 2D. Bản dọc 9:16 phụ thuộc Q-02.
@@ -113,7 +130,7 @@ Ngày 2026-10-30. `Proposed`. Cấu hình trong `.env` bị Git bỏ qua, OAuth 
 Ngày 2026-10-30. `Proposed`. Dashboard đề xuất dọn, người xác nhận. Worker từ chối run mới dưới ngưỡng dung lượng.
 
 ### D-017 – Không dùng TTS hoặc công cụ đăng bài không chính thức
-Ngày 2026-10-30. `Proposed`. Loại `edge-tts` và thư viện tương tự, kể cả miễn phí. **Lý do:** trái nguyên tắc local-first và dùng API chính thức, có rủi ro điều khoản dịch vụ.
+Đã được duyệt ngày 2026-10-31. Xem mục "Đã duyệt". Bản ghi này giữ làm lịch sử: ngày 2026-10-30, `Proposed`, loại `edge-tts` và thư viện tương tự.
 
 ### D-018 – Fencing, staging theo attempt và một Worker
 Ngày 2026-10-30. `Proposed`. Bổ sung cho D-011 theo BLOCKER 1 của Codex. `lease_generation` tăng đơn điệu, commit có điều kiện, đầu ra ghi vào staging theo generation, con trỏ trong DB là điểm commit duy nhất, khóa hệ điều hành bảo đảm một Worker. Đặc tả: `docs/architecture/queue-safety.md`.

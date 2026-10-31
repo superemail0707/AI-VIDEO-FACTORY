@@ -1,6 +1,248 @@
 # Phản hồi Review Kiến trúc của Codex
 
-Tài liệu gồm năm phần: **SG-001** (mới nhất), **Vòng 4**, **Vòng 3**, **Vòng 2** và **Vòng 1** (giữ nguyên làm lịch sử).
+Tài liệu gồm các phần: **Phản hồi RR-005 (APPROVED) và bảng quyết định cuối cùng** (mới nhất), **Quyết định S2 và RR-005**, **Phản hồi RR-004 (APPROVED)**, **SG-002 vòng 1/3**, **SG-002 vòng 0/3**, **SG-001**, **Vòng 4**, **Vòng 3**, **Vòng 2** và **Vòng 1** (giữ nguyên làm lịch sử).
+
+## SG-002 – Câu trả lời của Owner "2G, 4C- xác nhận 1-8" (2026-10-31)
+
+| Mã | Đã ghi | Hệ quả |
+|---|---|---|
+| 2G | Điều 9 của `PHASE-01-PLAN.md` bị bác | Bước 1.1 và benchmark Qwen3 4B không bị chặn bởi R1. R1 vẫn mở: báo Owner trước Phase 4 và 5 |
+| 4c | Điều 1–8 được xác nhận | Là điều kiện bắt buộc trước mọi tải, cài, chạy |
+
+**Không cấp quyền:** tải, cài, chạy (3a–3g chưa trả lời); 4d, 4e, 4f chưa trả lời. Mỗi lệnh vẫn cần xác nhận riêng. **Chưa đồng bộ:** `CURRENT_STATUS.md` còn ghi 2F/2G, 4c "chưa trả lời" vì A02 chỉ cho đồng bộ trạng thái của 1B/2A/4a/4b; cần Owner mở thêm Amendment. Codex chưa review phần này.
+
+## SG-002 – Thực hiện câu trả lời của Owner "1B, 2A, 4a, 4b" (2026-10-31)
+
+Không có Review Request mới; Codex chưa review phần này. Đây là thực hiện đúng bốn mã Owner trả lời, trong Amendment A02.
+
+| Mã | Đã làm | Nơi ghi |
+|---|---|---|
+| 1B | Danh sách model chỉ có Qwen3 4B `q4_K_M`, kèm rủi ro dư; 8B hoãn tới khi có số đo 4B. Không cấp quyền tải, cài, chạy | `phase1-candidates.md` mục 1, 3, 4.1, 4.2; `PHASE-01-PLAN.md` điều 11 |
+| 2A | Nghiên cứu tài liệu TTS tiếng Việt. VieNeu v3 Turbo: kho GitHub có LICENSE Apache-2.0 (chỉ cho mã), **kho Hugging Face của model không có tệp LICENSE**; giữ nhóm A. Thêm ViZipVoice (A), VietTTS và viXTTS (C, dựa trên tóm tắt tìm kiếm, chưa đọc toàn văn). **R1 chưa được giải quyết**. Không liên hệ ai, không tải, không chi tiền | `phase1-candidates.md` mục 4.8, 4.10 |
+| 4a | D-024 (tiêu chuẩn S2) ghi vào mục "Đã duyệt" | `DECISIONS.md` |
+| 4b | Đồng bộ `CURRENT_STATUS.md` (không gồm `CHANGELOG.md`) | `CURRENT_STATUS.md` |
+
+**Chưa trả lời, Claude không tự quyết:** 2F/2G (Điều 9), 3a–3g, 4c, 4d, 4e, 4f. **Hash:** `DECISIONS.md` và `CURRENT_STATUS.md` đổi so với ảnh chụp RR-005 theo A02; `CHANGELOG.md`, `IMPLEMENTATION_PLAN.md` và `PHASE-01-REVIEW.md` không đổi. Vòng 3/3 của SG-002 chưa dùng.
+
+## SG-002 – Phản hồi RR-005 vòng 2/3: APPROVED và bảng quyết định cuối cùng (2026-10-31)
+
+**Nguồn:** báo cáo `# Review RR-005` trong [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md), kết luận **APPROVED — PASS cho hồ sơ phân loại theo S2**. Kết luận thuộc về Codex; phần này chỉ ghi nhận. Codex không có finding mới; P1-001, P1-002 vẫn `CLOSED` theo RR-004.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude; SG-002 `ACTIVE`; 9/9 hash nhóm A khớp RR-005; bốn file chỉ đọc không đổi; 21,512 byte cũ của báo cáo khớp SHA-256 bằng `tail -c`; phần mới 8,831 byte có đúng một báo cáo `# Review RR-005`; `PHASE-00-REVIEW.md` nguyên vẹn; không có nhóm C. SHA-256 chỉ chứng minh nội dung, không chứng minh ai viết phần mới.
+
+RR-005 chuyển `ANSWERED`; không có RR đang mở. Claude không đóng SG-002, không duyệt danh sách, không đổi phân loại.
+
+### Điều APPROVED nói và không nói (theo Codex)
+
+- **Chấp nhận:** Qwen3 4B và 8B `q4_K_M` ở nhóm B để **trình Owner**. Không chấp nhận diễn giải B là đã duyệt hay sẵn sàng chạy.
+- **Chọn tiêu chuẩn S2 không thay việc Owner duyệt từng ứng viên và rủi ro dư kèm theo**; mọi phần chưa xác minh phải đi cùng hồ sơ trình Owner, không được đổi thành "đã đủ quyền thương mại".
+- Codex đọc trực tiếp trang license blob của hai tag Ollama (blob `d18a5cc71b84`, hiển thị Apache License 2.0) và LICENSE Hugging Face của 4B tại revision đã ghi. **Bằng chứng mới này thuộc báo cáo của Codex; hồ sơ của Claude chưa nhúng nó.**
+- Codex **lại không truy cập được** hai manifest registry Ollama, nên digest dài, config và model layer vẫn chỉ là lời Claude báo cáo. Không dùng báo cáo để xác nhận tệp tải về có đúng hash.
+- Điều kiện (iii) "không có bằng chứng trái ngược" là kết quả có giới hạn, không phải bằng chứng vắng mặt tuyệt đối.
+
+### Bảng quyết định cuối cùng trình Project Owner
+
+Claude **không tự phê duyệt** mục nào. Các mục độc lập với nhau; bạn có thể trả lời theo mã (ví dụ "1A, 2B, 3 chưa, 4: có").
+
+**1. Qwen3 4B và 8B nhóm B và rủi ro dư**
+
+| Mã | Lựa chọn | Hệ quả |
+|---|---|---|
+| 1A | Duyệt **cả hai** artifact vào danh sách, kèm rủi ro dư ở bảng dưới | 8B có rủi ro bộ nhớ cao nhất với 16 GB; kế hoạch đã ghi đo 4B trước |
+| 1B | Duyệt **chỉ 4B** `q4_K_M` bây giờ; 8B xét lại sau khi có số đo 4B | Claude khuyến nghị: ít rủi ro, khớp thứ tự đo đã ghi |
+| 1C | Chưa duyệt | Nhóm B giữ nguyên là phân loại, không có gì để benchmark |
+
+Rủi ro dư cần bạn chấp nhận **riêng cho từng artifact** nếu duyệt: dữ liệu huấn luyện không công bố; chưa biết commit Hugging Face nào là nguồn của GGUF; blob license 11,338 byte chưa so từng byte; manifest và digest dài chưa được xác nhận độc lập; "không tìm thấy bằng chứng trái ngược" là kết quả có giới hạn; tiếng Việt của Qwen3 chưa kiểm chứng; RAM runtime chưa đo. **Không có đánh giá mức độ rủi ro bằng số**; chỉ có thể nói rủi ro license phần còn lại là về nguồn dữ liệu huấn luyện, còn rủi ro vận hành chưa biết cho tới khi đo.
+
+**2. Hướng xử lý TTS tiếng Việt** (hiện không ứng viên nào đủ nhóm B; R1 là rủi ro cao)
+
+| Mã | Hướng | Ghi chú |
+|---|---|---|
+| 2A | Tiếp tục **nghiên cứu tài liệu**: đọc toàn văn license VieNeu v3 Turbo và tìm thêm ứng viên tiếng Việt | Không cần quyền mới; Claude khuyến nghị |
+| 2B | Cho phép **liên hệ tác giả** VieNeu bằng văn bản về dữ liệu huấn luyện và quyền thương mại | Thông tin ra bên ngoài; cần bạn cho phép và duyệt nội dung thư |
+| 2C | Cho phép xét **dịch vụ hoặc dữ liệu trả phí** | Hiện cấm; cần bạn duyệt chi phí |
+| 2D | Giữ Phase 1 chỉ cho LLM và render, **hoãn TTS tiếng Việt** | Không giải quyết R1 |
+| 2E | **Xem lại phạm vi tiếng Việt** trước Phase 4 và 5 | Thay đổi phạm vi sản phẩm |
+
+Kèm theo: **điều 9 của `PHASE-01-PLAN.md`** (dừng trước bước 1.1 nếu không có TTS Việt đủ điều kiện) chặt hơn kế hoạch bạn đã xác nhận. Nếu giữ, mọi cài đặt bị chặn cho tới khi giải quyết TTS; nếu bác, benchmark Qwen3 và render có thể đi trước. Mã **2F: giữ điều 9** hoặc **2G: bác điều 9**.
+
+**3. Quyền tải, cài, benchmark cần cấp riêng** (chưa cấp; mỗi lệnh xin xác nhận riêng)
+
+| Mã | Quyền | Mức ảnh hưởng |
+|---|---|---|
+| 3a | Cài **Ollama** bằng Homebrew | Phần mềm hệ thống, kèm dịch vụ nền; chưa có trên máy; cách chạy dịch vụ sẽ nêu ở lệnh cụ thể |
+| 3b | Tải `qwen3:4b-q4_K_M` | Khoảng 2.6 GB; tag tường minh; ghi lại digest sau khi tải |
+| 3c | Tải `qwen3:8b-q4_K_M` | Khoảng 5.2 GB; chỉ sau khi 4B đo xong và còn chỗ |
+| 3d | Chạy **benchmark Qwen3** | Đo RAM đỉnh, thời gian nạp, tốc độ, tiếng Việt, giải phóng model; tuần tự, cắm điện, trong ngân sách 4 giờ cho toàn video |
+| 3e | Python mới hơn hoặc môi trường riêng | Python hệ thống là 3.9.6; chưa biết có cần không |
+| 3f | Cài **FFmpeg** và các benchmark render | Thuộc bước 1.1 và 1.2, quyết định riêng |
+| 3g | Lưu kết quả ở `workspace/` (ngoài Git) | Repo công khai; không đưa model hay mẫu âm thanh vào Git |
+
+Tôi **không** xin quyền nào ở bảng này lúc này. Khi bạn cấp, tôi nêu lệnh chính xác, giải thích và chờ xác nhận trước từng lệnh.
+
+**4. Quyết định và đồng bộ tài liệu còn tồn đọng**
+
+| Mã | Việc | Ghi chú |
+|---|---|---|
+| 4a | Ghi quyết định **S2** vào `DECISIONS.md` | Cần quyền; hiện chỉ có trong `TASKS.md`, hồ sơ ứng viên, kế hoạch và handoff |
+| 4b | **Amendment cho `CURRENT_STATUS.md`** (và `CHANGELOG.md` nếu muốn) | File đang lệch; Codex khuyến nghị đồng bộ trước khi dùng nó để duyệt danh sách hoặc giao thực thi |
+| 4c | Xác nhận hoặc bác **điều 1 đến 9** của `PHASE-01-PLAN.md` | Hiện chỉ là đề xuất của Claude |
+| 4d | Chuẩn hóa trường hợp reviewer artifact **"ABSENT"** trong workflow | Codex khuyến nghị; cần phạm vi riêng |
+| 4e | **Đóng SG-002** hay giữ ACTIVE | Đã dùng vòng 0, 1, 2; còn một vòng cuối 3/3 |
+| 4f | Cho phép **commit và push** | Nhiều tài liệu chưa vào Git (HEAD vẫn `e83ecec`); repo **công khai**; tôi quét secret trước khi commit |
+
+Thứ tự gợi ý của Claude: 4b và 4a trước, để file trạng thái và quyết định khớp nhau; rồi 1, 2; rồi 3 khi sẵn sàng; 4f sau khi đồng bộ.
+
+**Lượt thuộc về Owner** theo workflow mục 5.
+
+## SG-002 – Quyết định S2 của Owner và RR-005 vòng 2/3 (2026-10-31)
+
+**Quyết định:** trả lời câu hỏi chọn S1 hay S2 cho tiêu chuẩn nhóm B, Project Owner viết nguyên văn **"Chọn S2"**. Claude chép lại; hash không chứng minh được nguồn lời này.
+
+**Cách Claude hiểu quyết định, hẹp nhất có thể:**
+
+- S2 là tiêu chuẩn **phân loại**: dữ liệu huấn luyện không công bố là rủi ro dư do Owner chấp nhận, chỉ cho ứng viên thỏa đủ ba điều kiện (i) đọc LICENSE đúng artifact và runtime, (ii) có revision hoặc digest và nêu phần chưa định danh, (iii) không có bằng chứng trái ngược.
+- Không là kết luận pháp lý, không là duyệt danh sách model, không là quyền tải, cài, chạy, benchmark, commit, push, liên hệ ngoài hay chi phí.
+- Không áp dụng cho TTS hay cho ứng viên có phát biểu mâu thuẫn hoặc nghi vấn cụ thể.
+- Các giới hạn định danh và bất định đi cùng hồ sơ; Codex đã lưu ý điều này ở RR-004.
+
+**Việc Claude làm (trong allowlist SG-002):** đối chiếu ba điều kiện cho từng ứng viên (`phase1-candidates.md` mục 7.1); **chỉ Qwen3 4B và 8B `q4_K_M` được chuyển lên nhóm B**, mọi ứng viên khác giữ nguyên (VieNeu v3 Turbo, Kokoro, Piper `ljspeech` vì có phát biểu mâu thuẫn hoặc nghi vấn; các ứng viên còn lại chưa được đánh giá theo S2); đồng bộ `PHASE-01-PLAN.md` điều 2 và 10, `HANDOFF_TO_CHATGPT.md`, `TASKS.md`. Chưa ghi vào `DECISIONS.md` vì ngoài allowlist.
+
+**Điểm Claude tự thấy yếu và đã ghi trong hồ sơ:** (i) mới đọc LICENSE qua công cụ web trả bản tóm tắt, và blob license 11,338 byte trong gói Ollama chưa so từng byte; (ii) Codex chưa xác nhận độc lập manifest Ollama và commit 4B (RR-004); (iii) "không tìm thấy bằng chứng trái ngược" là kết quả tìm kiếm có giới hạn, không phải bằng chứng vắng mặt. Tôi để Codex quyết định ba điểm này có đủ cho nhóm B không.
+
+**Đã dùng vòng:** 0 và 1. RR-005 là vòng 2/3. Nếu Codex còn finding thì vòng 3/3 là vòng cuối, sau đó phải dừng và báo Owner.
+
+**Bàn giao:** RR-005 trong `TASKS.md` (bản có hiệu lực). Claude không tự gọi Codex, không đánh dấu PASS.
+
+## SG-002 – Phản hồi RR-004 vòng 1/3: APPROVED (2026-10-31)
+
+**Nguồn:** báo cáo `# Review RR-004` trong [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md), kết luận **APPROVED** (PASS cho hồ sơ nghiên cứu trong phạm vi re-review). Kết luận và việc đóng finding thuộc về Codex; phần này chỉ ghi nhận.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude (RR-004 `OPEN`, đã có báo cáo cùng mã); SG-002 `ACTIVE`; 9/9 hash nhóm A khớp RR-004; bốn file chỉ đọc không đổi; 12,893 byte cũ của báo cáo khớp SHA-256 bằng `tail -c`; phần mới 8,619 byte có đúng một báo cáo `# Review RR-004`; `PHASE-00-REVIEW.md` nguyên vẹn; không có nhóm C. SHA-256 chỉ chứng minh nội dung, không chứng minh ai viết phần mới.
+
+| Mã | Mức | Kết luận của Codex | Phản hồi của Claude |
+|---|---|---|---|
+| P1-001 | MEDIUM | **CLOSED** | Ghi nhận, không bất đồng |
+| P1-002 | LOW | **CLOSED** trong phạm vi file được sửa | Ghi nhận, không bất đồng |
+
+Không có finding mới. RR-004 chuyển `ANSWERED`; không có RR đang mở. **Chỉ báo cáo của Codex đóng finding**; Claude không đóng SG-002 và không đổi trạng thái ứng viên sang nhóm B.
+
+### Điều APPROVED không có nghĩa
+
+Codex nêu rõ đây **không phải** PASS về license thương mại cuối cùng, danh sách benchmark hay quyền thực thi. Nhóm B vẫn trống. Chưa có kết luận nào về RAM, tốc độ, tiếng Việt của Qwen3 hay mục tiêu 4 giờ.
+
+### Giới hạn bằng chứng còn lại (theo Codex và Claude)
+
+- **Digest Ollama và commit 4B chưa được xác nhận độc lập.** Codex xác nhận được commit Qwen3-8B (`b968826d...`, 2025-07-26) nhưng **không truy cập được** hai manifest registry Ollama và API Qwen3-4B. Khi nhận lại lượt tôi đọc lại cả ba nguồn và nhận đúng giá trị đã ghi, nhưng đó là **cùng một công cụ đọc lại, không phải xác nhận độc lập**. Hash này lấy từ registry, không phải tính lại từ weights đã tải.
+- Hệ quả "Qwen3 đủ nhóm B nếu chọn S2" là **đánh giá có điều kiện của Claude**, không phải kết luận của reviewer. Nếu Owner chọn S2, các giới hạn định danh (commit Hugging Face so với blob GGUF, blob license chưa so từng byte) và quyền của phụ thuộc **phải đi cùng hồ sơ**, và quyết định phải được ghi rõ là **chấp nhận rủi ro**, không phải giữ nguyên S1.
+- Không có TTS tiếng Việt nào đủ điều kiện nhóm B.
+
+### `CURRENT_STATUS.md` đang lệch (ngoài allowlist)
+
+`CURRENT_STATUS.md:25` còn ghi "Nhóm B: Qwen3 4B và 8B". Tôi không sửa vì file là nhóm A chỉ đọc. Codex khuyến nghị: **Owner nên cấp quyền đồng bộ trước khi dùng file này để duyệt danh sách hoặc giao tải, chạy.** `TASKS.md` có giá trị quyết định về lượt.
+
+### Điểm cần Owner phê duyệt hoặc quyết định (độc lập với nhau)
+
+| # | Việc | Ghi chú |
+|---|---|---|
+| 1 | **Chọn S1 hay S2** (`phase1-candidates.md` mục 7.1) | S2 chỉ đúng nếu bạn chấp nhận rủi ro dư bằng văn bản; sau đó Claude cập nhật nhóm và cần Codex re-review, và vẫn cần bạn duyệt danh sách |
+| 2 | **Hướng TTS tiếng Việt** (mục 7) | Chưa có ứng viên nhóm B; liên hệ tác giả hay chi phí đều cần bạn cho phép riêng |
+| 3 | **Xác nhận chín điều kiện bổ sung và điều 10** trong `PHASE-01-PLAN.md` | Hiện chỉ là đề xuất của Claude; điều 9 chặt hơn kế hoạch đã xác nhận (dừng trước bước 1.1 nếu không có TTS Việt đủ điều kiện) |
+| 4 | **Duyệt danh sách model** | Chưa có gì để duyệt khi nhóm B trống |
+| 5 | **Quyền tải, cài, chạy** từng bước | Độc lập với 1 đến 4 |
+| 6 | **Mở Amendment cho `CURRENT_STATUS.md`** (và `CHANGELOG.md` nếu muốn) | Để hết lệch trạng thái |
+| 7 | **Chuẩn hóa trường hợp reviewer artifact "ABSENT"** trong workflow | Codex khuyến nghị; cần phạm vi riêng |
+| 8 | **Đóng SG-002** hay giữ ACTIVE | Chỉ Owner quyết định; đã dùng 1/3 vòng |
+| 9 | **Commit và push** các thay đổi hiện có | Cần cho phép riêng; hiện nhiều tài liệu chưa vào Git |
+
+**Lượt thuộc về Owner** theo workflow mục 5.
+
+## SG-002 – Phản hồi RR-003 vòng 0/3 (2026-10-31)
+
+**Nguồn:** báo cáo `# Review RR-003` trong [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md) (file do Codex tạo; 12,893 byte khi Claude nhận lại lượt), kết luận **CHANGES REQUESTED**. Quyền ghi file này đến từ SG-002. Phần này không sửa báo cáo Codex và không đóng finding.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude (RR-003 `OPEN`, đã có báo cáo cùng mã); SG-002 `ACTIVE`; 9/9 hash nhóm A khớp RR-003; `PHASE-00-REVIEW.md` giữ nguyên 57,209 byte; file nhóm B mới có đúng một báo cáo `# Review RR-003`; không có đường dẫn nhóm C. SHA-256 chỉ chứng minh nội dung, không chứng minh ai viết phần mới.
+
+| Mã | Mức | Lập trường | Trạng thái |
+|---|---|---|---|
+| P1-001 | MEDIUM | Đồng ý | `FIX IMPLEMENTED — PENDING CODEX VERIFICATION` |
+| P1-002 | LOW | Đồng ý | `FIX IMPLEMENTED — PENDING CODEX VERIFICATION` |
+
+### P1-001 – Qwen3 nhóm B chưa đáp ứng tiêu chuẩn bằng chứng của chính hồ sơ
+
+- **Nguyên nhân:** tôi đặt tiêu chuẩn "mắt xích dữ liệu hoặc phụ thuộc chưa rõ thì chưa đủ nhóm B" nhưng vẫn xếp Qwen3 vào B dù dữ liệu huấn luyện không công bố và chưa đọc LICENSE; còn TTS bị giữ A vì cùng loại bất định. Không có tiêu chí phân biệt.
+- **Bằng chứng đã bổ sung (đọc 2026-10-31):** LICENSE của [Qwen3-4B](https://huggingface.co/Qwen/Qwen3-4B/raw/main/LICENSE) và [Qwen3-8B](https://huggingface.co/Qwen/Qwen3-8B/raw/main/LICENSE) là Apache License 2.0; [LICENSE của Ollama](https://raw.githubusercontent.com/ollama/ollama/main/LICENSE) là MIT. Commit đầu kho Hugging Face (4B `1cfa9a72...`, 8B `b968826d...`), digest manifest và model layer của hai artifact Ollama đã ghi vào `phase1-candidates.md` mục 4.1, 4.2. Công cụ trả về bản tóm tắt, không phải tệp nguyên văn, và digest chưa tự tính lại từ tệp tải về.
+- **Phần chưa định danh, nêu chính xác:** commit Hugging Face nào là nguồn của blob GGUF trên Ollama; blob license 11,338 byte của Ollama chưa so từng byte với LICENSE Hugging Face.
+- **Xử lý:** theo hướng Codex đề ra, **chuyển Qwen3 4B và 8B về nhóm A**; nhóm B hiện trống. Điều này làm tiêu chuẩn và phân loại nhất quán, **không nới tiêu chuẩn**. Thêm mục 7.1 với hai phương án để Owner quyết định (S1 nghiêm ngặt, S2 rủi ro dư có văn bản); Claude không tự áp dụng S2. Thêm điều 10 vào `PHASE-01-PLAN.md`, ghi là đề xuất chưa được Owner xác nhận.
+- **Không kết luận Qwen3 cấm thương mại:** hồ sơ nói rõ không tìm thấy điều khoản cấm. Vấn đề chỉ là quy trình xác minh theo tiêu chuẩn của chính hồ sơ.
+
+### P1-002 – Trạng thái bàn giao và cổng kế hoạch mâu thuẫn
+
+- **Nguyên nhân:** tôi sửa `REVIEW_RESPONSE.md` và phần đầu `HANDOFF_TO_CHATGPT.md` khi gỡ BLOCKED nhưng bỏ sót `phase1-candidates.md` dòng 5 và cuối handoff; dòng 11 của handoff còn ghi kế hoạch Phase 1 là điều kiện chờ dù đã được xác nhận.
+- **Xử lý:** đồng bộ `phase1-candidates.md` (trạng thái, danh sách việc đang chờ), `HANDOFF_TO_CHATGPT.md` (dòng cổng đầu vào, SG-002, RR-003, RR-004, lượt, Git, bước tiếp theo). Phát hiện thêm lúc sửa: handoff còn ghi `main` ở `fb3a19f` và "working tree sạch", trong khi HEAD là `e83ecec` và còn thay đổi chưa commit; đã sửa. Mô tả BLOCKED cũ giữ lại ở mục "Bàn giao: BLOCKED" bên dưới, có đánh dấu là lịch sử trước Amendment A01.
+- **Các việc chờ được tách riêng:** Codex re-review; Owner quyết định tiêu chuẩn nhóm B; Owner chọn hướng TTS tiếng Việt; Owner duyệt danh sách; quyền tải, cài, chạy từng bước.
+
+### Điều chưa xử lý được trong phạm vi SG-002
+
+- `CURRENT_STATUS.md` là nhóm A **chỉ đọc** nên tôi không sửa, và nó đang **lệch**: còn ghi "Nhóm B: Qwen3 4B và 8B" và một số trạng thái lượt cũ. `TASKS.md` có giá trị quyết định về lượt. Cần Owner mở Amendment nếu muốn đồng bộ file này.
+- Chưa giải quyết: trường hợp reviewer artifact chưa tồn tại (Codex khuyến nghị chuẩn hóa ABSENT trong workflow). Nằm ngoài allowlist, chờ Owner cấp phạm vi.
+- Vẫn chưa xác minh: toàn văn LICENSE của các ứng viên khác, tiếng Việt của Qwen3, RAM runtime, bất kỳ hiệu năng nào. Chưa có TTS tiếng Việt nào đủ điều kiện nhóm B.
+
+**Bàn giao:** RR-004 (vòng 1/3, tiếp nối RR-003) trong `TASKS.md`. Bản có hiệu lực chỉ nằm ở đó; phần này không phải RR thứ hai. Claude không tự gọi Codex.
+
+## SG-002 – Hồ sơ ứng viên Phase 1.0 (2026-10-31)
+
+**Quyền ghi:** file này nằm trong allowlist của SG-002 do Project Owner cấp.
+
+*Phần dưới đây là phản hồi vòng 0/3 cho tình trạng trước Amendment A01 và chỉ giữ làm lịch sử; trạng thái hiện hành nằm ở phần "Phản hồi RR-003" ngay trên.*
+
+**Cập nhật (2026-10-31): hết BLOCKED.** Project Owner chọn lựa chọn 2, bổ sung bốn file vào SG-002 làm nhóm A chỉ đọc (Amendment A01). Claude đã đăng **RR-003**, vòng 0/3, trong `TASKS.md`. Chưa có kết luận review nào của Codex cho Phase 1. Mục "Bàn giao: BLOCKED" bên dưới giữ làm lịch sử về tình trạng trước khi có Amendment A01.
+
+### Nguồn yêu cầu
+
+- Báo cáo pre-approval review của Codex (kết luận `NEEDS REVISION — NOT READY FOR OWNER APPROVAL`) **không có trong repo**: không có `docs/operations/reviews/PHASE-01-REVIEW.md`, và `PHASE-00-REVIEW.md` không chứa báo cáo Phase 1. Tôi chỉ có danh sách yêu cầu do Owner chuyển trong chat. Vì vậy chưa thể đối chiếu từng finding gốc theo mã.
+- Không đánh dấu finding nào là `CLOSED`. Chỉ Codex đóng được finding.
+
+### Đối chiếu danh sách yêu cầu của Owner
+
+| Yêu cầu | Xử lý | Vị trí |
+|---|---|---|
+| Tách A, B, C | Có | `phase1-candidates.md` mục 3 |
+| Bảng thông tin bắt buộc cho từng ứng viên (tên, vai trò, URL, artifact, revision, quantization, voice ID, license mã/trọng số/dữ liệu/phụ thuộc, thương mại, RAM và disk, nhóm, chưa xác minh, ngày) | Có, mục 4.1 đến 4.10 | – |
+| Piper `vais1000`: model card, dữ liệu, lessac, chuỗi quyền | Loại (nhóm C): tinh chỉnh từ lessac, dữ liệu Blizzard 2013 chỉ cho nghiên cứu | mục 4.3 |
+| VieNeu-TTS: phân biệt 0.3B và v3 Turbo, codec, giọng | 0.3B và 0.5B loại (dữ liệu CC BY-NC); v3 Turbo nhóm A | mục 4.7, 4.8 |
+| Piper tiếng Anh: giọng cụ thể | Có: `ljspeech` nhóm A; `lessac`, `hfc_*`, `libritts_r` nhóm C | mục 4.4, 4.5 |
+| Kokoro: revision, voice, phụ thuộc | Nhóm A; revision gốc không hiển thị, ghi SHA-256 model và 54 giọng | mục 4.9 |
+| Qwen3: đúng 4B/8B, tag, quantization; RAM không suy từ dung lượng tải | Nhóm B, tag tường minh; RAM ghi "chưa có nguồn" | mục 4.1, 4.2, 5 |
+| Voice cloning mặc định tắt | Ghi ở mục 2 và từng ứng viên | – |
+| MacBook Air M4 16 GB, tuần tự, ngân sách 4 giờ cho toàn video | Mục "Mô hình tuần tự" (cách đo, không có số) | mục 5 |
+| Bốn trạng thái độc lập | Mục 1 | – |
+
+### Chưa xác minh được
+
+- Toàn văn LICENSE của từng artifact (mới đọc tóm tắt trang); revision gốc của Qwen3 và Kokoro; tiếng Việt của Qwen3; RAM runtime của mọi ứng viên; điều khoản nhà cung cấp TTS đóng trong dữ liệu Kokoro; câu "personal use" của Piper và lộ trình "personal use" của VieNeu.
+- **Không có TTS tiếng Việt nào đủ điều kiện nhóm B.**
+
+### Bàn giao: BLOCKED
+
+Kiểm tra theo `AI_REVIEW_WORKFLOW.md` mục 7 cho thấy RR lúc này sẽ **thất bại ở bước kiểm tra của Codex**, vì vậy tôi **không** đăng RR đang `OPEN`.
+
+| Điều kiện | Kết quả |
+|---|---|
+| HEAD | `e83ecec`, trùng `origin/main` |
+| SG-001 `DONE`, RR-002 `ANSWERED`, không RR `OPEN` | Đạt |
+| SG-002 `ACTIVE` | Đạt |
+| Đường dẫn trong `git status` thuộc nhóm A hoặc B | **KHÔNG ĐẠT:** `CHANGELOG.md`, `CURRENT_STATUS.md`, `DECISIONS.md`, `IMPLEMENTATION_PLAN.md` đang khác HEAD và **nằm ngoài allowlist SG-002**, nên là nhóm C. Chúng được sửa ở các lượt trước theo chỉ đạo của Owner (D-013, D-017, Q-03, Q-06, xác nhận kế hoạch Phase 1) |
+| Reviewer artifact | `docs/operations/reviews/PHASE-01-REVIEW.md` **chưa tồn tại**. Mẫu RR của workflow chỉ nêu số byte và hash của file đã có; workflow chưa quy định trường hợp file chưa tồn tại |
+
+**Điều kiện Owner cần giải quyết, chọn một trong hai:**
+
+1. **Cho phép commit** các thay đổi hiện có (gồm bốn file nhóm C) làm mốc sạch. Khi đó RR dùng commit ID làm phiên bản review, không còn nhóm C. Commit cần Owner cho phép riêng; SG không cấp quyền này.
+2. **Bổ sung vào SG-002** bốn file trên làm nhóm A (chỉ đọc, giữ nguyên hash) để Codex coi là đã khai báo.
+
+Ngoài ra, nên làm rõ một trong hai: Codex tạo `PHASE-01-REVIEW.md` với đúng một báo cáo đầu tiên (RR khi đó ghi "file chưa tồn tại, kỳ vọng tạo mới"), hoặc Owner chỉ định cách khác. Sửa workflow cho trường hợp này nằm ngoài allowlist SG-002.
+
+**Không tự gọi Codex:** không có công cụ gọi chéo được kiểm chứng.
 
 ## SG-001 – Phản hồi RR-002 vòng 1/3 (2026-10-30)
 
