@@ -35,13 +35,14 @@ Cập nhật lần cuối: 2026-10-31, sau khi Owner trả lời "1B, 2A, 4a, 4b
 | RR-003 | Vòng 0/3: **CHANGES REQUESTED** (Codex), `ANSWERED` |
 | RR-004 | Vòng 1/3: **APPROVED** (Codex), `ANSWERED`. Reviewer artifact `docs/operations/reviews/PHASE-01-REVIEW.md` |
 | P1-001, P1-002 | **CLOSED** (Codex, RR-004) |
-| Quyết định S2 | **Owner chọn S2 ngày 2026-10-31** (nguyên văn "Chọn S2"). Dữ liệu huấn luyện không công bố là rủi ro dư do Owner chấp nhận, chỉ cho ứng viên thỏa ba điều kiện, chỉ cho phân loại. Không phải kết luận pháp lý, duyệt danh sách hay quyền tải, cài, chạy. Chưa ghi vào `DECISIONS.md` (ngoài allowlist) |
+| Quyết định S2 | **Owner chọn S2 ngày 2026-10-31** (nguyên văn "Chọn S2"). Dữ liệu huấn luyện không công bố là rủi ro dư do Owner chấp nhận, chỉ cho ứng viên thỏa ba điều kiện, chỉ cho phân loại. Không phải kết luận pháp lý, duyệt danh sách hay quyền tải, cài, chạy. Đã ghi thành D-024 trong `DECISIONS.md` (Amendment A02) |
 | RR-005 | Vòng 2/3: **APPROVED** (Codex), `ANSWERED`. Phân loại Qwen3 4B, 8B lên nhóm B theo S2 được chấp nhận để **trình Owner**, không phải "đã duyệt" hay "sẵn sàng chạy" |
-| Lượt làm việc | **Project Owner.** Không có RR đang mở. Claude đã dừng. `CURRENT_STATUS.md` đã đồng bộ theo A02. Còn vòng 3/3 của SG-002; chưa dùng. Claude không tự đóng SG-002, không commit, không push |
+| RR-006 | Vòng 3/3 (cuối): **CHANGES REQUESTED** (Codex), `ANSWERED`. P1-003 (MEDIUM, trạng thái hiện hành chưa đồng bộ với 1B, 2A, D-024) và P1-004 (LOW, lập luận thiếu LICENSE riêng của VieNeu mạnh hơn bằng chứng): Claude xác minh **đúng cả hai**, `FIX NOT IMPLEMENTED — AWAITING OWNER`; chưa CLOSED. Owner chỉ đạo "Cho sửa, không review": Claude đã sửa cả hai, trạng thái `FIX IMPLEMENTED — NOT RE-REVIEWED`, không CLOSED. Codex không đánh giá quyền của cài đặt, tải, đo, commit/push |
+| Lượt làm việc | **Project Owner.** Không có RR đang mở. Claude đã dừng. SG-002 đã dùng hết 4 lần review (vòng 0–3), không còn vòng; Claude không mở vòng 4, không đóng SG-002, không sửa các finding cho tới khi Owner chỉ đạo |
 | Code ứng dụng | **NOT IMPLEMENTED** |
 | Runtime testing | **NOT PERFORMED** |
 | Phần mềm cài cho dự án, model AI, credentials | **Đã có (2026-10-31, Amendment A03):** Ollama 0.40.13 (Homebrew, kèm 10 gói phụ thuộc gồm `python@3.15`, `mlx`; Homebrew nâng lên 7.0.11) và model `qwen3:4b-q4_K_M` (digest khớp hồ sơ, SHA-256 blob tự tính). Đã tải thêm `qwen3:8b-q4_K_M` (A06, digest khớp, chưa chạy). **Đã đo thô Qwen3 4B** (A04, A05): nạp nguội 2.56 s, 34 token/s, RSS đỉnh 3,277 MB, `format` JSON schema 9/9 hợp lệ so với 2/9 không `format`; **Đo thô 8B (A07, không cô lập):** nạp 3.6 s, ~19 token/s, RSS đỉnh 5,796 MB, swap tăng ~740 MB; `format` giúp chia cảnh nhưng 8B ít lỗi hơn 4B khi không `format` (8/9 so với 2/9). Không bật dịch vụ nền. Credentials: chưa có |
-| Git | Nhánh `main` ở `e83ecec`, trùng `origin/main`. **Working tree không sạch:** tài liệu Phase 1 và trạng thái chưa commit, chưa push. **Repo từ xa CÔNG KHAI** (Project Owner xác nhận): không đẩy secret, credentials, dữ liệu vận hành, model hay media |
+| Git | Nhánh `main` ở `9838f0a`, trùng `origin/main` (Project Owner nói "Cho commit" và "Cho push" trong chat; **chưa ghi trong file repo**, xem RR-006). Working tree sạch lúc kiểm tra, trước khi đăng RR-006. **Repo từ xa CÔNG KHAI**: không đẩy secret, credentials, dữ liệu vận hành, model hay media |
 
 ## 2. Phân biệt trạng thái
 

@@ -2,6 +2,34 @@
 
 Tài liệu gồm các phần: **Phản hồi RR-005 (APPROVED) và bảng quyết định cuối cùng** (mới nhất), **Quyết định S2 và RR-005**, **Phản hồi RR-004 (APPROVED)**, **SG-002 vòng 1/3**, **SG-002 vòng 0/3**, **SG-001**, **Vòng 4**, **Vòng 3**, **Vòng 2** và **Vòng 1** (giữ nguyên làm lịch sử).
 
+## SG-002 – Đã sửa P1-003 và P1-004 theo chỉ đạo "Cho sửa, không review" (2026-10-31)
+
+**Trạng thái: `FIX IMPLEMENTED — NOT RE-REVIEWED`.** Không phải CLOSED. Owner chọn không nhờ Codex xác nhận; vòng 3/3 đã hết, không có vòng 4.
+
+- **P1-003:** đã sửa các câu cũ: `phase1-candidates.md` dòng "chưa có danh sách nào được Owner duyệt" (nay: duyệt một phần, chỉ 4B); "chưa chọn hướng nào" (nay: đã chọn 2A); bảng S2 "Codex chưa re-review" (nay: APPROVED ở RR-005); mục 4.2 và bảng danh sách ghi 8B "chưa có câu duyệt vào danh sách", Owner chỉ cho phép tải (A06) và đo thô (A07); `PHASE-01-PLAN.md` điều 2 (ba việc riêng: duyệt danh sách, quyền tải, quyền chạy); `HANDOFF_TO_CHATGPT.md` dòng S2 (đã ghi D-024); câu "không có RR đang mở" của RR-005 ghi là lịch sử. Phần lớn lỗi còn lại của dòng REVIEW_RESPONSE cũ (RR-004, các phản hồi lịch sử) giữ nguyên làm lịch sử, mỗi phản hồi gắn với RR của nó.
+- **P1-004:** `phase1-candidates.md` mục 4.8: tách "không có tệp LICENSE riêng" khỏi "có tuyên bố cấp phép trong README"; ghi phần chưa làm là lưu và đối chiếu toàn văn điều khoản README dẫn chiếu tại revision đã chốt; giữ nhóm A; hỏi tác giả không còn được ghi là cách duy nhất.
+- **Chưa sửa (ngoài chỉ đạo hoặc allowlist):** `CURRENT_STATUS.md` (dòng Git cũ), mục lặp D-013/D-017 trong `DECISIONS.md`, nhãn A02–A07, xác nhận bằng văn bản quyền commit/push `9838f0a`.
+- **Chưa commit.** Các thay đổi này là bản sửa sau RR-006, chưa được Codex review.
+
+## SG-002 – Phản hồi RR-006 vòng 3/3 (cuối): CHANGES REQUESTED (2026-10-31)
+
+**Nguồn:** báo cáo `# Review RR-006` ở đầu [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md), kết luận **CHANGES REQUESTED — NEEDS REVISION** (không phải BLOCKED). Hai finding: P1-003 (MEDIUM), P1-004 (LOW). Claude không sửa báo cáo Codex.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude; SG-002 `ACTIVE`; 8 hash nhóm A khớp RR-006 và `TASKS.md` phần trước `## Review Requests` khớp `a79d620b…`; `PHASE-01-REVIEW.md` 39,724 byte, 30,343 byte cuối khớp SHA-256 `9e3919e4…`; báo cáo mới ở đầu file, đúng một `# Review RR-006`; `PHASE-00-REVIEW.md` khớp; `git status --porcelain` chỉ có `HANDOFF_TO_CHATGPT.md`, `TASKS.md`, `PHASE-01-REVIEW.md`; HEAD vẫn `9838f0a`.
+
+### Xác minh từng finding (Claude tự đọc lại trước khi trả lời)
+
+| Finding | Xác minh | Trạng thái |
+|---|---|---|
+| P1-003 | **Đồng ý, đúng.** Tôi xác nhận: `phase1-candidates.md` dòng 23 còn ghi "chưa có danh sách nào được Owner duyệt" (mâu thuẫn mã 1B ở dòng 20, 38, 4.1); mục 7 dòng 232 còn ghi "chưa chọn hướng nào" dù mục 8 ghi đã chọn 2A; bảng S2 dòng 260 còn ghi "Codex chưa re-review" dù RR-005 đã APPROVED; `PHASE-01-PLAN.md` điều 2 còn ghi "chưa được Owner duyệt" trong khi điều 11 xác nhận duyệt 4B; handoff còn câu cũ về S2 chưa ghi `DECISIONS.md`; `REVIEW_RESPONSE.md` còn câu "không có RR đang mở" của RR-005. Lỗi của tôi: các câu cũ không được cập nhật khi thêm mã 1B, 2A, D-024 | `FIX NOT IMPLEMENTED — AWAITING OWNER` |
+| P1-004 | **Đồng ý, đúng.** Tôi đọc lại [README VieNeu v3 Turbo](https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo/raw/main/README.md) (2026-10-31): license "áp dụng cho mọi artifact" gồm `model.safetensors`, ONNX và tài sản giọng; giọng cài sẵn dùng được cho nội dung kiếm tiền, không cần thêm license hay phí; có tuyên bố người nói đã cấp quyền và đồng ý (chỉ cho giọng cài sẵn). Dòng 162(c) đã ghi đúng ý này, nhưng dòng 162–163 kết luận "không có văn bản license để đọc cho đúng artifact" và "chỉ hỏi tác giả mới làm rõ" mạnh hơn bằng chứng. Cách nói chính xác: thiếu **tệp LICENSE riêng**, còn **tuyên bố cấp phép có trong README**; phần chưa có là toàn văn điều khoản README dẫn chiếu đối chiếu ở đúng revision, bằng chứng độc lập cho dữ liệu huấn luyện, phụ thuộc, consent, và mâu thuẫn "personal use" ở lộ trình GitHub. Nhóm A giữ nguyên | `FIX NOT IMPLEMENTED — AWAITING OWNER` |
+
+**Lý do chưa sửa:** SG-002 đã dùng đủ vòng 0, 1, 2, 3. Workflow mục 9 ghi sau vòng 3 chưa PASS thì dừng và báo Owner; chỉ Owner quyết định tiếp tục, bằng chỉ đạo trực tiếp. Mọi bản sửa sẽ cần một vòng review mà SG-002 không còn. Claude không mở vòng 4, không đặt lại bộ đếm, không đóng SG-002 và không tự đóng finding.
+
+**Hai finding chưa CLOSED** (chỉ báo cáo của Codex mới đóng được). Các phần Codex xác nhận: toàn vẹn mục 7 đạt; 1B, D-024, 2G/4c được ghi đúng; TTS chưa có ứng viên nhóm B; ViZipVoice giữ A; VietTTS và viXTTS giữ C; 12 mục `Proposed` giữ nguyên; không có câu coi nhóm B hay 1B là quyền chạy. Codex **không** đánh giá quyền của cài đặt, tải, benchmark, commit/push và nhãn A03–A07; báo cáo này không hợp thức hóa hay bác bỏ chúng.
+
+**Việc cần Owner quyết định:** (1) có cho sửa P1-003, P1-004 không, và bằng hình thức nào (tiếp tục SG-002 với vòng bổ sung do Owner trực tiếp chỉ đạo, hay SG mới); (2) có nhờ Codex xác nhận bản sửa không; (3) chấp nhận hai điểm còn lại như rủi ro, nếu không sửa; (4) các điểm RR-006 đã nêu: nhãn A02–A07, xác nhận bằng văn bản quyền commit/push, dòng Git cũ trong `CURRENT_STATUS.md`, mục lặp D-013/D-017, đóng SG-002 (4e), 4d, chấm tiếng Việt.
+
 ## SG-002 – Câu trả lời của Owner "2G, 4C- xác nhận 1-8" (2026-10-31)
 
 | Mã | Đã ghi | Hệ quả |
@@ -30,7 +58,7 @@ Không có Review Request mới; Codex chưa review phần này. Đây là thự
 
 **Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude; SG-002 `ACTIVE`; 9/9 hash nhóm A khớp RR-005; bốn file chỉ đọc không đổi; 21,512 byte cũ của báo cáo khớp SHA-256 bằng `tail -c`; phần mới 8,831 byte có đúng một báo cáo `# Review RR-005`; `PHASE-00-REVIEW.md` nguyên vẹn; không có nhóm C. SHA-256 chỉ chứng minh nội dung, không chứng minh ai viết phần mới.
 
-RR-005 chuyển `ANSWERED`; không có RR đang mở. Claude không đóng SG-002, không duyệt danh sách, không đổi phân loại.
+RR-005 chuyển `ANSWERED` (lúc đó không có RR đang mở; **nay lịch sử**, xem RR-006 ở trên). Claude không đóng SG-002, không duyệt danh sách, không đổi phân loại.
 
 ### Điều APPROVED nói và không nói (theo Codex)
 

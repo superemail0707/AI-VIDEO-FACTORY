@@ -1,3 +1,56 @@
+# Review RR-006
+- Ngày: 2026-10-31. Reviewer: Codex, Independent Reviewer.
+- Scope Grant: SG-002 | Vòng: 3/3 (cuối) | Tiếp nối: RR-005.
+- Baseline Git: `9838f0a2ca1073d152bb43ef1c6c2a7473c81d9d`, nhánh `main`; snapshot SHA-256 trong RR-006.
+- Kết luận: **CHANGES REQUESTED — NEEDS REVISION** cho hồ sơ trong phạm vi. Đầu vào toàn vẹn hợp lệ; đây không phải BLOCKED.
+- Phạm vi: chỉ năm mục “Nội dung thuộc SG-002” và hồi quy liên quan trong RR-006. Không đánh giá quyền hoặc tính hợp lệ của mục “Ngoài phạm vi”, không xác nhận số đo hay sự kiện tải model.
+
+## Phát hiện
+
+### [MEDIUM] P1-003 – Trạng thái hiện hành chưa đồng bộ với các quyết định 1B, 2A và D-024
+- Vị trí: `docs/testing/phase1-candidates.md:23`, `:232`, `:260`; `docs/operations/phase-reports/PHASE-01-PLAN.md:30`; `HANDOFF_TO_CHATGPT.md:11`, `:38`; `REVIEW_RESPONSE.md:15`, `:33`.
+- Bằng chứng: bảng danh sách và mục 4.1 ghi Owner duyệt riêng Qwen3 4B theo 1B, nhưng đoạn sau bảng bốn trạng thái vẫn nói “chưa có danh sách nào được Owner duyệt”; PLAN điều 2 cũng ghi chưa được Owner duyệt, trong khi điều 11 xác nhận duyệt 4B. Mục 7 nói “chưa chọn hướng nào” dù mục 8 ghi đã chọn 2A. Handoff ghi D-024 đã được ghi tại dòng 34 nhưng dòng 38 nói S2 chưa ghi vào DECISIONS. Bảng S2 còn ghi Codex chưa re-review dù RR-005 đã APPROVED. REVIEW_RESPONSE còn nói không có RR mới/không có RR OPEN; RR-006 đang OPEN theo TASKS.
+- Tình huống gây lỗi: người tiếp nhận không xác định được điều gì đã được quyết định, điều gì còn chờ và báo cáo nào là hiện hành. TASKS ưu tiên khi xác định lượt giúp tránh bế tắc, nhưng không làm các phát biểu hiện hành sai trở thành nhất quán. Đây là mâu thuẫn hồ sơ trong mục 1, 4, 5 của RR, không phải kết luận về quyền của các thao tác ngoài phạm vi.
+- Yêu cầu khắc phục: đồng bộ các câu hiện hành với 1B (chỉ 4B), 2A (nghiên cứu tài liệu), D-024 đã ghi và RR-006 vòng cuối; nếu giữ bản cũ làm lịch sử, gắn mốc/nhãn hết hiệu lực rõ ràng. Bảo toàn phân biệt phân loại B, duyệt từng artifact và quyền thực thi riêng. Không dùng yêu cầu này để mở rộng quyền hoặc tự sửa file ngoài phạm vi được Owner cấp.
+- Trong phạm vi SG: có.
+
+### [LOW] P1-004 – Lập luận thiếu LICENSE riêng của VieNeu mạnh hơn bằng chứng
+- Vị trí: `docs/testing/phase1-candidates.md:162–163`.
+- Bằng chứng: hồ sơ ghi không có tệp LICENSE trong kho model rồi kết luận “không có văn bản license ... cho đúng artifact trọng số”, điều kiện (i) không thỏa và “chỉ hỏi tác giả ... mới có thể làm rõ”. Chính dòng 162(c) đã ghi README tuyên bố license áp dụng cho mọi artifact. Đọc trực tiếp [model card chính thức](https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo/raw/main/README.md) ngày 2026-10-31: FAQ nêu Apache-2.0 áp dụng cho trọng số, ONNX và tài sản giọng đi kèm, cho phép nội dung kiếm tiền và có tuyên bố đồng ý của người nói/quyền chủ thể. Thiếu tệp tên LICENSE riêng không tự chứng minh thiếu tuyên bố cấp phép cho trọng số.
+- Tình huống gây lỗi: Owner có thể hiểu nhầm rằng nhà phát hành không cấp phép trọng số, hoặc liên hệ tác giả là con đường duy nhất, thay vì phân biệt tuyên bố cấp phép hiện có với phần bằng chứng độc lập còn thiếu.
+- Yêu cầu khắc phục: ghi chính xác “chưa lưu/đối chiếu toàn văn điều khoản được README dẫn chiếu cho artifact tại revision đã chốt”; tách điều này khỏi việc không có tệp LICENSE riêng. Giữ rõ bất định dữ liệu, phụ thuộc, consent và phát biểu roadmap cần làm rõ. Không tự chuyển VieNeu lên B, không mở rộng S2 sang TTS và không liên hệ tác giả khi chưa được phép.
+- Trong phạm vi SG: có. Phân loại A vẫn hợp lý; finding về độ chính xác của lý do, không phải kết luận đủ quyền thương mại. Nguồn web là snapshot hiện hành, chưa chứng minh README ở commit đã ghi giống hoàn toàn snapshot này.
+
+## Đã tự xác minh
+
+### Toàn vẹn mục 7 – PASS
+1. TASKS có đúng một RR OPEN: RR-006; chưa có báo cáo cùng mã trước lượt này. SG-002 ACTIVE, có lời Owner trích nguyên văn, RR tham chiếu đúng SG.
+2. RR-006 có END-OF-REVIEW-REQUEST. Chuỗi vòng RR-003/004/005/006 là 0/1/2/3, không reset hoặc vượt giới hạn.
+3. HEAD và nhánh đúng baseline. Working tree đầu lượt chỉ có `HANDOFF_TO_CHATGPT.md`, `TASKS.md`, đều nhóm A; không có đường dẫn nhóm C.
+4. Cả 9 hash nhóm A khớp RR-006, gồm TASKS chỉ băm phần trước `## Review Requests`.
+5. Reviewer artifact Phase 1: 30,343 byte, SHA-256 `9e3919e458fb6909343a7d7ebde9171c05dd5c1b7cd39d6bb84b8829f1471a6a`. Phase 0: 57,209 byte, SHA-256 `ea4183151dc4bb7cfb6a437c0abc9adbb21725ccd3b132a0e0abb23aedd19c13`. Đều khớp.
+
+### Kết quả đối chiếu nội dung
+- 1B được ghi rõ ở bảng danh sách, mục 4.1/4.2 và PLAN điều 11: chỉ Qwen3 4B `q4_K_M`; 8B chưa duyệt tại quyết định đó. Không suy từ đây sang đánh giá các chỉ đạo ngoài phạm vi xảy ra sau.
+- D-024 (`DECISIONS.md:94–99`) ghi đủ ba điều kiện S2, lời “Chọn S2”, rủi ro dư theo artifact và giới hạn phân loại; không thành quyền tải/cài/chạy, không áp dụng TTS tiếng Việt. Đối chiếu nội dung quyết định còn lại với bản trước và lịch sử review: 12 mục D-009–012, D-014–016, D-018–022 vẫn Proposed. D-013/D-017 có bản ghi lịch sử chỉ dẫn tới mục đã duyệt; không phát hiện phê duyệt mới từ D-024.
+- PLAN điều 1–8 được ghi xác nhận theo “2G, 4C- xác nhận 1-8”, điều 9 bị bác, điều 11 chỉ duyệt danh sách 4B. R1 không chặn LLM theo điều 9 đã bỏ, nhưng vẫn phải trình Owner trước Phase 4/5.
+- Không thấy câu biến nhóm B hoặc riêng 1B thành quyền chạy, hoặc biến số đo thô thành PASS chất lượng tiếng Việt. Không đánh giá bản thân số đo.
+- TTS: chưa có cơ sở nâng ứng viên tiếng Việt lên B theo tiêu chuẩn hiện ghi; R1 còn mở. ViZipVoice giữ A hợp lý vì chưa hoàn tất license/định danh/chuỗi dữ liệu. [Model card ViZipVoice](https://huggingface.co/contextboxai/ViZipvoice) xác nhận checkpoint `checkpoint-1860000.pt`, FP16, fine-tune ZipVoice và khoảng 7,000 giờ; chưa chốt revision artifact độc lập.
+- VietTTS giữ C phù hợp: [model card nhà phát hành](https://huggingface.co/dangvansam/viet-tts/raw/main/README.md) tách mã Apache-2.0 với model/âm thanh CC BY-NC. viXTTS giữ C phù hợp: [model card](https://huggingface.co/capleaf/viXTTS/raw/main/README.md) dẫn Coqui Public Model License; [LICENSE của model gốc XTTS-v2](https://huggingface.co/coqui/XTTS-v2/raw/main/LICENSE.txt) hạn chế model và đầu ra cho phi thương mại. Các nguồn truy cập 2026-10-31; đây là kiểm tra tài liệu, không xác nhận quyền của người phát hành đối với mọi dữ liệu.
+- P1-001/P1-002 vẫn CLOSED theo RR-004; P1-003 là mâu thuẫn trạng thái mới sau các quyết định Owner, không đảo kết luận cũ về phân loại Qwen3.
+
+## Chưa thể xác minh và giới hạn
+- Không kiểm chứng độc lập nguồn gốc lời Owner được Claude chép vào file; hash không chứng minh tác giả hoặc phê duyệt.
+- Không kiểm tra quyền/tính hợp lệ của cài đặt, tải, benchmark, commit/push hoặc nhãn A03–A07. Theo yêu cầu trực tiếp của Owner, các mục đó được loại khỏi kết luận SG-002; báo cáo này không hợp thức hóa hoặc bác bỏ chúng, cũng không quyết định hình thức cấp quyền cần dùng cho chúng.
+- Không truy cập remote, không tải model, không chạy Ollama/benchmark; không xác minh digest tệp tải, hiệu năng, tiếng Việt, đầy đủ consent hay license mọi phụ thuộc. README GitHub hiện hành không thay bằng chứng runtime trên Mac.
+- Không mở lại thiết kế Phase 0; không sửa Git cũ trong CURRENT_STATUS hay mục lịch sử D-013/D-017. Không cấp quyền sửa các tài liệu đó.
+
+## Bàn giao
+- **NEXT ACTOR: Claude**, chỉ đọc/phản hồi báo cáo và tóm tắt findings cho Owner theo workflow. **NEXT DECISION: Project Owner** vì đã dùng hết vòng 3/3 mà chưa PASS. Không tự mở vòng 4, gia hạn SG, đóng SG hay bắt đầu việc mới.
+- Owner quyết định việc sửa/tiếp tục hoặc chấp nhận các điểm còn lại; reviewer không tự nghiệm thu. Chỉ thêm báo cáo này vào đầu file review; toàn bộ 30,343 byte lịch sử được giữ nguyên.
+
+---
+
 # Review RR-005
 
 - Scope Grant: **SG-002**, Amendment **A01** | Vòng: **2/3**.

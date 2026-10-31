@@ -27,7 +27,7 @@
 Phần này là bổ sung của Claude trong phạm vi SG-002. **Ngày 2026-10-31 Owner trả lời "2G, 4C- xác nhận 1-8"**: điều 1–8 được xác nhận, điều 9 bị bác. Các điều đã xác nhận chỉ thắt chặt, không nới lỏng. Codex đã review ở RR-003 và coi đây là đề xuất chưa được Owner xác nhận.
 
 1. **Ứng viên nhóm A** (xem `docs/testing/phase1-candidates.md`) chỉ được nghiên cứu: không tải, không chạy.
-2. **Nhóm B** chỉ đủ điều kiện để Claude **đề xuất** Owner cho phép benchmark. Danh sách model chưa được duyệt thì chưa có quyền tải. Theo tiêu chuẩn S2 mà Owner chọn (điều 10), nhóm B hiện gồm Qwen3 4B và 8B `q4_K_M`; **Codex đã APPROVED phân loại (RR-005); chưa được Owner duyệt**.
+2. **Nhóm B** chỉ đủ điều kiện để Claude **đề xuất** Owner cho phép benchmark. Theo tiêu chuẩn S2 mà Owner chọn (điều 10), nhóm B hiện gồm Qwen3 4B và 8B `q4_K_M`; **Codex đã APPROVED phân loại (RR-005)**. Duyệt danh sách, quyền tải và quyền chạy là ba việc riêng: Owner đã duyệt vào danh sách **chỉ Qwen3 4B** (mã 1B, điều 11); quyền tải và đo thô 4B, 8B đã được Owner chỉ đạo riêng (xem `TASKS.md`); 8B chưa có câu duyệt vào danh sách.
 3. Trước khi xin tải, hồ sơ phải ghi cho từng artifact: tên chính xác, URL kho và artifact, revision hoặc digest, quantization, voice ID nếu có, link license của mã và trọng số, license dữ liệu và phụ thuộc, điều kiện thương mại, dung lượng tải, ngày xác minh.
 4. Phải đọc toàn văn tệp license của đúng artifact. Tóm tắt trang web là chưa đủ để chuyển một ứng viên sang nhóm B nếu có mắt xích dữ liệu hoặc phụ thuộc chưa rõ.
 5. Mỗi lần tải: Owner duyệt đúng artifact, tag và dung lượng; Claude kiểm tra dung lượng trống; ghi SHA-256 hoặc digest của tệp đã tải; chỉ dùng tag tường minh (ví dụ `qwen3:4b-q4_K_M`, không dùng tag trơn).

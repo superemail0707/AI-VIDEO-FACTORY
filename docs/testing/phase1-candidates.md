@@ -17,10 +17,10 @@ Bốn trạng thái dưới đây **không tương đương nhau**:
 |---|---|
 | Phương pháp benchmark | Đã duyệt (D-013, 2026-10-31); chỉ duyệt phương pháp |
 | Kế hoạch Phase 1 | Đã xác nhận (2026-10-31) |
-| Danh sách model | **Duyệt một phần (mã 1B, Owner, 2026-10-31): chỉ Qwen3 4B `q4_K_M`**, kèm rủi ro dư ở mục 4.1 (dữ liệu huấn luyện không công bố; commit nguồn GGUF chưa định danh; tiếng Việt và RAM chưa đo). **Qwen3 8B chưa duyệt** (chờ số đo 4B). Chưa có TTS nào trong danh sách |
+| Danh sách model | **Duyệt một phần (mã 1B, Owner, 2026-10-31): chỉ Qwen3 4B `q4_K_M`**, kèm rủi ro dư ở mục 4.1 (dữ liệu huấn luyện không công bố; commit nguồn GGUF chưa định danh; tiếng Việt và RAM chưa đo). **Qwen3 8B: chưa có câu duyệt vào danh sách** (Owner chỉ cho phép tải ở A06 và đo thô ở A07). Chưa có TTS nào trong danh sách |
 | Quyền tải, cài, chạy | **CHƯA cấp.** Mỗi lệnh cần xác nhận riêng |
 
-**Nhóm B không phải lệnh triển khai.** Nhóm B chỉ nghĩa là đủ bằng chứng để đề xuất Owner cho phép benchmark. **Theo S2, nhóm B hiện gồm Qwen3 4B và 8B** (mục 3); Codex đã `APPROVED` phân loại này (RR-005); chưa có danh sách nào được Owner duyệt.
+**Nhóm B không phải lệnh triển khai.** Nhóm B chỉ nghĩa là đủ bằng chứng để đề xuất Owner cho phép benchmark. **Theo S2, nhóm B hiện gồm Qwen3 4B và 8B** (mục 3); Codex đã `APPROVED` phân loại này (RR-005); danh sách model đã được Owner duyệt **một phần**: chỉ Qwen3 4B `q4_K_M` (mã 1B). Qwen3 8B: Owner cho phép tải (A06) và đo thô (A07) nhưng **chưa có câu duyệt 8B vào danh sách**. Duyệt danh sách, quyền tải và quyền chạy là ba việc riêng.
 
 ## 2. Giới hạn của bằng chứng
 
@@ -66,7 +66,7 @@ Bốn trạng thái dưới đây **không tương đương nhau**:
 | Chưa xác minh | Tiếng Việt: trang chỉ nói "100+ ngôn ngữ", không nêu tên tiếng Việt. Liên kết giữa commit Hugging Face và blob Ollama. Ngữ cảnh 40K theo Ollama; chưa đo |
 | Ngày xác minh | 2026-10-31 |
 
-### 4.2 Qwen3 8B – nhóm B theo S2 (Codex APPROVED phân loại; **Owner chưa duyệt vào danh sách**, hoãn tới khi có số đo 4B; không phải quyền tải)
+### 4.2 Qwen3 8B – nhóm B theo S2 (Codex APPROVED phân loại; **chưa có câu duyệt vào danh sách**; Owner cho phép tải (A06) và đo thô (A07); không phải quyền chạy thêm)
 
 | Trường | Giá trị |
 |---|---|
@@ -159,8 +159,8 @@ Bốn trạng thái dưới đây **không tương đương nhau**:
 | Nhân bản giọng | Thẻ model cấm nhân bản người thật khi chưa được phép. **Mặc định tắt** trong dự án |
 | RAM | Thẻ nói đường CPU không cần torch (ONNX Runtime), `int8` cần CPU có VNNI; **không nêu RAM**; chưa rõ hỗ trợ macOS arm64. Cần đo |
 | Có thể làm rõ bằng | Hỏi tác giả bằng văn bản về dữ liệu huấn luyện và quyền thương mại; việc liên hệ bên ngoài cần Owner cho phép |
-| **Kết quả đọc license (mã 2A, 2026-10-31)** | (a) [Kho GitHub](https://github.com/pnnbao97/VieNeu-TTS) có LICENSE là mẫu Apache-2.0: chỉ áp cho **mã**. (b) **Kho Hugging Face của model không có tệp LICENSE** (danh sách tệp tại commit `61b85e3d…`: README, config, `model.safetensors`, onnx, gguf…); license chỉ khai ở metadata `apache-2.0` và mục License của README, nên **không có văn bản license để đọc cho đúng artifact trọng số**. (c) README nói license "áp dụng cho mọi artifact trong kho", giọng cài sẵn dùng được cho nội dung thương mại và kiếm tiền; sự đồng ý của người nói chỉ là tuyên bố cho các giọng/trọng số đi kèm; cần ghi công hai dự án; cấm nhân bản người thật khi chưa được phép. (d) Dữ liệu huấn luyện ~10.000 giờ Anh–Việt, quy trình "not publicly disclosed", dataset gated. (e) **Chênh lệch số giọng:** thẻ model liệt kê 23 giọng, thư mục `gguf/voices` có 25 thư mục (có thêm `adam_bua`, `thien_tam_duc`; tên `minh_quan_pro`), chưa đối chiếu. |
-| Kết luận 2A | Điều kiện (i) của S2 **không thỏa** (không có LICENSE của đúng artifact để đọc toàn văn) và điều kiện (iii) vẫn vướng phát biểu "personal use" ở lộ trình GitHub. Và S2 không áp dụng cho TTS. **Giữ nhóm A.** Chỉ hỏi tác giả (cần Owner cho liên hệ ngoài) mới có thể làm rõ |
+| **Kết quả đọc license (mã 2A, 2026-10-31)** | (a) [Kho GitHub](https://github.com/pnnbao97/VieNeu-TTS) có LICENSE là mẫu Apache-2.0: chỉ áp cho **mã**. (b) **Kho Hugging Face của model không có tệp LICENSE** (danh sách tệp tại commit `61b85e3d…`: README, config, `model.safetensors`, onnx, gguf…); license được khai ở metadata `apache-2.0` và mục License/FAQ của README. **Thiếu tệp LICENSE riêng không có nghĩa nhà phát hành không cấp phép cho trọng số**: README (đọc trực tiếp 2026-10-31) nói Apache-2.0 áp dụng cho mọi artifact, gồm `model.safetensors`, ONNX và tài sản giọng. (c) README nói license "áp dụng cho mọi artifact trong kho", giọng cài sẵn dùng được cho nội dung thương mại và kiếm tiền; sự đồng ý của người nói chỉ là tuyên bố cho các giọng/trọng số đi kèm; cần ghi công hai dự án; cấm nhân bản người thật khi chưa được phép. (d) Dữ liệu huấn luyện ~10.000 giờ Anh–Việt, quy trình "not publicly disclosed", dataset gated. (e) **Chênh lệch số giọng:** thẻ model liệt kê 23 giọng, thư mục `gguf/voices` có 25 thư mục (có thêm `adam_bua`, `thien_tam_duc`; tên `minh_quan_pro`), chưa đối chiếu. |
+| Kết luận 2A | Tuyên bố cấp phép **có** (README), nhưng **chưa lưu và đối chiếu toàn văn điều khoản mà README dẫn chiếu cho artifact tại revision đã chốt** (README đọc là bản hiện hành, chưa chứng minh trùng với commit `61b85e3d…`). Còn bất định: dữ liệu huấn luyện không công bố; consent chỉ là tuyên bố của nhà phát hành cho giọng cài sẵn; phụ thuộc (`sea-g2p`); mâu thuẫn "personal use" ở lộ trình GitHub. S2 không áp dụng cho TTS. **Giữ nhóm A**, không phải kết luận là nhà phát hành không cấp phép. Hỏi tác giả (cần Owner cho liên hệ ngoài) là một cách làm rõ, không phải cách duy nhất; có thể lưu và đối chiếu thêm bằng tài liệu |
 | Ngày xác minh | 2026-10-31 |
 
 ### 4.9 Kokoro v1.0 – nhóm A
@@ -229,7 +229,7 @@ Không có con số RAM hay thời gian nào ở đây; đây là cách đo, kh�
 
 ## 7. Hệ quả cho R1 và lựa chọn của Project Owner
 
-Không có TTS tiếng Việt nào hiện đủ điều kiện nhóm B. Các hướng, **chưa chọn hướng nào**:
+Không có TTS tiếng Việt nào hiện đủ điều kiện nhóm B. Các hướng (Owner đã chọn **hướng 2: nghiên cứu tài liệu**, mã 2A; kết quả ở mục 4.8 và 4.10. Các hướng còn lại chưa chọn; hướng 1 phần hỏi tác giả cần Owner cho liên hệ ngoài):
 
 | Hướng | Nội dung | Ghi chú |
 |---|---|---|
@@ -257,7 +257,7 @@ Không có TTS tiếng Việt nào hiện đủ điều kiện nhóm B. Các hư
 - **Không** áp dụng cho TTS, hay cho ứng viên có phát biểu mâu thuẫn hoặc nghi vấn cụ thể.
 - Các giới hạn định danh và các bất định liệt kê ở mục 4.1, 4.2 và 6 **đi cùng hồ sơ**; chấp nhận rủi ro dữ liệu huấn luyện không xóa chúng.
 
-**Đối chiếu ba điều kiện S2 (Claude đánh giá; Codex chưa re-review):**
+**Đối chiếu ba điều kiện S2 (Claude đánh giá; Codex đã APPROVED phân loại tại RR-005, vòng 2/3):**
 
 | Ứng viên | (i) Đọc LICENSE đúng artifact và runtime | (ii) Revision hoặc digest, nêu phần chưa định danh | (iii) Không có bằng chứng trái ngược | Nhóm theo S2 |
 |---|---|---|---|---|
