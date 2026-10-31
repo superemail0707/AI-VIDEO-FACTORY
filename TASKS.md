@@ -143,7 +143,8 @@ Xem [AI_REVIEW_WORKFLOW.md](docs/operations/AI_REVIEW_WORKFLOW.md) mục 3.
 - Không cấp quyền: tải model hoặc weights; cài runtime; chạy benchmark; tạo application code; tự phê duyệt ứng viên; chuyển Phase; commit, push hoặc đổi remote; dùng credentials; mở khóa TikTok Direct Post; liên hệ bên ngoài; chi phí
 - Tiêu chí xong: Codex kết luận `APPROVED` cho hồ sơ ứng viên, rồi trình Owner. Claude không tự đánh dấu PASS và không tự đóng SG
 - Giới hạn vòng: 3 (độc lập với SG-001; review đầu tiên là vòng 0)
-- Trạng thái: ACTIVE
+- Trạng thái: DONE
+- Đóng bởi / ngày: Project Owner / 2026-10-31. Lời Owner: "đóng" (trả lời câu hỏi đóng SG-002, mã 4e). Đã dùng đủ vòng 0, 1, 2, 3 (RR-003 đến RR-006). Codex: RR-004 và RR-005 APPROVED; **RR-006 CHANGES REQUESTED, hai finding P1-003 (MEDIUM) và P1-004 (LOW) chưa CLOSED** (đã sửa theo "Cho sửa, không review", `FIX IMPLEMENTED — NOT RE-REVIEWED`; Owner chấp nhận không review). Đóng SG không đóng finding, không hợp thức hóa các thao tác ngoài phạm vi (cài, tải, đo, commit/push, nhãn A02–A07) và không cấp quyền mới. Sau khi đóng, Claude không sửa file nào theo SG-002
 
 #### SG-002 – Amendment A01
 - Status: APPROVED
