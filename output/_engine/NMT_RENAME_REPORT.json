@@ -1,0 +1,144 @@
+{
+  "date": "2026-11-08",
+  "owner_request": "Đổi tên couple-engine thành nmt-engine và thêm mô tả cho engine này, cập nhập các document liên quan.",
+  "canonical_command": "/nmt-engine",
+  "canonical_cli": "output/_engine/nmt_engine.py",
+  "canonical_guide": "output/_engine/NMT_ENGINE.md",
+  "prompt": "output/_engine/NMT_ENGINE_PROMPT.md",
+  "compatibility_aliases": [
+    "/couple-engine",
+    "output/_engine/couple_engine.py",
+    "output/_engine/COUPLE_ENGINE.md",
+    "output/_engine/COUPLE_ENGINE_PROMPT.md"
+  ],
+  "preserved": "Episode source/hash/workflow, exported media, historical Owner quotes and review artifacts",
+  "backup_directory": "/var/folders/nc/6yrmm4gs4tn678wkwdb8n5t00000gn/T/nmt-engine-rename-ca43i_vb",
+  "media_before": {
+    "videos-post/vi-anh-qua-dep-trai/export_report.json": "31fd6ba7c9e3ef055419382f4e2b5ed9cfc3e4e22d40bbc0e5d7d11157fa7e47",
+    "videos-post/vi-anh-qua-dep-trai/tiktok/vi-anh-qua-dep-trai_tiktok_nmt.mp4": "0f97b6e887daed9fd4ffc86296e902c90b419255210b0718835059331cd261e9",
+    "videos-post/vi-anh-qua-dep-trai/youtube_shorts/vi-anh-qua-dep-trai_youtube_shorts_nmt.mp4": "0f97b6e887daed9fd4ffc86296e902c90b419255210b0718835059331cd261e9",
+    "videos-post/vi-anh-qua-dep-trai/facebook_reels/vi-anh-qua-dep-trai_facebook_reels_nmt.mp4": "0f97b6e887daed9fd4ffc86296e902c90b419255210b0718835059331cd261e9"
+  },
+  "verification": {
+    "status": "PASS",
+    "checks": [
+      "canonical CLI help",
+      "list/status and legacy CLI parity",
+      "legacy CLI forwards canonical help",
+      "temporary episode scaffold: Vietnamese topic, compilable template, NMT brand, no real episode created",
+      "legacy Python entry point delegates canonical implementation",
+      "canonical docs and historical redirects",
+      "Python syntax for changed modules/comments",
+      "export report and all three EP10 final MP4 SHA-256 unchanged",
+      "Claude Code command YAML frontmatter parsed successfully",
+      "AST equivalence confirms renderer/branding changes are comments/docstrings only"
+    ],
+    "real_episodes_created": false,
+    "media_rendered": false,
+    "software_installed": false,
+    "claude_code_ui_invocation_tested": false,
+    "desktop_skill_installed": false
+  },
+  "modified_files": [
+    {
+      "path": "output/_engine/couple_engine.py",
+      "before_sha256": "be6a37400e2671e416437733639b96aa0381a6e653e42af831c636e417f82404",
+      "after_sha256": "a40f571df80a3d4bbc58d9a4d37267402ff4e9a0093b6bd578139c49757bca30"
+    },
+    {
+      "path": "output/_engine/COUPLE_ENGINE.md",
+      "before_sha256": "f469bffd8427aab95f77bb6addd419bb208c4df4c0ecc1916c21ab275c93bfd4",
+      "after_sha256": "410ad43c46b9ee6e72bcd67ab1e5d4f851d80b05ffdc159f969038136e096634"
+    },
+    {
+      "path": "output/_engine/COUPLE_ENGINE_PROMPT.md",
+      "before_sha256": "99884c348e1e5222b897b7a245b25f69bc585362509a33ec69a056ffa372ced6",
+      "after_sha256": "25292fc3f6f7b8446f798f69e2680bfdc2235c987cfb3cfb7cdfcdf19d52fd37"
+    },
+    {
+      "path": ".claude/commands/couple-engine.md",
+      "before_sha256": "9b425d3a917de2860f688eda94e721bcc275d1f05e8a9a3bae361f938dddcfc1",
+      "after_sha256": "f81e3cb13125b2534ff85bf101ea601eb9c9ba56ce52c28ddfbc560a468e6d78"
+    },
+    {
+      "path": "output/_engine/IMPROVEMENT_LOG.md",
+      "before_sha256": "c98852c48e10b4e0dc5d710eebb0bb54fae51aa7c7b1f0b346e5fcdbfbe6f214",
+      "after_sha256": "75e962a9634449a18a3ad3686ddab5cc385bd5b9f0119cbc81eb3b2d6f3ea2f3"
+    },
+    {
+      "path": "output/_engine/cute_engine.py",
+      "before_sha256": "c2c90321eb03e58347374298a4eab6f5005b70a537d2cb1e49cbd910a89fee00",
+      "after_sha256": "a93180e300d7a864a489480e0267d3e9b4af1927ede39be124c29adb749f17ed"
+    },
+    {
+      "path": "output/_engine/semireal_pilot.py",
+      "before_sha256": "ff4270451c28719808edb1c9c5c75256d700862ee5070bd0f3302245a7738066",
+      "after_sha256": "e3e6ed042fc75fa1e4d70f7b38102c695945fdc58ad26dbe788a10878d49f610"
+    },
+    {
+      "path": "output/_engine/semireal_batch.py",
+      "before_sha256": "bbfbbed131780d8e94a42067378a764ebdeff57db79a0ab64a76e39f18ee400c",
+      "after_sha256": "8c15c26790b24ecf3914d0ebe6e9e65a5f841601e643c312e1b22f4af333e216"
+    },
+    {
+      "path": "docs/requirements/WATERMARK_NMT.md",
+      "before_sha256": "139d423ea606c0e1391003e0f2f9b08f7b9808f224a274a505c0d550050ef3bb",
+      "after_sha256": "ad3f44c757d0210b16b35aa708b49a6ca9040a6ec19db7bc276cbad181b2fa02"
+    },
+    {
+      "path": "src/ai_video_factory/core/branding.py",
+      "before_sha256": "3dc7c739a7c172e58b71c199eb94af70deb5443bad76915108664e07035ed58a",
+      "after_sha256": "b87137480cb77a32e0ef3f13d0cff43626d7a8a3f3a5bc8273d0026e5b50ccbe"
+    },
+    {
+      "path": "tests/unit/test_subtitle_layout.py",
+      "before_sha256": "c08d92eaabe38595c1fb758d67c1ae72d544b96110ed4c930edb5a76af035c87",
+      "after_sha256": "5a32db0714f893e473642efaa309e6f56b65622b6866bbde9067d5c489878397"
+    },
+    {
+      "path": "CLAUDE.md",
+      "before_sha256": "dfabb9407e1e4e6e8e131170709800035df0a465c56826b601422f5922d083e4",
+      "after_sha256": "f0a0355f1aaa336a86c85a80204bc0ce1ee1a676c87846682fefceadf8537598"
+    },
+    {
+      "path": "CURRENT_STATUS.md",
+      "before_sha256": "34fc6b4d7bf6130cb4f542a71871890f3eea8cdf943dc18638ec944846e7e99b",
+      "after_sha256": "00aafaf6c3d90046d8639491fbea9b2f5cbc49e9d01a84c46852fa38524829f4"
+    },
+    {
+      "path": "HANDOFF_TO_CHATGPT.md",
+      "before_sha256": "1a020565b7d4f052a396a7be4b5f20f5467813f71e3aa9e89987132ad1256e24",
+      "after_sha256": "94e8de660a3bef116099c31d8e7234812652cf937a182e9fbf4b3bbf773ac3cc"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "before_sha256": "ebe563554b5c5f9da2c5cd5278d8d46056a24841efaf744b7a70a0638c7d034d",
+      "after_sha256": "436686f5af6112e1a77efc2cc929f40ccf8939591ce1a1b4018e63e97fd6cb6f"
+    },
+    {
+      "path": "TASKS.md",
+      "before_sha256": "bc72f81f1d55e17a9295e023dcacf96af86e54829b7f603694c1d77e392732f1",
+      "after_sha256": "e8911c82fede44f47f4d629001e85433854092eb9cb90c541b4d9a85efb9a4ae"
+    },
+    {
+      "path": ".claude/commands/nmt-engine.md",
+      "new": true,
+      "sha256": "1fa9bb44f691dfc60a6e3c8591cc755c7cc4149ae05fad506b1263924bbcf270"
+    },
+    {
+      "path": "output/_engine/nmt_engine.py",
+      "new": true,
+      "sha256": "d48c0eb45cc9bbd7653161df76745ac786c90d236257386471a90cc097712fa2"
+    },
+    {
+      "path": "output/_engine/NMT_ENGINE.md",
+      "new": true,
+      "sha256": "400e2a0f5c7a1ffec7e0c64e95cb9e7ecfea8fbec6ce8be3f02f34a00e7000e6"
+    },
+    {
+      "path": "output/_engine/NMT_ENGINE_PROMPT.md",
+      "new": true,
+      "sha256": "d768533c2aa1ee36cfca5d07e5c8d775e4b56fe09682aafe3ccb9aeaf75aa4fd"
+    }
+  ]
+}

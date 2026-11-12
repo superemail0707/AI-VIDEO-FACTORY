@@ -138,6 +138,42 @@ Ngày 2026-10-30. `Proposed`. Bổ sung cho D-011 theo BLOCKER 1 của Codex. `l
 ### D-019 – Máy trạng thái upload và đối soát
 Ngày 2026-10-30. `Proposed`. `queued`, `uploading`, `confirmed`, `unknown`, `failed`. Không retry mù; không xác định được thì người duyệt. Đặc tả: `docs/architecture/publishing-reliability.md`.
 
+### D-025 – Watermark NMT chèn ở bước xuất cuối của Spielberg, Quality Gate chặn khi lỗi
+- Ngày 2026-11-07. `Proposed` (Owner yêu cầu quy tắc và cho ghi vào DECISIONS; nội dung kỹ thuật dưới đây chờ Owner duyệt).
+- Bối cảnh: Owner yêu cầu mọi video xuất bản của "Ngang Một Tí" có watermark trong file, giữ bản sạch, chặn xuất bản khi lỗi.
+- Quyết định đề xuất: module `core/branding.py` (Pillow + FFmpeg overlay, công nghệ đã duyệt); chèn sau Quality Gate cơ bản, trên bản sạch của Spielberg; bản đăng `*_nmt.mp4`; báo cáo `watermark_report.json`; Tesla kiểm tra PASS + checksum + duyệt người. Vị trí mặc định dưới-phải (Owner chọn), dọc 190 px / 0,85 / mép 48 px; ngang 240 px / 0,85 / mép 40 × 170 px.
+- Bằng chứng: `docs/requirements/WATERMARK_NMT.md` mục 6.
+- Phương án đã cân nhắc: watermark YouTube Studio (bị loại: không nằm trong file, chỉ YouTube); chèn vào ảnh nguồn hay từng cảnh (bị loại theo yêu cầu Owner).
+- Hệ quả: thêm bước mã hoá lại (~30 s cho video 31 s 60 fps trong VM); thương hiệu phải được khai báo khi xuất.
+
+### D-026 – Facebook Reels đăng trực tiếp qua Graph API, không qua Postiz
+- Ngày 2026-11-08. `Approved` (Owner, chat: "Approve option A", gồm cả quyền chạy một bài thử DRAFT thật trên Trang). Codex chưa review.
+- Bối cảnh: Postiz đăng video Facebook bằng `file_url` trỏ tới `http://localhost:4007/uploads/...` (`STORAGE_PROVIDER=local`). Máy chủ Meta không tải được địa chỉ này nên mọi lần đăng video Facebook qua Postiz đều sẽ lỗi.
+- Quyết định: Tesla dùng adapter `publishing/facebook_reels.py` upload thẳng byte MP4 đã duyệt theo luồng Reels của Graph API (`video_reels` start → `rupload.facebook.com` → finish với `video_state` `DRAFT` hoặc `PUBLISHED`), rồi đọc lại video từ Meta (Trang sở hữu, các phase, `published`) làm bước xác minh độc lập. YouTube và TikTok vẫn đi qua Postiz. OAuth vẫn làm trong Postiz; adapter chỉ đọc Page token đã lưu trong Postgres của stack `avf-postiz` vào bộ nhớ, không ghi ra file hay log, không đặt token trong URL. Chỉ cho phép hai host của Meta.
+- Cổng LIVE cho Facebook: phải có `facebook_contract.json` (`PASS_DRAFT_ONLY`) của đúng integration, do lệnh `facebook-draft-test` tạo; Owner vẫn `approve` từng job trong terminal. Với nội dung AI, chấp nhận dòng công bố AI trong caption vì video là hoạt hình 2D, không phải nội dung chân thực; Graph API không có trường nhãn AI đã kiểm chứng. Điểm này cần Codex review.
+- Bằng chứng: test DRAFT thật ngày 2026-11-08, video `1124038717286057` trên Trang "Ngang Một Tí" (`1474012595784934`): uploading/processing `complete`, `video_status=ready`, `published=false`, `page_matches=true`. Unit test `tests/unit/test_facebook_reels.py` 20/20, toàn bộ 190/190.
+- Phương án đã cân nhắc: (B) tunnel `cloudflared` công khai Postiz – phải cài phần mềm, lộ trang đăng nhập, phải đổi `FRONTEND_URL` và kết nối lại kênh; (C) lưu trữ đám mây S3/R2 – cần tài khoản, có thể phát sinh phí.
+- Hệ quả (D-026): Facebook không hiện trong lịch Postiz. Phụ thuộc schema bảng `Integration` của image Postiz đã cài; nâng cấp Postiz phải chạy lại test. App Facebook phải ở chế độ Live, nếu không bài chỉ hiển thị với người có vai trò trong app.
+
+### D-027 – Tự động hoá đăng ba nền tảng, một lần duyệt mỗi tập
+- Ngày 2026-11-08. `Approved` (Owner chọn trong phiếu hỏi: "1 approval per video", "Inbox now + apply for Direct Post", "AI line in description", "macOS background service"). Codex chưa review.
+- Bối cảnh: Owner muốn "tất cả tự động hoá". Trước đó mỗi manifest cần duyệt riêng, LIVE của YouTube/TikTok bị chặn cứng vì chưa có bộ xác minh độc lập, worker phải chạy tay.
+- Quyết định:
+  1. Tesla `prepare-episode <videos-post/slug>` đọc gói đã duyệt (watermark PASS, final approved, checksum khớp), tự soạn nội dung từng nền tảng từ `post.json` (lọc câu kêu gọi tag/share kiểu engagement bait, thêm câu hỏi bình luận, hashtag, dòng công bố AI) và tạo một manifest `LIVE` cho mỗi nền tảng. Owner duyệt **một lần cho cả tập** bằng `approve-episode <slug>` trong terminal (cụm xác nhận gồm slug và checksum gộp). Duyệt tập đồng thời là xác nhận quyền (rights) của tập.
+  2. TikTok: `UPLOAD` vào hộp nháp (Owner bấm Đăng trong app), `video_made_with_ai=true`. Direct Post vẫn `POLICY BLOCKED` (D-023) cho tới khi TikTok duyệt Production **và** Owner xác nhận riêng việc gỡ chặn.
+  3. YouTube: hoạt hình 2D, công bố AI bằng dòng trong mô tả. Lần đầu luôn `private`; khi bộ xác minh đọc lại đúng kênh và `privacyStatus=private`, ghi `youtube_contract.json`; từ đó tập mới mới được `public`. Bộ xác minh: YouTube Data API `videos.list` bằng token Postiz đã lưu (đọc vào bộ nhớ), dự phòng oEmbed công khai.
+  4. Worker chạy nền bằng LaunchAgent của user (`service install`), không sudo, gỡ bằng `service uninstall`.
+- Phương án đã cân nhắc: không duyệt (bị loại: lỗi đi thẳng ra công khai); adapter YouTube riêng để đặt `containsSyntheticMedia` (để sau, Postiz không hỗ trợ).
+- Hệ quả: an toàn vẫn fail-closed: thiếu bộ xác minh, sai kênh, đổi tên kênh, ranh giới gửi chưa rõ đều dừng ở `RECONCILE_REQUIRED`/`POLICY_BLOCKED`, không tự đăng lại.
+
+### D-028 – Cầu nối loopback cho Postiz và tắt SSRF guard nội bộ
+- Ngày 2026-11-08. `Approved` (Owner chọn "Port bridge + SSRF off" và "Yes, add resubmit"). Codex chưa review.
+- Bối cảnh: lần chạy thật ep08, YouTube và TikTok qua Postiz đều `ERROR` trước khi gọi nền tảng. Postiz đọc lại video từ `http://localhost:4007/uploads/...` nhưng trong container không có gì nghe ở 4007 (Postiz chạy cổng 5000) và SSRF guard của Postiz chặn mọi IP loopback/private ("Blocked IP").
+- Quyết định: thêm service `postiz-loopback` (`alpine/socat:1.8.0.3`, pin digest `sha256:beb4a68d…b015e`, 32 MB RAM) dùng chung network namespace với `postiz`, chuyển `127.0.0.1:4007 → 127.0.0.1:5000`; đặt `DISABLE_SSRF_PROTECTION=true`. Thêm lệnh `resubmit JOB_ID`: chỉ khi Postiz báo đúng bài đó `ERROR` và không có `releaseURL`, Owner gõ cụm xác nhận trong terminal; ghi sự kiện `RESUBMIT_AFTER_PROVIDER_ERROR`. Job Facebook trực tiếp không bao giờ đủ điều kiện.
+- Bằng chứng: trong container `fetch` file MP4 qua `localhost:4007/uploads/...` → 200, đúng 12 710 973 byte; Mac vẫn mở `localhost:4007` được.
+- Phương án đã cân nhắc: adapter trực tiếp YouTube/TikTok như D-026 (nhiều code, phải tự refresh token, dễ lệch với Postiz); đổi `FRONTEND_URL` sang cổng 5000 (trùng AirPlay Receiver của macOS, phải đăng ký lại mọi OAuth redirect).
+- Hệ quả/rủi ro: SSRF guard tắt cho mọi tính năng Postiz (webhook, preview URL). Chấp nhận vì Postiz chỉ bind `127.0.0.1`, tắt đăng ký, một người dùng. Nâng cấp Postiz phải kiểm tra lại cả hai điểm.
+
 ### D-020 – Kiểm soát truy cập API và dashboard cục bộ
 Ngày 2026-10-30. `Proposed`. Allowlist Host, kiểm tra Origin, token API cục bộ, phê duyệt kèm checksum, quyền tệp chặt. **Lý do:** trang web bất kỳ trong trình duyệt vẫn gửi được yêu cầu tới `127.0.0.1`. Đặc tả: `docs/architecture/security-and-rights.md` mục 2.
 

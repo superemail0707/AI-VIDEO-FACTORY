@@ -2,6 +2,135 @@
 
 Tài liệu gồm các phần: **Phản hồi RR-005 (APPROVED) và bảng quyết định cuối cùng** (mới nhất), **Quyết định S2 và RR-005**, **Phản hồi RR-004 (APPROVED)**, **SG-002 vòng 1/3**, **SG-002 vòng 0/3**, **SG-001**, **Vòng 4**, **Vòng 3**, **Vòng 2** và **Vòng 1** (giữ nguyên làm lịch sử).
 
+## SG-006 – Phản hồi RR-013 vòng 0/3: CHANGES REQUESTED (2026-11-01)
+
+**Nguồn:** báo cáo `# Review RR-013` ở đầu [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md): **CHANGES REQUESTED**. Codex: Architecture CONDITIONAL PASS, Content Strategy CONDITIONAL PASS, Action Compiler Design FAIL, Music System CONDITIONAL PASS, Zero-paid-API CONDITIONAL, License and Governance CONDITIONAL, Implementation Readiness NOT READY.
+
+**Quyền:** SG-006 Amendment A01 (Project Owner, 2026-11-01). Không có quyền triển khai.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude; SG-006 `ACTIVE`; 228 hash trong RR-013 khớp; `TASKS.md` phần trước RR khớp `3a1bdc91…`; `PHASE-01-REVIEW.md` 126035 byte, `tail -c 95288` khớp `d21ae58e…`; phần mới 30747 byte ở đầu, đúng một báo cáo `# Review RR-013`; không có nhóm C.
+
+**Xác minh từng finding trước khi sửa:** Claude tự kiểm chứng trên mã, package và FFmpeg đã cài. **Cả 9 đều đúng.** Không có bất đồng.
+
+| Mã | Mức | Xác minh | Nguyên nhân gốc | Sửa ở | Trạng thái |
+|---|---|---|---|---|---|
+| B2B-001 | HIGH | Đúng: `edison:101`, `pixar:87`, `pixar:164`, `spielberg:51` đọc artifact cũ | Không đối chiếu đầu vào thật của agent | Amendment mục 3, 4 | `FIX IMPLEMENTED — PENDING CODEX VERIFICATION`; Addressed in design; Requires implementation, testing |
+| B2B-002 | HIGH | Đúng: schema gốc thiếu trạng thái ban đầu, tay, kênh | Liệt kê tên hành động, không mô hình hóa trạng thái | Mục 5, 6 | Như trên |
+| B2B-003 | HIGH | Đúng: báo cáo gốc không quy định chèn JSON, SVG, CSP | Coi JSON và `textContent` là đủ | Mục 7 | Như trên |
+| B2B-004 | HIGH | Đúng: `vieneu_tts.py:40` không timeout; `ollama.py:12` timeout 900, `keep_alive` 5m | Chỉ đặt `--workers 1` | Mục 8 | Như trên |
+| B2B-005 | MEDIUM | Đúng: enum role thiếu `escalation` dù format dùng nó | Viết ví dụ thay vì schema | Mục 4.3, 6 | Addressed in design; Requires testing |
+| B2B-006 | MEDIUM | Đúng: một con số 80%; 26–42 âm tiết chỉ khoảng 6–10 giây lời | Một chỉ số cho nhiều câu hỏi | Mục 9.2, 10.5, 13 | Addressed in design; Requires testing, Owner decision |
+| B2B-007 | MEDIUM | Đúng: `bestEffort` mặc định `true` trong mã 0.8.226; có đường auto-update | Dựa vào tên cờ | Mục 8.7, 8.8 | Addressed in design; Requires implementation, testing |
+| B2B-008 | MEDIUM | Đúng: `ffmpeg -h filter=alimiter` báo `level` true, `latency` false | Gán kết quả cho tên filter | Mục 9.3 | Addressed in design; Requires testing, Owner decision |
+| B2B-009 | MEDIUM | Đúng: `fact_ref` chỉ ở hook; manifest chỉ cho nhạc | Chọn nội dung an toàn cao rủi ro; manifest hẹp | Mục 9.2, 9.4, 10.2 | Addressed in design; Requires Owner decision |
+
+Ma trận đầy đủ (nguyên nhân, cách kiểm chứng, rủi ro còn lại) ở mục 2 của [PHASE-02B-DESIGN-AMENDMENT-A01.md](docs/operations/phase-reports/PHASE-02B-DESIGN-AMENDMENT-A01.md), 79739 byte, SHA-256 `7fa539a6a0b8219c92223fa6dd13a1ed971ba549eba16d45572edd95f109161d`. **Không finding nào được ghi là CLOSED.** Chỉ Codex đóng được finding. Báo cáo gốc `docs/operations/phase-reports/PHASE-02B-DESIGN-REPORT.md` không sửa.
+
+**Một lựa chọn khác ưu tiên của Codex:** Amendment mục 7.3 chèn JSON inline có escape thay vì tệp riêng, vì HyperFrames đòi dựng timeline đồng bộ lúc tải trang. Đây không phải bất đồng; Codex xem lại ở RR-014.
+
+**Lỗi tự phát hiện khi viết:** bản nháp schema thiếu chỗ cho `reblock`, khiến Brief A không biểu diễn được; đã thêm trường `time_skip` trước khi đăng ký. Kiểm tra cục bộ bằng trình kiểm schema nhỏ trong scratchpad: 12 khối JSON phân tích được, ví dụ Brief B và dạng Brief A hợp lệ, ba mẫu xấu bị từ chối, 28 ca âm tính được liệt kê. Đây là kiểm tra tài liệu, không phải test code; chưa chạy Ollama, compiler hay renderer.
+
+**Điểm cần Owner:** mục 12 của Amendment.
+
+**Lượt:** RR-014 (vòng 1/3) đã đăng trong `TASKS.md`; lượt thuộc Codex.
+
+## SG-004 – Phản hồi RR-012 vòng 1/3: APPROVED WITH CHANGES, trình Owner (2026-10-31)
+
+**Nguồn:** báo cáo `# Review RR-012` ở đầu [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md): **APPROVED WITH CHANGES — không phải PASS**; P1-005 còn mở; P1-006, P1-007 vẫn `CLOSED`. Claude không sửa báo cáo Codex.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude; SG-004 `ACTIVE`; HEAD `7115591`; `PHASE-01-REVIEW.md` 95,288 byte, 86,194 byte cuối khớp `5aa9ba5c…`; đúng một `# Review RR-012` ở đầu; hash `TASKS.md` phần trước RR `ab355908…` (khác RR-011 vì thêm khối RR-012, đúng dự kiến, nên so với giá trị ghi trong RR-012) và `CURRENT_STATUS.md` `962096ec…` không đổi; không nhóm C.
+
+| Điểm | Xác minh | Trạng thái |
+|---|---|---|
+| Codex không đọc được URL LAME tại tag và header x265 | **Đúng, là lỗi truy cập phía Codex, không bác bỏ lời Claude.** Claude tìm URL thay thế đọc được (mục 8.4): LAME `COPYING` và `lame.c` tại tag `RELEASE__4_0` bản HTML; revision r6552 "Tag 4.0 release." (2026-07-11); header x265 tại 4.3 qua `source/x265.h` (GPL v2 or later + câu thương mại) | Đã bổ sung; Codex chưa xác nhận |
+| Quan hệ mirror x264 với upstream | **Không giải quyết được bằng tài liệu.** Commit `b35605ac…` tồn tại trên `mirror/x264` ("i8mm & neon hpel_filter optimization"), nhưng không có trang nào xác nhận mirror khớp upstream; tìm kiếm công khai không thấy `mirror/x264` được xác nhận chính thức. Kho VideoLAN bị bot-protection | **Cần Owner quyết** |
+| dav1d | Codex ghi nhận trang `videolan/dav1d` tự mô tả mirror của code.videolan.org là bằng chứng hỗ trợ, không mặc định không chính thức. Claude đồng ý và đã điều chỉnh cách nói | Giữ nguyên |
+
+**Điều kiện đóng P1-005 (Codex):** (a) bổ sung đối chiếu đọc được cho phần còn thiếu, hoặc (b) **Owner quyết định riêng** chấp nhận các giới hạn nguồn. Claude đã làm (a) trong phạm vi tài liệu. Còn lại cần Owner. **Chưa đăng RR mới**: Codex đã nói không cần lặp RR chỉ để nhắc cùng giới hạn; việc đăng RR-013 (vòng 2/3) cho Codex xác nhận các URL mới hay không là do Owner chọn. Claude không đóng P1-005, không PASS, không cài.
+
+: CHANGES REQUESTED, bổ sung bằng chứng (2026-10-31)
+
+**Nguồn:** báo cáo `# Review RR-011` ở đầu [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md): **CHANGES REQUESTED — NEEDS REVISION**; P1-005 còn mở (sửa một phần); P1-006, P1-007 vẫn `CLOSED`. SVT-AV1 đã xác minh tại v4.2.0. Claude không sửa báo cáo Codex.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude; SG-004 `ACTIVE`; HEAD `7115591`; `PHASE-01-REVIEW.md` 86,194 byte, 76,078 byte cuối khớp `1619658e…`; đúng một `# Review RR-011` ở đầu; hash nhóm A khớp RR-011 (`TASKS.md` phần trước RR, `CURRENT_STATUS.md` `962096ec…`); không nhóm C.
+
+| Điểm Codex nêu | Xác minh và xử lý (mục 8.3) | Trạng thái |
+|---|---|---|
+| LAME chỉ ở SVN HEAD, chưa gắn 4.0 | **Đúng.** Đã tìm tag trong SVN chính thức SourceForge: `RELEASE__4_0` (r6552) và `lame4_0` (r6551). Đọc `COPYING` (LGPL v2) và header `libmp3lame/lame.c` ("version 2 ... or any later version") **tại tag RELEASE__4_0**. Ghi nhận Codex không truy cập được URL SVN HEAD ở lượt này (lỗi truy cập, chưa xác nhận độc lập) | Đã bổ sung; chờ Codex |
+| x265 chưa có license tại 4.3 | **Đúng.** Đọc được tại kho `Multicorewareinc/x265` tag 4.3 (cùng tổ chức với URL tarball của formula): `COPYING` GPL v2 kèm câu thương mại; header `x265.cpp` "version 2 ... any later version"; commit `e9b88125…`. Giới hạn: trang không khẳng định là kho chính thức | Đã bổ sung; chờ Codex |
+| dav1d, x264 chưa đối chiếu nguồn gốc mirror; x264 COPYING tại commit chưa đọc | **Đúng một phần.** Đã đọc x264 `COPYING` tại commit `b35605ac…` (GPL v2). Mirror `mirror/x264` chỉ tự mô tả "x264 Git mirror", **không nêu upstream**; không xác nhận commit có trong lịch sử. `videolan/dav1d` tự mô tả "read-only mirror ... origin at code.videolan.org". Không thể đối chiếu thêm vì kho gốc bị bot-protection (không vượt) | Một phần; **cần Owner quyết mức chấp nhận** hoặc quyền riêng |
+| xz thiếu văn bản điều khoản được dẫn | **Đúng.** Đã đọc `COPYING.0BSD`, `COPYING.LGPLv2.1`, `COPYING.GPLv2` tại v5.8.4. `COPYING.GPLv3` chưa đọc (build system) | Đã bổ sung phần lớn |
+| Dòng 186 nói header x264 ở HEAD/nhánh mặc định, lệch với dòng 173 ghi commit | **Đúng.** Đã đồng bộ câu suy luận: nêu lame ở tag 4.0, x265 ở tag 4.3, x264 ở commit đã ghi | Đã sửa |
+
+**Giới hạn còn lại (không che):** đối chiếu tarball Homebrew thực tế (chưa tải); nguồn gốc mirror dav1d và x264; `COPYING.GPLv3` của xz; phụ thuộc gián tiếp; notice; tương thích pháp lý; sáng chế. **Hồ sơ FFmpeg giữ trạng thái chờ, không PASS; Claude không đóng P1-005.** Phần còn thiếu cần Owner quyết riêng: chấp nhận mirror làm mức bằng chứng cho dav1d và x264, hoặc cho phép tải chỉ để kiểm tra (không phải điều kiện bắt buộc). Vòng kế tiếp là 1/3 của SG-004 (RR-012).
+
+## SG-004 – Phản hồi P1-005 sau RR-010: bổ sung bằng chứng, vòng 0/3 (2026-10-31)
+
+**Nguồn quyền:** SG-004 và Amendment A01 (`TASKS.md`), Owner xác nhận allowlist. Claude không sửa báo cáo Codex.
+
+**Đã làm (mục 8.3 của `phase1-tools-candidates.md`):** ba điểm Codex nêu ở RR-010:
+1. **Đúng phiên bản:** ghim tag hoặc commit theo `brew info --json=v2`. 7/11 phụ thuộc (libvmaf, libvpx, opus, svt-av1, openssl@4, xz, sdl2-compat) đọc được từ kho chính thức đúng tag; dav1d và x264 đúng tag hoặc commit nhưng chỉ qua bản sao GitHub chưa xác nhận chính thức, vì kho VideoLAN GitLab chặn bằng bot-protection (Claude không vượt); x265 4.3 **chưa đọc được** tại đúng phiên bản (mirror GitHub không có tag 4.3, Bitbucket trả 404).
+2. **LAME:** đã có nguồn chính thức (lame.sourceforge.io và SVN SourceForge): "fully LGPL'd", COPYING là LGPL v2, header `lame.c` ghi "version 2 ... or any later version". **Giới hạn:** đọc ở SVN HEAD, không phải tag hoặc tarball 4.0; việc 4.0 cùng header là **suy luận**.
+3. **SVT-AV1:** lệch metadata Homebrew vẫn tồn tại ở đúng v4.2.0: nguồn chính thức ghi BSD 3-Clause Clear (loại trừ quyền sáng chế) kèm PATENTS.md AOM riêng; Homebrew ghi BSD-3-Clause. Không phải do khác phiên bản. Nguyên nhân là suy luận.
+
+**Phân loại ba loại** (theo yêu cầu Owner): đã xác minh / suy luận / rủi ro chưa giải quyết, ở mục 8.3 phần A đến E. Tầng 1.1 ở mục 8.1 cập nhật trỏ sang 8.3.
+
+**Kết luận:** thiếu bằng chứng ở dav1d (nguồn chính thức), x264 (COPYING tại commit), x265 (đúng phiên bản), LAME (tag 4.0). **FFmpeg giữ trạng thái chờ; không PASS; P1-005 không do Claude đóng** (`FIX IMPLEMENTED — PENDING CODEX VERIFICATION` hoặc coi là chưa đủ, do Codex đánh giá). Owner vẫn có thể quyết riêng mức bằng chứng chấp nhận cho các điểm trên. Không tải, cài, chạy gì; không dùng tải tarball để đọc license (cần quyết định riêng).
+
+## SG-003 – Phản hồi RR-010 vòng 3/3 (cuối): CHANGES REQUESTED, hết vòng (2026-10-31)
+
+**Nguồn:** báo cáo `# Review RR-010` ở đầu [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md): **CHANGES REQUESTED — NEEDS REVISION**; P1-005 còn mở; P1-006, P1-007 vẫn `CLOSED`. Hết vòng 3/3: dừng và trình Owner. Claude không sửa báo cáo Codex.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude; SG-003 `ACTIVE`; HEAD `7115591`; `PHASE-01-REVIEW.md` 76,078 byte, 66,483 byte cuối khớp `b0ff9d93…`; đúng một `# Review RR-010` ở đầu; hash `TASKS.md` phần trước RR `c608b884…` và `CURRENT_STATUS.md` `962096ec…` không đổi; không nhóm C.
+
+| Finding | Xác minh | Trạng thái |
+|---|---|---|
+| P1-005 | **Đồng ý, đúng.** Ba điều Codex nêu đều đúng và hồ sơ đã tự ghi: (1) tệp license đọc ở nhánh mặc định, chưa gắn với đúng tag hoặc commit của 11 phụ thuộc Homebrew; (2) LAME 4.0 chưa có nguồn chính thức xác nhận grant và "or later" (chỉ bản sao không chính thức; Codex còn không truy cập được bản sao đó nên không xác nhận được tóm tắt của Claude); (3) SVT-AV1: metadata Homebrew `BSD-3-Clause` so với nguồn nhánh hiện tại `BSD-3-Clause-Clear` chưa đối chiếu tại v4.2.0. Tôi cũng xin đính chính cách gọi lệch SVT-AV1 là "nhỏ": Codex đúng rằng gọi nhỏ không chứng minh tác động nhỏ | `OPEN` (chưa sửa; hết vòng) |
+
+**Không làm:** không sửa tiếp, không mở vòng 4, không đổi SG để reset. Tôi chỉ xác nhận ba điểm còn thiếu và trình Owner. **Quyết định Owner:** có cho tiếp tục bổ sung bằng chứng chỉ đọc tại đúng tag/commit và nguồn LAME chính thức, hay chấp nhận riêng mức bằng chứng giới hạn. Owner đã mở SG-004 cho việc này (xem báo cáo trạng thái của Claude); allowlist SG-004 chưa được Owner xác nhận nên chưa có file nào được ghi theo SG-004.
+
+## SG-003 – Phản hồi RR-009 vòng 2/3: CHANGES REQUESTED (2026-10-31)
+
+**Nguồn:** báo cáo `# Review RR-009` ở đầu [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md): **CHANGES REQUESTED — NEEDS REVISION**; **P1-007 CLOSED** (Codex); P1-006 vẫn CLOSED; **P1-005 còn mở** về một điểm: tầng 1.1 (đọc toàn văn license phụ thuộc runtime, hoặc quyết định riêng của Owner) ghi "chưa xong", nên PASS bây giờ có thể bị dùng làm bước (b) dù bước (a) chưa hoàn tất. Claude không sửa báo cáo Codex.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude; SG-003 `ACTIVE`; HEAD `7115591`; hash nhóm A khớp RR-009; `PHASE-01-REVIEW.md` 66,483 byte, 58,747 byte cuối khớp `f657694c…`; đúng một `# Review RR-009` ở đầu; không nhóm C.
+
+| Finding | Xác minh | Trạng thái |
+|---|---|---|
+| P1-005 (phần còn lại) | **Đồng ý, đúng.** Tầng 1.1 chính hồ sơ đã đặt thành điều kiện cần trước Codex PASS và ghi "chưa xong"; RR-009 không bổ sung gì. Tôi chọn hướng Codex nêu thứ nhất, trong quyền nghiên cứu hiện có: đọc tệp license upstream của cả 11 phụ thuộc runtime (mục 8.2): dav1d BSD-2, libvmaf BSD+Patent, libvpx BSD-3 + PATENTS, opus BSD-kiểu kèm tuyên bố sáng chế, svt-av1 BSD-3-Clause-Clear + PATENTS AOM, x264 GPL v2 or later (header), x265 GPL v2 or later (header, kèm tuyên bố có giấy phép thương mại riêng), openssl Apache-2.0, xz (liblzma 0BSD, script GPLv2+, getopt LGPLv2.1+), sdl2-compat zlib, lame LGPL 2 (chỉ bản sao không chính thức). **Giới hạn nói rõ:** nhánh mặc định, chưa ghim phiên bản Homebrew; tóm tắt qua công cụ web; lame chưa xác nhận "or later" từ nguồn chính thức; svt-av1 lệch metadata Homebrew (BSD-3-Clause so với BSD-3-Clause-Clear); phụ thuộc gián tiếp và notice trong bottle chưa đọc; tương thích GPL/Apache và sáng chế chưa giải quyết. Tầng 1.1 nay ghi "đã thực hiện với giới hạn"; **việc đủ hay không là do Codex đánh giá**; hoặc Owner có thể quyết riêng mức bằng chứng được chấp nhận | `FIX IMPLEMENTED — PENDING CODEX VERIFICATION` |
+| P1-006, P1-007 | Codex đã `CLOSED`. Claude không đổi | `CLOSED` (bởi Codex) |
+
+**Đây là vòng cuối (3/3) của SG-003.** Nếu RR-010 vẫn không PASS thì dừng và báo Owner theo workflow mục 9; Claude không mở vòng 4 hay đặt lại bộ đếm. Không tải, không cài, không chạy gì. Không đóng finding; chỉ Codex đóng.
+
+## SG-003 – Phản hồi RR-008 vòng 1/3: CHANGES REQUESTED (2026-10-31)
+
+**Nguồn:** báo cáo `# Review RR-008` ở đầu [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md): **CHANGES REQUESTED — NEEDS REVISION**; P1-006 **CLOSED** (Codex); P1-005 còn mở (sửa một phần); P1-007 mới (MEDIUM). Claude không sửa báo cáo Codex.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude; SG-003 `ACTIVE`; HEAD `7115591`; hash nhóm A khớp RR-008; `PHASE-01-REVIEW.md` 58,747 byte, 49,442 byte cuối khớp `e76679fb…`; đúng một `# Review RR-008` ở đầu; không nhóm C.
+
+| Finding | Xác minh | Trạng thái |
+|---|---|---|
+| P1-005 | **Đồng ý, đúng.** Mục 1 và 8.1 đã đúng nhưng dòng FFmpeg ở mục 8 vẫn ghi "Chưa đọc toàn văn GPLv3" (nay đã đọc, mục 8.1) và "Đề xuất B, kèm rủi ro dư Owner phải chấp nhận riêng", tức kết luận cũ. Đã sửa chính dòng đó: ghi GPLv3 đã đọc, phụ thuộc mới đọc metadata Homebrew, điều kiện (i)–(iii) chưa xác nhận hoàn tất, nhãn "B có điều kiện (Owner cho tiếp tục đánh giá), chưa phải B đã đủ bằng chứng", và ghi cách ghi cũ là lịch sử đã lỗi thời | `FIX IMPLEMENTED — PENDING CODEX VERIFICATION` |
+| P1-006 | Codex đã `CLOSED` ở RR-008. Claude không ghi đóng | `CLOSED` (bởi Codex) |
+| P1-007 | **Đồng ý, đúng.** Danh sách 8.1 trộn điều kiện đầu vào hồ sơ với Codex PASS, quyết định của Owner và so hash sau tải; theo thứ tự đó cần quyết định cuối để hoàn tất hồ sơ dùng xin chính quyết định đó, hoặc phải tải trước khi được cấp quyền. Đã tách thành bốn tầng: (1) bằng chứng tài liệu để review; (2) Codex PASS và hồ sơ lệnh (gồm đối chiếu lại formula lúc lập); (3) quyền tải/cài của Owner, kể cả tải chỉ để kiểm tra digest là quyết định riêng; (4) so SHA-256 tệp thực nhận với hash nguồn công bố, chỉ sau tầng 3 và trước khi dùng. Chuỗi mục 8 điểm 1 nay có bước (e). Phân biệt hash nguồn công bố với hash tệp thực nhận | `FIX IMPLEMENTED — PENDING CODEX VERIFICATION` |
+
+**Không làm:** không tải, cài hay chạy gì; không nới tiêu chuẩn license; không coi hash sau tải là điều kiện chặn Codex PASS. **Không đóng finding**; chỉ Codex đóng. Vòng 2/3 qua RR-009.
+
+## SG-003 – Phản hồi RR-007 vòng 0/3: CHANGES REQUESTED (2026-10-31)
+
+**Nguồn:** báo cáo `# Review RR-007` ở đầu [PHASE-01-REVIEW.md](docs/operations/reviews/PHASE-01-REVIEW.md), kết luận **CHANGES REQUESTED — NEEDS REVISION** (không phải BLOCKED): P1-005 (MEDIUM), P1-006 (LOW). Claude không sửa báo cáo Codex.
+
+**Kiểm tra khi nhận lại lượt (workflow mục 7):** đúng lượt của Claude; SG-003 `ACTIVE`; HEAD vẫn `7115591`; hash nhóm A khớp RR-007 (`HANDOFF` `04e77fcd…`, hồ sơ tools `f0eaafdb…`, `TASKS.md` phần trước RR `c608b884…`, `REVIEW_RESPONSE` `d7f7abd6…`, `CURRENT_STATUS` `962096ec…`); `PHASE-01-REVIEW.md` 49,442 byte, 39,724 byte cuối khớp `01a2e718…`; báo cáo mới ở đầu file, đúng một `# Review RR-007`; `PHASE-00-REVIEW.md` khớp; không có đường dẫn nhóm C.
+
+| Finding | Xác minh | Trạng thái |
+|---|---|---|
+| P1-005 | **Đồng ý, đúng.** Dòng FFmpeg ở `phase1-tools-candidates.md` mục 1 và 8 ghi "đề xuất B" ngay sau khi tôi đọc `LICENSE.md` upstream, nhưng chính hồ sơ nói chưa đọc toàn văn GPLv3 và license từng phụ thuộc. `LICENSE.md` chỉ chỉ dẫn license nào áp dụng và dẫn tới các tệp `COPYING.*`; không thay toàn văn. Nhãn B của Owner là cho phép tiếp tục đánh giá, không phải điều kiện (i)–(iii) đã đạt. Tôi đã sửa: nhãn nay là "B CÓ ĐIỀU KIỆN (Owner cho tiếp tục đánh giá) — chưa phải B đã đủ bằng chứng"; thêm mục 8.1 với bảng đã đọc và chưa đọc (đọc COPYING.GPLv3 mục 2, license phụ thuộc ở mức metadata Homebrew, ghi đoạn OpenSSL và GPL) và danh sách điều kiện còn chặn | `FIX IMPLEMENTED — PENDING CODEX VERIFICATION` |
+| P1-006 | **Đồng ý, đúng.** Mục 8 điểm 1 nói nếu Owner chấp nhận rủi ro thì Claude có thể xin quyền cài; thiếu cổng Codex PASS mà Owner đã đặt trong SG-003. Tôi đã sửa thành chuỗi: hoàn tất điều kiện hồ sơ → Codex PASS → Claude trình hồ sơ lệnh cụ thể → Owner quyết riêng. Việc cho B có điều kiện và việc nhờ review không phải quyền cài hay chạy | `FIX IMPLEMENTED — PENDING CODEX VERIFICATION` |
+
+**Sửa thêm theo ghi chú của Codex (không phải finding):** (1) ghi formula là 9.0.2 **revision 1** và phải đối chiếu lại trước khi cài; (2) bỏ khẳng định "kéo khoảng 14 gói": 11 phụ thuộc runtime chưa phải toàn bộ closure (còn `pkgconf` build, `bzip2` và `libxml2` từ macOS); (3) làm rõ "dùng nội bộ" chỉ mô tả cách dùng công cụ, không phải video kiếm tiền; (4) ghi Codex không truy cập được trang legal ffmpeg.org (timeout) nên câu "trang legal không nói về video đầu ra" chưa được xác nhận độc lập; (5) ghi đoạn OpenSSL và GPL trong LICENSE.md, và lưu ý của Codex về `configure` (OpenSSL ≥ 3.0.0 dùng cùng GPL với version3), không kết luận có hay không mâu thuẫn.
+
+**Chưa làm (không thuộc allowlist hoặc cần quyền):** không đọc toàn văn license từng phụ thuộc, không so hash tải về, không cài. **Không đóng finding**; chỉ Codex đóng được. Vòng 1/3 sẽ gửi qua RR-008.
+
 ## SG-002 – Đã sửa P1-003 và P1-004 theo chỉ đạo "Cho sửa, không review" (2026-10-31)
 
 **Trạng thái: `FIX IMPLEMENTED — NOT RE-REVIEWED`.** Không phải CLOSED. Owner chọn không nhờ Codex xác nhận; vòng 3/3 đã hết, không có vòng 4.

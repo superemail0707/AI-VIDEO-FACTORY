@@ -17,7 +17,11 @@
 # === Runtime data ===
 /workspace/
 /data/
-/output/
+/output/*
+# nmt-engine (Ngang Một Tí) là code của dự án: chỉ thư mục engine được theo dõi, các tập vẫn bị bỏ qua
+!/output/_engine/
+# logo watermark NMT mà engine đóng lên mọi bản xuất
+!/output/branding/
 /outputs/
 /renders/
 /logs/
@@ -95,6 +99,9 @@ temp/
 *.bak
 
 # === Secrets: never commit. Keep this block last ===
+.publishing/
+postiz-local/
+*.credentials
 .env
 .env.*
 *.env

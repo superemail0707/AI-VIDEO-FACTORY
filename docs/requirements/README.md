@@ -46,3 +46,9 @@ Tất cả ở trạng thái **Chưa làm**. Mỗi test nghiệm thu nên tham c
 | NFR-11 | Không có đăng trùng tự động | AC-P1 đến AC-P11, PF-01 đến PF-13 |
 | NFR-12 | Không xuất bản khi quyền nội dung thiếu hoặc không rõ | AC-R1 đến AC-R3 |
 | NFR-13 | API cục bộ chống yêu cầu từ trình duyệt ngoài ý muốn | AC-S1, AC-S2 |
+
+## Thương hiệu
+
+| Mã | Yêu cầu | Trạng thái |
+|---|---|---|
+| BR-01 | Watermark NMT chèn vào mọi video xuất bản của "Ngang Một Tí"; QG chặn khi lỗi; Tesla chỉ nhận bản có watermark | Đã triển khai & kiểm thử (chi tiết, giới hạn: `WATERMARK_NMT.md`; quyết định D-025 `Proposed`) |

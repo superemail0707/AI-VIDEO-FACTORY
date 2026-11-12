@@ -58,3 +58,10 @@ Before starting a new Phase, review `HANDOFF_TO_CHATGPT.md` and the relevant pro
 Do not delete historical context that is still relevant. Update the document while preserving important decisions and unresolved issues.
 
 This rule is mandatory for every Phase, including bug fixes, integration work, and final optimization.
+
+
+## NMT-engine — video Ngang Một Tí
+
+Lệnh dự án: `/nmt-engine <chủ đề hoặc brief>`, định nghĩa tại `.claude/commands/nmt-engine.md`. Đọc `output/_engine/NMT_ENGINE.md` và `output/_engine/IMPROVEMENT_LOG.md` trước khi làm. CLI tạo/liệt kê tập: `python3 output/_engine/nmt_engine.py new "<chủ đề>"` hoặc `list`.
+
+Engine dựng hoạt hình 2D Tí–Ngang–Mimi (Mimi là thú cưng của Ngang), hỗ trợ kịch bản đời thường/hài/hội thoại hoặc dựng theo nhạc được Owner cung cấp, có cổng duyệt và xuất NMT vào `videos-post/`. Khi tiếp tục một tập, đọc `CURRENT_PREVIEW.json` và workflow/revision hiện hành; không xuất lại bản cũ đã bị thay thế. Tên `couple-engine` chỉ còn là alias tương thích và tên trong lịch sử. Việc đổi tên này không thay đổi kiến trúc Factory Manager + 7 Agent hay quyền xuất bản.
