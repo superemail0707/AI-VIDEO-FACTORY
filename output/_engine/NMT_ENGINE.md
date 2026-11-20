@@ -1,6 +1,6 @@
 # NMT-engine — Ngang Một Tí
 
-Phiên bản: **1.0.0** (12/11/2026, xem `VERSION` và `CHANGELOG.md`).
+Phiên bản: **1.1.0** (20/11/2026, xem `VERSION` và `CHANGELOG.md`). 1.1.0: quy trình chuẩn v2 (D-032), chấm kịch bản + hội đồng người xem, tranh tự động (Codex/ChatGPT web), `scene_kit`, phụ đề chạy theo giọng, thumbnail v2, outro đăng ký 7,8 s (chỉ tiếng 3 nút), review video độc lập.
 
 `nmt-engine` là bộ công cụ dựng video hoạt hình 2D cho thương hiệu **Ngang Một Tí**, với **Tí, Ngang và Mimi — thú cưng của Ngang**. Engine hỗ trợ triển khai brief thành kịch bản, storyboard, diễn xuất bằng sprite/key pose, giọng thoại hoặc nhạc do Owner cung cấp, phụ đề tiếng Việt, outro và video có watermark NMT cho TikTok, YouTube Shorts, Facebook Reels.
 
@@ -22,6 +22,8 @@ Lệnh `/nmt-engine` được khai báo tại `.claude/commands/nmt-engine.md` c
 Tên cũ `couple-engine`, CLI `couple_engine.py` và hai đường dẫn tài liệu `COUPLE_ENGINE*.md` được giữ dưới dạng alias/chuyển hướng. Thư mục tập, ID nhân vật và video đã xuất giữ nguyên. Renderer nội bộ vẫn là `cute_engine.py`; đây là tên module kỹ thuật, không phải tên lệnh thương hiệu.
 
 Thư mục engine: `output/_engine/`. Cập nhật lần cuối 08/11/2026.
+
+**Quy trình chuẩn v2 (D-032, Owner duyệt 18/11/2026):** checklist sản xuất ở [`NMT_STANDARD_PROCESS.md`](NMT_STANDARD_PROCESS.md) — format cố định ≥ 60 s, không chữ tiêu đề đầu video, kịch bản ≥ 9/10 + hội đồng người xem, phụ đề trắng nền đen keyword vàng chạy theo giọng, thumbnail chuẩn, giảm âm outro. Khi mục nào dưới đây khác, theo file đó.
 
 **Cải tiến liên tục (Owner 08/11/2026):** mỗi lỗi Owner phát hiện phải được sửa, tìm nguyên nhân gốc, chặn tái diễn bằng kiểm tra tự động trong engine (hoặc checklist mục 4) và ghi vào [`IMPROVEMENT_LOG.md`](IMPROVEMENT_LOG.md). Đọc sổ này trước khi làm tập mới.
 
@@ -68,10 +70,10 @@ Hình vẽ tay hoàn toàn đã bị Owner chê là "giả". Phải **tìm trong
 | Bước | Lệnh (chạy trong `output/epNN_<slug>/render/`) | Kết quả | Cổng |
 |---|---|---|---|
 | 0. Tạo tập | `python3 ../../_engine/nmt_engine.py new "<chủ đề>"` | `epNN.py`, `post.json` | — |
-| 1. Kịch bản | Điền `META` và `PLAN`, rồi chạy `python3 epNN.py --script` | `script.md`, `lines.json` | **Owner duyệt kịch bản** |
-| 2. Giọng và hình mẫu | `--tts`, viết `epNN_scenes.py`, rồi chạy `--storyboard` | Giọng, `contact_sheet.png`, `thumbnail.png` | **Owner duyệt hình** |
+| 1. Kịch bản | Điền `META` (gồm `brief`, `format`) và `PLAN`, chạy `--script`, rồi `--script-review` | `script.md`, `lines.json`, `script_review.json` | **Tự duyệt khi ≥ 8/10** (D-029); Owner duyệt khi 3 lần chưa đạt / giám khảo chưa hiệu chỉnh / `script_gate="owner"` |
+| 2. Tranh, giọng, hình mẫu | `--art-auto` (image_gen tự động), `--check-art`, `--tts`, viết `epNN_scenes.py`, `--storyboard` | Tranh `art/vNN/`, giọng, `contact_sheet.png` | **Owner duyệt hình** |
 | 3. Video | `python3 epNN.py F01 F02 …` (chia nhỏ để mỗi lượt dưới 180 s), `--audio`, `--mux` | `final_video.mp4` | **Owner duyệt video cuối** |
-| 4. Xuất đa nền tảng | `--export tiktok F01 …`, `--export youtube_shorts …`, `--export facebook_reels …`, rồi `--export-finish` | `videos-post/<slug>/<nền tảng>/` | Bản để đăng **thủ công** |
+| 4. Xuất đa nền tảng | `--export tiktok F01 …`, `--export youtube_shorts …`, `--export facebook_reels …`, rồi `--export-finish` | `videos-post/unpost/<slug>/<nền tảng>/` | Bản để đăng **thủ công** |
 
 Ghi quyết định duyệt bằng `--approve <script|visual|final> --by "owner (chat)" --note "…"`. Từ chối thì dùng `--reject`.
 
@@ -88,9 +90,12 @@ Ghi quyết định duyệt bằng `--approve <script|visual|final> --by "owner 
 
 ## 3. Xuất đa nền tảng: `videos-post/`
 
+**Quy tắc thư mục (Owner 13/11/2026):** video cuối chưa đăng nằm ở `videos-post/unpost/<slug>/`; `--export-finish` tự ghi vào đây. Khi đã đăng đủ các nền tảng dự định, ghi `PUBLISHED.json` vào thư mục tập rồi chuyển nguyên thư mục sang `videos-post/posted/<slug>/`. Không để thư mục tập ở thẳng `videos-post/`. Các đường dẫn `videos-post/<slug>` trong lịch sử bên dưới là vị trí cũ.
+
 ```
 videos-post/
-└── <slug chủ đề>/             vd. ngay-dau-yeu-vs-nam-thu-3
+├── posted/<slug>/          đã đăng (có PUBLISHED.json)
+└── unpost/<slug chủ đề>/   chưa đăng, vd. ngay-dau-yeu-vs-nam-thu-3
     ├── README.md
     ├── tiktok/            <slug>_tiktok_nmt.mp4, cover.jpg, caption.txt, manifest.json
     ├── youtube_shorts/    <slug>_youtube_shorts_nmt.mp4, cover.jpg, caption.txt, manifest.json
@@ -155,7 +160,7 @@ Các số vùng an toàn là ước lượng theo hướng dẫn công khai củ
 
 ### 3.1 Watermark NMT (bắt buộc, Owner 07/11/2026)
 
-- `--export-finish` dựng **bản sạch** `output/<tập>/render/export/<nền tảng>/<slug>_<nền tảng>_clean.mp4` (có rồi thì dùng lại, không ghi đè), rồi chèn watermark NMT bằng `src/ai_video_factory/core/branding.py`. Chỉ bản `_nmt.mp4` đã qua kiểm tra mới được đưa vào `videos-post/`.
+- `--export-finish` dựng **bản sạch** `output/<tập>/render/export/<nền tảng>/<slug>_<nền tảng>_clean.mp4` (có rồi thì dùng lại, không ghi đè), rồi chèn watermark NMT bằng `src/ai_video_factory/core/branding.py`. Chỉ bản `_nmt.mp4` đã qua kiểm tra mới được đưa vào `videos-post/unpost/`.
 - Vị trí mặc định: góc dưới-phải, rộng 190 px, độ mờ 0,85, cách mép 48 px (cả 3 nền tảng). Chỉnh theo tập bằng `output/<tập>/watermark.json`.
 - `post.json` phải có `"brand": "ngang-mot-ti"` (tập mới tự có). Thiếu khoá → chặn xuất.
 - Lỗi (thiếu file logo, logo đè phụ đề, chèn lỗi, kiểm tra hỏng) → **chặn**, ghi `BLOCKED.txt` trong thư mục nền tảng và `watermark_report.json` cạnh bản sạch. Không bao giờ đưa bản sạch đi đăng.
@@ -187,9 +192,46 @@ Các số vùng an toàn là ước lượng theo hướng dẫn công khai củ
 **Đối chiếu sau khi dựng**
 - Lưới khung hình cả video và `volumedetect`, đối chiếu lại với các mục trên.
 
+### 4.1 Kiểm tra tự động và thư viện cảnh (Giai đoạn A, 12/11/2026)
+
+Kế hoạch: `docs/architecture/NMT_PIPELINE_UPGRADE_PLAN.md`. Các lệnh mới (chạy trong `output/epNN_*/render/`):
+
+| Lệnh | Kiểm gì | Chặn |
+|---|---|---|
+| `python3 epNN.py --check-art [thư mục]` | Mọi tranh trong `ART_DIR` (mặc định `art/v<mới nhất>`): phủ ≥ 95 % (viền kem/trong suốt), tỉ lệ 9:16, nghi trùng tranh, đáy nhân vật/đỉnh đầu theo `safe_annotations.json`. Ghi overlay 540×960 lưới 100 px + dải phụ đề 1:1 vào `art/vNN/_qa/`, báo cáo `render/qa_art.json` | `--storyboard` khi tập đặt `ART_CHECK = True` (mẫu tập mới bật sẵn) |
+| `python3 epNN.py --check-transitions` / `--check-sync` | Vào End card/Outro phải `cut` (EP13); kiểu chuyển hợp lệ, không dài hơn cảnh; câu mở có tiếng thật ≤ 0,20 s (EP19, đo onset trong WAV); câu không chồng nhau, không vượt cuối video. Báo cáo `render/qa_transitions.json`, `qa_sync.json` | `--mux` |
+| `python3 epNN.py --metrics` | Tổng hợp `render/metrics.json`: thời gian từng bước (mỗi lệnh tự ghi `metrics.jsonl`), số vòng duyệt/từ chối từ `workflow.json`, số dòng code tập. Token Claude chỉ có khi ghi tay `render/metrics_manual.json` | — |
+
+**Chú thích tranh (`art/vNN/safe_annotations.json`):** sau khi xem overlay, ghi `{"A01": {"char_bottom_y": 1264, "head_top_y": 420, "face_x": [300, 880], "subtitles": true}}`. `face_x` (từ EP20) là x trái/phải của các mặt nhân vật; ngoài 108–972 thì lỗi (lề cắt TikTok/Shorts, cột nút phải). Máy không tự nhận diện nhân vật; vạch đáy/đầu vẽ lên overlay để đối chiếu. Tranh có phụ đề mà `char_bottom_y > 1460` là lỗi.
+
+**Thư viện cảnh `scene_kit.py`:** tập mới dùng `import scene_kit as K` thay cho hàm chép tay: `K.install_post()` (phụ đề full-bleed; `subtitles=False` cho phim không thoại; `pill_hook` cho highlight như EP17), `K.art_loader(ART_DIR, aliases=...)`, `K.cam`, `K.top_cam`, `K.shaken`, `K.jitter`, `K.mix`, `K.flash`, `K.pop`, `K.sub`, `K.vt`, `K.cut_at(vid)` (mốc cắt = đầu câu + onset đo được), `K.sparkle`, `K.twinkles`, `K.drop`, `K.sweat_burst`, `K.bubble`, `K.shock_lines`, `K.zzz_bubbles`, `K.stars_orbit`. Đã kiểm: EP19 dựng bằng scene_kit cho 253/253 khung mẫu trùng byte với bản gốc. Tập cũ giữ nguyên hàm riêng.
+
+**Mẫu tập mới (`nmt_engine.py new`):** `FIRST_LEAD = 0.05`, End card `cut`, `ART_DIR`, `ART_CHECK = True`.
+
+### 4.2 Chấm kịch bản và tranh tự động (Giai đoạn A2, D-029, 12/11/2026)
+
+Kế hoạch: `docs/architecture/NMT_PHASE_A2_PLAN.md`. Module: `script_review.py`, `art_auto.py`, `codex_client.py` (gọi Codex App Server trực tiếp, mỗi lần một phiên mới), prompt `prompts/script_judge_v1.md`, `prompts/art_scene_v1.md`.
+
+- **`--script-review`**: luật cứng → giám khảo Codex (read-only) trả điểm từng mục JSON → **code tự cộng** → ≥ 8 tự duyệt cổng kịch bản (`gates.auto_approve`, khoá SHA, `by="auto-review (codex, x/10, lần n)"`). Tối đa 3 lần; cùng một bản không chấm lại. Lưu vết `render/script_review.json` (câu trả lời gốc, thread_id, điểm, góp ý). Phụ: `status`, `prompt`, `record <file> --judge claude-subagent`, `reset` (khi Owner yêu cầu).
+- **Rule Owner 13/11/2026 — tự duyệt khi > 9,0/10:** `script_review.OWNER_AUTO_ABOVE = 9.0`. Tổng điểm lớn hơn 9,0 thì cổng kịch bản tự duyệt với mọi giám khảo độc lập (`gate_rule = "owner_above_9"`, ghi trong `workflow.json`); từ 8,0 đến 9,0 vẫn cần giám khảo đã hiệu chỉnh, nếu không thì chuyển Owner.
+- **Sổ lỗi chấm kịch bản (cải tiến liên tục):** mỗi lần chấm tự ghi một dòng vào `output/_engine/script_review_findings.jsonl` (tập, lần, điểm mất theo mục, lý do, góp ý, lỗi luật cứng; không ghi trùng cùng SHA). `python3 output/_engine/script_review.py findings [N]` tổng hợp mục mất điểm nhiều nhất và góp ý gần nhất — đọc trước khi viết kịch bản mới. `backfill` nạp lần chấm cũ từ `output/ep*/render/script_review*.json`.
+- **Hiệu chỉnh bắt buộc**: `python3 _engine/script_review.py calibrate` chấm 15 mẫu (`calibration/script_judge_samples.json`: 9 kịch bản EP11–19 đã duyệt + 6 bản kém, dựng bằng `calibration/build_samples.py`). Chỉ khi đúng ≥ 90 % với đúng phiên bản prompt thì cổng mới tự duyệt; chưa hiệu chỉnh → điểm đạt vẫn chuyển Owner.
+- **`--art-auto [CẢNH …] [--fix "…"]`**: cần kịch bản đã duyệt. Đọc `art/PROMPTS_vNN.md`, tham chiếu `refs/` hoặc `ART_REFS`; mỗi cảnh một phiên Codex workspace-write; nhận PNG `art/vNN/<CẢNH>.png` (hoặc chép ảnh mới nhất trong `~/.codex/generated_images`); bản cũ đổi tên `_aNN_superseded` (không ghi đè); lưu trữ `generated_art.archive`; máy kiểm độ phủ/tỉ lệ dọc/trùng cảnh khác → tạo lại kèm mô tả lỗi, tối đa 3 lượt/cảnh; báo file lạ ngoài thư mục tranh. Nhật ký `render/art_auto_log.jsonl`; `--metrics` cộng lượt.
+- **`chatgpt_art.py` (tạm thời khi Codex hết lượt, Owner 13/11/2026):** sinh file JS cho Playwright MCP `browser_run_code_unsafe` để tạo tranh trên ChatGPT web bằng hồ sơ Chrome Playwright đã đăng nhập: lô đầu `--new` mở cuộc trò chuyện mới + đính kèm 3 master reference; mỗi cảnh dán prompt từ `art/PROMPTS_vNN.md`, chờ ảnh, tải ảnh gốc qua `<a download>` + `download.saveAs` vào `art/vNN/<CẢNH>.png`; không ghi đè file có sẵn. Đo 13/11: 24 tranh (EP21 + EP22), 33–68 s/tranh, ~941×1672. Sau khi tải vẫn chạy `--check-art` và ghi `safe_annotations.json`.
+- **Nhạc nền dùng lại (Owner 19/11/2026, thay rule "không lặp" 13/11):** ưu tiên bản CC0 có sẵn hợp tập — `qa_checks.music_library("output")` gom theo SHA-256 kèm các tập đã dùng và dòng nguồn trong `audio/CREDITS.md`; chỉ tìm/tải bản mới khi kho không có bản phù hợp (xin Owner từng file). `require_music_unique` trong `--mux` chỉ in "NHẠC DÙNG LẠI" và không chặn, trừ khi tập đặt `META["music_unique"] = True`.
+- **Outro mặc định — Owner xác nhận lại 18/11/2026:** dùng `scene_kit.subscribe_outro(t, bg)` + `subscribe_sfx(sid)`, thời lượng `SUB_DUR = 7.8` giây. Avatar kênh bật ra, vệt khói, thanh trắng Like · Đăng ký · Chuông xuất hiện, con trỏ bấm lần lượt, thanh thu về avatar rồi avatar biến mất. Dùng tranh cảnh cuối làm nền, vào bằng `cut`, tên cảnh `Outro`, không phụ đề. Đây là bản đã dùng ở EP24, theo clip mẫu `avatar_banner/ScreenRecording_11-13-2026 20-55-26_1.mov`. **Bỏ outro icon tai mèo/chân mèo khỏi các bản dựng mới; không dùng `outro_cta` hoặc `OUTRO_TAPS`.** Khuôn `nmt_engine.py new` phải tạo mặc định 7,8 giây và SFX tương ứng. **Owner 20/11/2026 (EP32): SFX outro chỉ còn tiếng ở 3 nút (tách + phản hồi); bỏ tiếng lúc xuất hiện và biến mất** (`subscribe_sfx` mặc định). Kiểm tra bản MP4 đủ cả xuất hiện và biến mất trước khi gửi Owner.
+- Owner vẫn duyệt bảng hình và video cuối. Vị trí nhân vật (`safe_annotations.json`) vẫn do Claude ghi theo overlay — không phải phép đo.
+
+### 4.3 Chuẩn viết và chấm "Viral Storyboard Agent V2.0" (D-030, Owner 12/11/2026)
+
+- Toàn văn Owner: `prompts/viral_storyboard_agent_v2.md` (đầu file ghi 4 điều chỉnh Owner chọn: thời lượng theo topic; NMT-engine dựng, kèm I2V prompt; tự chọn concept + hiện bảng; tranh qua `--art-auto`).
+- Giám khảo dùng `prompts/script_judge_v2.md`, thang 10 = thang 100 của Agent chia 10: hook 1,5 · visual_comedy 2 · twist 2 · escalation 1,5 · relatable 1 · character_brief 1 · producible 1; kèm câu hỏi QC (tắt tiếng vẫn hiểu, twist được gieo, lời dẫn không thừa…). Đổi prompt → phiên bản mới → **phải hiệu chỉnh lại** (`script_review.py calibrate`, lên lịch sau 16/11 14:47).
+- Luật cứng mới: `duration_s` bắt buộc mọi loại video; `ideation` đủ 3 concept A/B/C, tên khác nhau, điểm 0–100, có logline/hook/twist, `chosen` là concept điểm cao nhất (hoặc `combined: true`), có lý do; `comedy.main` + ≤ 2 `support` trong 7 cơ chế; `twist_seed`; `visual_styles` 1–3 trong A–G.
+- `script.md` tự in bảng chọn concept và creative brief khi META có, để Owner và giám khảo cùng thấy.
+
 ## 5. Lưu ý vận hành
 
-- Máy ảo không gọi được Ollama trên Mac. TTS chạy bằng VieNeu cục bộ (`tts_vieneu.py`).
+- Máy ảo không gọi được Ollama trên Mac. TTS chạy bằng VieNeu cục bộ (`tts_vieneu.py`). Từ 12/11/2026 `tts_vieneu.py` tìm model theo thứ tự `AVF_VIENEU_MODEL` → `<repo>/workspace/vieneu-model` → đường dẫn máy ảo cũ; `--tts` của engine chạy được trên Mac, không cần chép `render/tts_local.py` nữa.
 - Mỗi lệnh trên máy ảo tối đa 180 s. Mỗi lượt render 2–3 cảnh.
 - Sửa file trực tiếp trên thiết bị. Bản sao trên cloud có thể lệch, nên kiểm tra bằng `grep` trước khi render.
 - Thư mục dự án chặn lệnh xoá. File tạm có tiền tố `_qa`, `_wardrobe_review/` để Owner tự dọn.

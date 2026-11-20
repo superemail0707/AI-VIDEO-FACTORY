@@ -262,7 +262,8 @@ def put(dst, im, cx, cy, s=1.0, rot=0.0, alpha=1.0):
 def pop_in(t, t0):
     return clamp(spring(t, t0, 16, 7), 0, 1.25)
 
-_env, VDUR = {}, {}
+_env, VDUR, VONSET = {}, {}, {}
+ONSET_THR = 0.02   # biên độ (đã chuẩn hoá theo đỉnh) coi là bắt đầu có tiếng thật (~ -34 dB so với đỉnh)
 
 
 def load_voice():
@@ -276,6 +277,22 @@ def load_voice():
         hop_ = sr // FPS
         _env[vid] = np.array([np.sqrt(np.mean(a[i * hop_:(i + 1) * hop_] ** 2)) for i in range(len(a) // hop_)] + [0.0])
         VDUR[vid] = len(a) / sr
+        nz_ = np.flatnonzero(np.abs(a) > ONSET_THR)
+        VONSET[vid] = float(nz_[0]) / sr if len(nz_) else 0.0
+
+
+def voice_onset(vid):
+    """Giây im lặng ở đầu file giọng vid (tiếng thật bắt đầu sau đầu file bao lâu). Bài học EP19."""
+    if vid not in VONSET and VDIR and os.path.exists(os.path.join(VDIR, vid + ".wav")):
+        with wave.open(os.path.join(VDIR, vid + ".wav")) as w:
+            sr, n, ch = w.getframerate(), w.getnframes(), w.getnchannels()
+            a = np.frombuffer(w.readframes(n), dtype=np.int16).astype(np.float32)
+        if ch > 1:
+            a = a.reshape(-1, ch).mean(1)
+        a /= np.abs(a).max() + 1e-9
+        nz_ = np.flatnonzero(np.abs(a) > ONSET_THR)
+        VONSET[vid] = float(nz_[0]) / sr if len(nz_) else 0.0
+    return VONSET.get(vid, 0.0)
 
 
 def amp(tg, who):
@@ -714,6 +731,8 @@ def frame(tg):
         return B
     psid = SCENES[i - 1][0]
     A = _call(psid, SCENES[i - 1][1] + tau)
+    # bài học EP29 F17: cảnh trả khung RGB làm Image.blend lỗi 'images do not match' -> chuẩn hoá về RGBA
+    A, B = (im if im.mode == "RGBA" else im.convert("RGBA") for im in (A, B))
     p = tau / td
     if tr == "fade":
         return Image.blend(A, B, e_io(p))
@@ -818,6 +837,19 @@ def wm_box(plat, brand="ngang-mot-ti"):
     return (g["x"], g["y"], g["x"] + g["w"], g["y"] + g["h"])
 
 
+def require_music_unique(meta=None):
+    """Owner 19/11/2026 (thay rule 13/11): ĐƯỢC dùng lại nhạc nền có sẵn nếu hợp tập; chỉ tìm/tải nhạc mới khi kho không
+    có bản phù hợp (vẫn xin Owner từng file). --mux chỉ báo bản nhạc đã dùng ở tập nào, không chặn.
+    Muốn bắt buộc nhạc riêng cho một tập: META["music_unique"] = True."""
+    sys.path.insert(0, ENGINE)
+    import qa_checks as QA
+    hits = QA.music_reuse(OUT)
+    for h in hits:
+        print("  NHẠC DÙNG LẠI: %s (%s…) đã dùng ở %s" % (h["title"], h["sha"][:10], ", ".join(h["episodes"])))
+    if hits and (meta or {}).get("music_unique"):
+        raise SystemExit("CHẶN --mux: tập này đặt META['music_unique'] nhưng nhạc nền đã dùng ở tập khác.")
+
+
 def require_subs_ok(plat=None):
     """Chặn ghép/xuất khi phụ đề đè nhân vật. Ghi báo cáo render/qa_subtitles_<bản>.json."""
     rep = check_subs(plat=plat)
@@ -888,6 +920,20 @@ def stills(picks, thumb=None, title=None):
 
 def mux():
     lst = os.path.join(HERE, "concat.txt")
+    # Bài học EP23 (13/11/2026): render một cảnh lỗi nhưng segment cũ vẫn còn → --mux ghép bản cũ (67 s) với tiếng mới (71 s)
+    # mà không báo. Chặn khi độ dài segment lệch thời lượng cảnh > 0,1 s.
+    bad = []
+    for s in SCENES:
+        seg = os.path.join(HERE, "segments", "%s.mp4" % s[0])
+        if not os.path.exists(seg):
+            bad.append("%s: thiếu" % s[0])
+            continue
+        d = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", seg],
+                                 capture_output=True, text=True).stdout.strip() or 0)
+        if abs(d - s[1]) > 0.1:
+            bad.append("%s: %.2f s ≠ %.2f s" % (s[0], d, s[1]))
+    if bad:
+        raise SystemExit("CHẶN --mux: segment không khớp thời lượng cảnh (render lại): " + "; ".join(bad))
     with open(lst, "w") as fh:
         for s in SCENES:
             fh.write("file 'segments/%s.mp4'\n" % s[0])
@@ -900,6 +946,26 @@ def mux():
                           "-of", "compact", os.path.join(OUT, "final_video.mp4")], capture_output=True, text=True).stdout)
 
 
+def _creative_brief_md(meta):
+    """Agent V2.0 mục III + VIII-A: bảng 3 concept và creative brief (chỉ khi META có)."""
+    out = []
+    ide = meta.get("ideation") or {}
+    if ide.get("concepts"):
+        out += ["## Chọn concept (Agent V2.0)", "", "| Concept | Loại | Điểm /100 | Logline | Hook | Twist |", "|---|---|---|---|---|---|"]
+        for c in ide["concepts"]:
+            out.append("| %s | %s | %s | %s | %s | %s |" % (c.get("name", ""), c.get("type", ""), c.get("score", ""),
+                       c.get("logline", ""), c.get("hook", ""), c.get("twist", "")))
+        out += ["", "**Chọn:** %s — %s" % (ide.get("chosen", ""), ide.get("reason", "")), ""]
+    rows = [("Thời lượng", meta.get("duration_s")), ("Phong cách", ", ".join(map(str, meta.get("visual_styles", [])))),
+            ("Cơ chế hài chính", (meta.get("comedy") or {}).get("main")),
+            ("Cơ chế bổ trợ", ", ".join((meta.get("comedy") or {}).get("support", []))),
+            ("Gieo twist", meta.get("twist_seed")), ("Khán giả", meta.get("audience"))]
+    rows = [(k, v) for k, v in rows if v]
+    if rows:
+        out += ["## Creative brief", ""] + ["- **%s:** %s" % (k, v) for k, v in rows] + [""]
+    return out
+
+
 def write_script(meta=None):
     """Bước 1: kịch bản để Owner đọc (script.md) + lines.json cho TTS."""
     meta = meta or {}
@@ -907,6 +973,7 @@ def write_script(meta=None):
     out = ["# Kịch bản — %s" % meta.get("title", os.path.basename(OUT)), ""]
     if meta.get("logline"):
         out += ["**Ý tưởng:** " + meta["logline"], ""]
+    out += _creative_brief_md(meta)
     out += ["Định dạng: 9:16 · 1080×1920 · 60 fps · khoảng %.0f giây · phụ đề không ghi tên nhân vật" % TOTAL, ""]
     notes = meta.get("notes", {})
     for sid, dur, title, tr, td in SCENES:
@@ -949,7 +1016,7 @@ def _arg(argv, flag, default=""):
     return argv[argv.index(flag) + 1] if flag in argv and argv.index(flag) + 1 < len(argv) else default
 
 
-def main(picks, thumb=None, title=None, sfx=None, music=None, argv=None, meta=None):
+def _main_impl(picks, thumb=None, title=None, sfx=None, music=None, argv=None, meta=None):
     """Quy trình chuẩn (gates.py): --script -> duyệt kịch bản -> --tts, --storyboard -> duyệt hình -> render -> --audio -> --mux -> duyệt video."""
     sys.path.insert(0, ENGINE)
     import gates as G
@@ -976,7 +1043,10 @@ def main(picks, thumb=None, title=None, sfx=None, music=None, argv=None, meta=No
     if "--script" in argv:
         p = write_script(meta)
         G.submit(OUT, "script", ep_py, "awaiting_script_approval")
-        print("Bước 1 xong. Kịch bản: %s\nCHỜ Owner duyệt kịch bản." % p)
+        if _script_gate_mode(meta, argv) == "owner":
+            print("Bước 1 xong. Kịch bản: %s\nCHỜ Owner duyệt kịch bản." % p)
+        else:
+            print("Bước 1 xong. Kịch bản: %s\nTiếp: --script-review (quy trình v2: ≥ 9/10 + hội đồng người xem; tối đa 3 lần, sau đó Owner duyệt)." % p)
         return
     G.require(OUT, "script", ep_py, "tạo giọng / hình mẫu")
     if "--tts" in argv:
@@ -985,6 +1055,7 @@ def main(picks, thumb=None, title=None, sfx=None, music=None, argv=None, meta=No
     load_voice()
     CUES[:] = cues()
     if "--storyboard" in argv or "--stills" in argv:
+        require_art_ok()
         stills(picks, thumb, title)
         G.submit(OUT, "visual", ep_py, "awaiting_visual_approval")
         print("Bước 2 xong. Hình mẫu: %s\nCHỜ Owner duyệt hình ảnh." % os.path.join(OUT, "contact_sheet.png"))
@@ -1011,6 +1082,8 @@ def main(picks, thumb=None, title=None, sfx=None, music=None, argv=None, meta=No
         return
     if "--mux" in argv:
         require_subs_ok(None)
+        require_timing_ok()
+        require_music_unique(meta)
         mux()
         G.submit(OUT, "final", ep_py, "awaiting_final_approval")
         print("Bước 3 xong. CHỜ Owner duyệt video cuối.")
@@ -1052,6 +1125,236 @@ def main(picks, thumb=None, title=None, sfx=None, music=None, argv=None, meta=No
     for k, v in USED.items():
         prev[k] = sorted(set(prev.get(k, [])) | v)
     json.dump(prev, open(up, "w"), indent=1)
+
+# ================= Quality Gate mới + đo đạc (Giai đoạn A, 12/11/2026) =================
+def _episode_module():
+    return sys.modules.get("__main__")
+
+
+def art_dir_default():
+    """ART_DIR của tập nếu khai báo; không thì art/v<mới nhất> có PNG."""
+    m = _episode_module()
+    d = getattr(m, "ART_DIR", None)
+    if d:
+        return str(d)
+    root = os.path.join(OUT, "art")
+    if not os.path.isdir(root):
+        return None
+    vs = sorted(x for x in os.listdir(root) if x.startswith("v") and os.path.isdir(os.path.join(root, x)))
+    vs = [v for v in vs if any(f.lower().endswith(".png") for f in os.listdir(os.path.join(root, v)))]
+    return os.path.join(root, vs[-1]) if vs else None
+
+
+def run_check_art(art_dir=None):
+    import qa_checks as Q
+    d = art_dir or art_dir_default()
+    if not d:
+        raise SystemExit("Không tìm thấy thư mục tranh (đặt ART_DIR trong tập hoặc art/v01/*.png).")
+    return Q.check_art(d, report_path=os.path.join(HERE, "qa_art.json"))
+
+
+def run_check_timing():
+    """Chuyển cảnh + tiếng/hình. Ghi qa_transitions.json, qa_sync.json."""
+    import qa_checks as Q
+    tr = Q.check_transitions(SCENES)
+    if VOICE and not VDUR:
+        load_voice()
+    sy = Q.check_sync(SCENES, VOICE, STARTS, VDUR, voice_onset)
+    os.makedirs(HERE, exist_ok=True)
+    for name, rep in (("qa_transitions.json", tr), ("qa_sync.json", sy)):
+        with open(os.path.join(HERE, name), "w", encoding="utf-8") as fh:
+            json.dump(rep, fh, ensure_ascii=False, indent=1)
+    return tr, sy
+
+
+def require_art_ok():
+    """Tập khai báo ART_CHECK = True: chặn --storyboard khi tranh chưa qua check_art."""
+    if not getattr(_episode_module(), "ART_CHECK", False):
+        return
+    rep = run_check_art()
+    if not rep["pass"]:
+        bad = [i for i in rep["items"] if not i["pass"]]
+        raise SystemExit("CHẶN: %d/%d tranh chưa đạt --check-art (vd. %s: %s). Báo cáo: render/qa_art.json"
+                         % (len(bad), rep["images"], bad[0]["name"], bad[0]["errors"][0]))
+
+
+def require_timing_ok():
+    tr, sy = run_check_timing()
+    errs = tr["errors"] + sy["errors"]
+    if errs:
+        raise SystemExit("CHẶN (chuyển cảnh / tiếng-hình): " + " | ".join(errs[:4]))
+
+
+def _script_gate_mode(meta, argv):
+    if "--manual-script-gate" in argv or (meta or {}).get("script_gate") == "owner":
+        return "owner"
+    return "auto"
+
+
+def run_script_review(argv, meta):
+    """D-029: chấm kịch bản tự động. Dạng:
+      --script-review                       chấm bằng Codex (lần thử kế tiếp)
+      --script-review prompt                ghi prompt giám khảo cho subagent Claude (khi Codex không dùng được)
+      --script-review record <file.json> [--judge claude-subagent]   ghi kết quả giám khảo ngoài
+      --script-review viewer-prompt         (quy trình v2) ghi prompt hội đồng người xem cho subagent Claude mới
+      --script-review viewer <file.json> [--judge claude-subagent]   ghi kết quả hội đồng người xem cho bản hiện tại
+      --script-review status                xem trạng thái
+      --script-review reset                 (Owner yêu cầu) lưu trạng thái cũ, bắt đầu vòng mới"""
+    sys.path.insert(0, ENGINE)
+    import gates as G
+    import metrics as MX
+    import script_review as SR
+    meta = meta or {}
+    ep_py = os.path.abspath(sys.argv[0])
+    sub = _arg(argv, "--script-review")
+    sub = sub if sub and not sub.startswith("--") else "run"
+    files = G.gated_files(OUT, "script", ep_py)
+    st = SR.load_state(OUT)
+    if sub == "status":
+        print(SR.summary_text(st))
+        return
+    if sub == "reset":
+        p = os.path.join(HERE, "script_review.json")
+        if os.path.exists(p):
+            os.replace(p, os.path.join(HERE, "script_review_%s.json" % time.strftime("%Y%m%d_%H%M%S")))
+        print("Đã lưu trạng thái cũ, bắt đầu vòng chấm mới.")
+        return
+    if _script_gate_mode(meta, argv) == "owner":
+        raise SystemExit("Cổng kịch bản đang ở chế độ Owner duyệt (META script_gate='owner' hoặc --manual-script-gate).")
+    if sub == "prompt":
+        print("Prompt giám khảo cho subagent Claude (không đưa lịch sử hội thoại): " + SR.judge_prompt_for_subagent(OUT, files, meta))
+        return
+    if sub == "viewer-prompt":
+        print("Prompt hội đồng người xem cho subagent Claude MỚI: " + SR.viewer_prompt_for_subagent(OUT, files))
+        return
+    if sub == "viewer":
+        src = argv[argv.index("viewer") + 1] if argv.index("viewer") + 1 < len(argv) else ""
+        if not src or not os.path.exists(src):
+            raise SystemExit("Cần file JSON kết quả hội đồng người xem: --script-review viewer <file.json>")
+        import codex_client as C
+        res = SR.record_viewer(OUT, files, C.extract_json(open(src, encoding="utf-8").read()),
+                               judge=_arg(argv, "--judge", "claude-subagent"))
+        print("Hội đồng người xem: %d/24 — %s" % (res["score"], "ĐẠT" if res["pass"] else "CHƯA ĐẠT"))
+        for f in res["fixes"]:
+            print("     • " + f)
+        return
+    if st.get("status") == "passed" and os.path.exists(files[0]) and SR.sha_files(files) != st["attempts"][-1]["sha256"]:
+        os.replace(os.path.join(HERE, "script_review.json"),
+                   os.path.join(HERE, "script_review_%s.json" % time.strftime("%Y%m%d_%H%M%S")))
+        print("Kịch bản đổi sau lần đạt trước: bắt đầu vòng chấm mới.")
+    external = None
+    if sub == "record":
+        src = argv[argv.index("record") + 1] if "record" in argv and argv.index("record") + 1 < len(argv) else ""
+        if not src or not os.path.exists(src):
+            raise SystemExit("Cần file JSON kết quả giám khảo: --script-review record <file.json>")
+        import codex_client as C
+        raw = open(src, encoding="utf-8").read()
+        external = {"judge": _arg(argv, "--judge", "claude-subagent"), "raw": raw, "obj": C.extract_json(raw),
+                    "thread_id": None}
+    t0 = time.time()
+    try:
+        st, rec = SR.attempt(OUT, files, meta, VOICE, SCENES, STARTS, external=external)
+    except Exception as exc:
+        import codex_client as C
+        if isinstance(exc, C.CodexUnavailable):
+            p = SR.judge_prompt_for_subagent(OUT, files, meta)
+            MX.record(OUT, "script-review", time.time() - t0, status="judge_unavailable")
+            raise SystemExit("Codex không chấm được (%s). Không tính lần thử. Dự phòng: subagent Claude mới chấm theo %s, "
+                             "rồi --script-review record <file.json> --judge claude-subagent." % (exc, p))
+        raise
+    MX.record(OUT, "script-review", time.time() - t0, status="passed" if rec["passed"] else "failed",
+              attempt=rec["n"], total=rec.get("total"), judge=rec.get("judge"))
+    print(SR.summary_text(st))
+    if st["status"] == "passed":
+        rule = "rule Owner >9,0/10" if rec.get("gate_rule") == "owner_above_9" else "D-029"
+        by = "auto-review (%s, %.1f/10, lần %d)" % (rec["judge"], rec["total"], rec["n"])
+        wf = G.auto_approve(OUT, "script", ep_py, rec["sha256"], by, note="%s; render/script_review.json" % rule)
+        print("ĐẠT: cổng kịch bản tự duyệt -> %s. Hiển thị đầy đủ kịch bản cho Owner xem (không chờ)." % wf["state"])
+    elif st["status"] == "needs_owner":
+        print("⛔ CHUYỂN OWNER DUYỆT KỊCH BẢN: %s. Gửi bản lần %s kèm điểm và góp ý." % (st.get("reason"), st.get("best_attempt", rec["n"])))
+    else:
+        print("CHƯA ĐẠT (lần %d/%d): sửa theo góp ý, chạy --script rồi --script-review." % (rec["n"], SR.MAX_ATTEMPTS))
+
+
+def run_art_auto(argv):
+    """D-029: --art-auto [CẢNH …] [--fix "lỗi"] [--prompts art/PROMPTS_v01.md]. Cần kịch bản đã duyệt."""
+    sys.path.insert(0, ENGINE)
+    import art_auto as AA
+    import gates as G
+    import metrics as MX
+    ep_py = os.path.abspath(sys.argv[0])
+    G.require(OUT, "script", ep_py, "tạo tranh tự động")
+    m = _episode_module()
+    art_dir = art_dir_default() if getattr(m, "ART_DIR", None) else os.path.join(OUT, "art", "v01")
+    rev = os.path.basename(str(art_dir).rstrip("/"))
+    prompts = _arg(argv, "--prompts") or os.path.join(OUT, "art", "PROMPTS_%s.md" % rev)
+    refs = [str(p) for p in getattr(m, "ART_REFS", [])] or (
+        [os.path.join(OUT, "refs", f) for f in sorted(os.listdir(os.path.join(OUT, "refs")))]
+        if os.path.isdir(os.path.join(OUT, "refs")) else [])
+    skip = {"--art-auto", "--fix", "--prompts", _arg(argv, "--fix"), _arg(argv, "--prompts")}
+    scenes = [a for a in argv if a not in skip and not a.startswith("--")]
+    t0 = time.time()
+    rep = AA.run(OUT, os.path.basename(OUT), rev, prompts, scenes=scenes or None, refs=refs, fix_note=_arg(argv, "--fix"))
+    MX.record(OUT, "art-auto", time.time() - t0, status="stopped" if rep["stopped"] else "ok",
+              scenes=len(rep["scenes"]))
+    for sid, r in rep["scenes"].items():
+        print("%-6s %-16s lần %s  %s" % (sid, r.get("status"), r.get("attempt", "-"),
+                                        "; ".join(r.get("machine_errors") or []) or r.get("reason", "")))
+    used, cap = AA.budget(OUT, len(AA.parse_prompts(prompts)))
+    print("Lượt image_gen đã dùng: %d/%d" % (used, cap))
+    if rep["stopped"]:
+        raise SystemExit("DỪNG: " + rep["stopped"] + ". Báo Owner: chờ có lượt lại hoặc tạo trên ChatGPT web (Owner tự đăng nhập).")
+    print("Tiếp: --check-art, xem art/%s/_qa/*_overlay.jpg, ghi safe_annotations.json; cảnh lỗi bố cục: --art-auto CẢNH --fix \"…\"." % rev)
+
+
+def _step_name(argv):
+    for f in ("--script", "--tts", "--storyboard", "--stills", "--audio", "--check-subs", "--mux", "--export-finish",
+              "--export", "--approve", "--reject", "--status", "--library-sync"):
+        if f in argv:
+            return f.lstrip("-")
+    return "render"
+
+
+def main(picks, thumb=None, title=None, sfx=None, music=None, argv=None, meta=None):
+    """Bọc quy trình chuẩn: thêm --check-art/--check-transitions/--check-sync/--metrics và ghi thời gian mỗi bước."""
+    sys.path.insert(0, ENGINE)
+    import metrics as MX
+    argv = sys.argv[1:] if argv is None else argv
+    if "--metrics" in argv:
+        print(json.dumps(MX.summary(OUT), ensure_ascii=False, indent=1))
+        return
+    if "--check-art" in argv:
+        d = _arg(argv, "--check-art")
+        rep = run_check_art(d if d and not d.startswith("--") else None)
+        for it in rep["items"]:
+            print("%-4s %-12s phủ %.1f%%  %s" % ("OK" if it["pass"] else "LỖI", it["name"], 100 * it["coverage"],
+                                               "; ".join(it["errors"] + it["warnings"])))
+        for dp in rep["possible_duplicates"]:
+            print("  NGHI TRÙNG: %s ~ %s (sai khác %.1f)" % (dp["a"], dp["b"], dp["mean_diff"]))
+        print(json.dumps({"pass": rep["pass"], "images": rep["images"], "overlays": rep["qa_dir"]}, ensure_ascii=False))
+        return
+    if "--script-review" in argv:
+        return run_script_review(argv, meta)
+    if "--art-auto" in argv:
+        return run_art_auto(argv)
+    if "--check-transitions" in argv or "--check-sync" in argv:
+        tr, sy = run_check_timing()
+        print(json.dumps({"transitions": tr, "sync": {k: sy[k] for k in ("total_s", "errors", "warnings", "pass")}},
+                         ensure_ascii=False, indent=1))
+        return
+    step, t0, status = _step_name(argv), time.time(), "ok"
+    try:
+        return _main_impl(picks, thumb=thumb, title=title, sfx=sfx, music=music, argv=argv, meta=meta)
+    except SystemExit as e:
+        status = "blocked" if e.code not in (None, 0) else "ok"
+        raise
+    except Exception:
+        status = "error"
+        raise
+    finally:
+        if step not in ("status",):
+            MX.record(OUT, step, time.time() - t0, status=status)
+
 
 # ================= bổ sung cho các tập 3–5 =================
 RED = (232, 96, 96)

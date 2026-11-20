@@ -33,6 +33,7 @@ Không sao chép nhân vật, kịch bản hay âm thanh có bản quyền.
 
 Phong cách: hài, đáng yêu, đôi khi hơi "vô tri" nhưng cuốn. Video thoại khoảng 25–35 giây; video theo nhạc dùng đoạn được Owner chọn. 1080×1920, 60 fps.
 Phụ đề không ghi tên nhân vật. Góc máy đa dạng, chuyển động mượt và sống.
+Outro mặc định (Owner 18/11/2026): scene_kit.subscribe_outro + subscribe_sfx, 7,8 giây, avatar kênh và thanh Like–Đăng ký–Chuông xuất hiện, con trỏ bấm, thu lại và biến mất. Không dùng outro icon/chân mèo. Cảnh tên Outro, vào bằng cut; kiểm tra đủ hiệu ứng vào/ra trên MP4.
 
 Làm tuần tự, dừng chờ tôi duyệt ở từng bước. Trình bày nội dung ngay trong chat rồi hỏi duyệt, không bắt tôi mở file:
 1. Tạo tập: nmt_engine.py new "<CHỦ ĐỀ>"
@@ -45,7 +46,7 @@ Làm tuần tự, dừng chờ tôi duyệt ở từng bước. Trình bày nộ
    gửi video → CHỜ TÔI DUYỆT.
 5. Sau khi tôi duyệt video cuối: viết post.json (caption và hashtag cho từng nền tảng),
    --export cho tiktok, youtube_shorts, facebook_reels, rồi --export-finish,
-   vào videos-post/<slug chủ đề>/<nền tảng>/. Báo đường dẫn.
+   vào videos-post/unpost/<slug chủ đề>/<nền tảng>/ (đăng xong chuyển sang videos-post/posted/). Báo đường dẫn.
 
 Ghi quyết định duyệt bằng --approve … --by "owner (chat)".
 Chỉ dùng tool, plugin, model, mã GitHub miễn phí 100% (ưu tiên chạy cục bộ). Không tự đăng lên mạng, không commit hay push, không ghi DECISIONS.md khi chưa được duyệt.

@@ -4,7 +4,7 @@ Mỗi nền tảng được dựng lại từ cùng cảnh/âm thanh đã duyệ
 - vị trí và bề rộng phụ đề để không bị giao diện ứng dụng che (vùng an toàn, ước lượng theo hướng dẫn công khai của nền tảng);
 - âm lượng chuẩn hoá -14 LUFS (mức các nền tảng ngắn tự chuẩn hoá);
 - ảnh bìa, caption + hashtag riêng.
-Kết quả: <gốc dự án>/videos-post/<topic>/<nền tảng>/  (KHÔNG tự đăng lên đâu)."""
+Kết quả: <gốc dự án>/videos-post/unpost/<topic>/<nền tảng>/  (KHÔNG tự đăng lên đâu; đăng xong chuyển sang videos-post/posted/)."""
 import hashlib
 import json
 import os
@@ -55,7 +55,7 @@ def seg_dir(E, plat):
 def topic_dir(E, meta, post):
     root = os.path.dirname(os.path.dirname(E.OUT))           # <gốc dự án>
     name = post.get("topic_slug") or slug(meta.get("title", os.path.basename(E.OUT)))
-    return os.path.join(root, "videos-post", name)
+    return os.path.join(root, "videos-post", "unpost", name)
 
 
 def _sha(p):

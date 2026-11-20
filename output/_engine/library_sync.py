@@ -141,11 +141,46 @@ def _scenes_meta(out_dir):
     art_dir = os.path.join(out_dir, "art", m.group(1) if m else "v01")
     names = sorted(set(re.findall(r"\bart\(\s*'([\w.-]+)'\s*\)", src)))
     meta = {}
-    m2 = re.search(r"^LIBRARY_ART\s*=\s*(\{.*?^\})", src, re.S | re.M)
-    if m2:
-        import ast
-        meta = ast.literal_eval(m2.group(1))
+    # Bài học EP27: tìm phép gán bằng ast (không phụ thuộc '}' đứng đầu dòng như regex cũ)
+    import ast
+    expr = None
+    for one in srcs:
+        try:
+            tree = ast.parse(one)
+        except SyntaxError:
+            continue
+        for node in tree.body:
+            if isinstance(node, ast.Assign) and any(getattr(t, "id", None) == "LIBRARY_ART" for t in node.targets):
+                expr = ast.get_source_segment(one, node.value)
+    if expr is None:
+        m2 = re.search(r"^LIBRARY_ART\s*=\s*(\{.*?^\})", src, re.S | re.M)
+        expr = m2.group(1) if m2 else None
+    if expr:
+        meta = _literal_with_consts(expr, src)
+    # tranh gọi qua biến (vd. ô montage EP20: art(name)) không khớp regex → lấy thêm theo khai báo LIBRARY_ART
+    names = sorted(set(names) | {k for k in meta if os.path.exists(os.path.join(art_dir, k + ".png"))})
     return art_dir, names, meta
+
+
+def _literal_with_consts(expr, src):
+    """literal_eval cho LIBRARY_ART, cho phép tên hằng khai báo ở đầu file (vd. _G = '...'; bài học EP20)."""
+    import ast
+    consts = {}
+    for chunk in src.split("\n"):
+        m = re.match(r"^([A-Za-z_]\w*)\s*=\s*(['\"].*['\"])\s*$", chunk)
+        if m:
+            try:
+                consts[m.group(1)] = ast.literal_eval(m.group(2))
+            except (ValueError, SyntaxError):
+                pass
+    tree = ast.parse(expr.strip(), mode="eval")
+
+    class _Sub(ast.NodeTransformer):
+        def visit_Name(self, node):
+            if node.id in consts:
+                return ast.copy_location(ast.Constant(consts[node.id]), node)
+            raise ValueError("LIBRARY_ART dùng tên '%s' không phải hằng chuỗi ở đầu file" % node.id)
+    return ast.literal_eval(ast.fix_missing_locations(_Sub().visit(tree)))
 
 
 def _contact_sheet(paths, dst):

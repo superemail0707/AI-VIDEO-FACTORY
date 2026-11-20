@@ -210,9 +210,9 @@ def build(E, SFX, MUSIC):
         fx[s0:s0 + len(y)] += y[: len(fx) - s0]
         ev.append({"type": "sfx", "kind": kind, "start": round(S[sid] + lt, 3), "duration": d, "file": "audio/sfx/" + name, "source": "tổng hợp numpy"})
     gen = {"epic": epic, "cute": cute, "tense": tense}
-    for style, a, b, g in MUSIC:
+    for style, a, b, g, *opt in MUSIC:     # opt[0] (tuỳ chọn): fade-out giây — quy trình v2: outro tắt dần 1,5 s
         m = gen[style](b - a)
-        fi, fo = min(len(m) // 3, int(0.5 * SR)), min(len(m) // 3, int(0.6 * SR))
+        fi, fo = min(len(m) // 3, int(0.5 * SR)), min(len(m) // 2, int((opt[0] if opt else 0.6) * SR))
         m[:fi] *= np.linspace(0, 1, fi)
         m[-fo:] *= np.linspace(1, 0, fo)
         s0 = int(a * SR)

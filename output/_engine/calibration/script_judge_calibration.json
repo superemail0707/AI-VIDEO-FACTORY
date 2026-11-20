@@ -1,0 +1,107 @@
+{
+ "judges": {},
+ "history": [
+  {
+   "at": "2026-11-12T19:44:05",
+   "judge": "codex",
+   "prompt_version": "806af3066e49a5a7",
+   "threshold": 8.0,
+   "samples": 15,
+   "accuracy": 0.0,
+   "pass": false,
+   "rows": [
+    {
+     "name": "ep11_approved",
+     "expected": "good",
+     "error": "{\"id\": \"01a1cfc8-bf6c-7422-8b3c-a91f24651ee0\", \"rootTurnId\": \"01a1cfc8-bf6c-7422-8b3c-a91f24651ee0\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487402, \"completedAt\": 1794487405, \"durationMs\": 3354}",
+     "correct": false
+    },
+    {
+     "name": "ep12_approved",
+     "expected": "good",
+     "error": "{\"id\": \"01a1cfc8-cd75-7c31-ae94-14c096676935\", \"rootTurnId\": \"01a1cfc8-cd75-7c31-ae94-14c096676935\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487405, \"completedAt\": 1794487408, \"durationMs\": 2520}",
+     "correct": false
+    },
+    {
+     "name": "ep13_approved",
+     "expected": "good",
+     "error": "{\"id\": \"01a1cfc8-d7fe-7552-a950-0f873c39f3d4\", \"rootTurnId\": \"01a1cfc8-d7fe-7552-a950-0f873c39f3d4\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487408, \"completedAt\": 1794487411, \"durationMs\": 2538}",
+     "correct": false
+    },
+    {
+     "name": "ep14_approved",
+     "expected": "good",
+     "error": "{\"id\": \"01a1cfc8-e276-7f32-97c8-92d99c64cc98\", \"rootTurnId\": \"01a1cfc8-e276-7f32-97c8-92d99c64cc98\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487411, \"completedAt\": 1794487414, \"durationMs\": 3507}",
+     "correct": false
+    },
+    {
+     "name": "ep15_approved",
+     "expected": "good",
+     "error": "{\"id\": \"01a1cfc8-f0f2-7951-9e03-9983a1ab0c4b\", \"rootTurnId\": \"01a1cfc8-f0f2-7951-9e03-9983a1ab0c4b\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487415, \"completedAt\": 1794487417, \"durationMs\": 2652}",
+     "correct": false
+    },
+    {
+     "name": "ep16_approved",
+     "expected": "good",
+     "error": "{\"id\": \"01a1cfc8-fbd9-72c2-9fcd-fc08bc3ab8ed\", \"rootTurnId\": \"01a1cfc8-fbd9-72c2-9fcd-fc08bc3ab8ed\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487417, \"completedAt\": 1794487420, \"durationMs\": 2584}",
+     "correct": false
+    },
+    {
+     "name": "ep17_approved",
+     "expected": "good",
+     "error": "{\"id\": \"01a1cfc9-06b8-7871-9c74-a054a379479e\", \"rootTurnId\": \"01a1cfc9-06b8-7871-9c74-a054a379479e\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487420, \"completedAt\": 1794487423, \"durationMs\": 2589}",
+     "correct": false
+    },
+    {
+     "name": "ep18_approved",
+     "expected": "good",
+     "error": "{\"id\": \"01a1cfc9-114a-7012-bee5-ad1d0269ea13\", \"rootTurnId\": \"01a1cfc9-114a-7012-bee5-ad1d0269ea13\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487423, \"completedAt\": 1794487425, \"durationMs\": 2592}",
+     "correct": false
+    },
+    {
+     "name": "ep19_approved",
+     "expected": "good",
+     "error": "{\"id\": \"01a1cfc9-1c3e-7c91-b9fd-21334e3ced97\", \"rootTurnId\": \"01a1cfc9-1c3e-7c91-b9fd-21334e3ced97\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487426, \"completedAt\": 1794487429, \"durationMs\": 2927}",
+     "correct": false
+    },
+    {
+     "name": "ep19_v1_reconstructed",
+     "expected": "bad",
+     "error": "{\"id\": \"01a1cfc9-2863-7b82-abad-78cafa59c961\", \"rootTurnId\": \"01a1cfc9-2863-7b82-abad-78cafa59c961\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487429, \"completedAt\": 1794487431, \"durationMs\": 2411}",
+     "correct": false
+    },
+    {
+     "name": "ep14_v02_weak_open",
+     "expected": "bad",
+     "error": "{\"id\": \"01a1cfc9-3286-7713-8d20-99dda156e575\", \"rootTurnId\": \"01a1cfc9-3286-7713-8d20-99dda156e575\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487431, \"completedAt\": 1794487434, \"durationMs\": 2604}",
+     "correct": false
+    },
+    {
+     "name": "ep12_no_twist",
+     "expected": "bad",
+     "error": "{\"id\": \"01a1cfc9-3d4f-7dc2-9f52-b8d7015344a5\", \"rootTurnId\": \"01a1cfc9-3d4f-7dc2-9f52-b8d7015344a5\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487434, \"completedAt\": 1794487436, \"durationMs\": 2397}",
+     "correct": false
+    },
+    {
+     "name": "ep16_shuffled",
+     "expected": "bad",
+     "error": "{\"id\": \"01a1cfc9-4767-72c1-8ae5-20efb6a94df3\", \"rootTurnId\": \"01a1cfc9-4767-72c1-8ae5-20efb6a94df3\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487437, \"completedAt\": 1794487440, \"durationMs\": 2840}",
+     "correct": false
+    },
+    {
+     "name": "ep17_wordy_explained",
+     "expected": "bad",
+     "error": "{\"id\": \"01a1cfc9-5310-7c00-94f3-9e7e40418db1\", \"rootTurnId\": \"01a1cfc9-5310-7c00-94f3-9e7e40418db1\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487440, \"completedAt\": 1794487442, \"durationMs\": 2207}",
+     "correct": false
+    },
+    {
+     "name": "ep13_offbrief",
+     "expected": "bad",
+     "error": "{\"id\": \"01a1cfc9-5c70-78c2-967b-fb3bebedc150\", \"rootTurnId\": \"01a1cfc9-5c70-78c2-967b-fb3bebedc150\", \"items\": [], \"itemsView\": \"notLoaded\", \"status\": \"failed\", \"error\": {\"message\": \"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 16th, 2026 2:47 PM.\", \"codexErrorInfo\": \"usageLimitExceeded\", \"additionalDetails\": null, \"misalignment\": null}, \"startedAt\": 1794487442, \"completedAt\": 1794487445, \"durationMs\": 2601}",
+     "correct": false
+    }
+   ],
+   "aborted": "codex usageLimitExceeded — không lượt nào được chấm; không phải kết quả hiệu chỉnh"
+  }
+ ]
+}

@@ -83,6 +83,17 @@ def submit(ep, stage, episode_py, next_state):
     log(ep, wf, "submitted", stage=stage, sha256=_sha(gated_files(ep, stage, episode_py)))
 
 
+def auto_approve(ep, stage, episode_py, reviewed_sha, by, note=""):
+    """D-029: tự duyệt kịch bản khi giám khảo độc lập đạt ngưỡng. Chỉ cho 'script'; SHA file hiện tại phải đúng bản đã chấm."""
+    if stage != "script":
+        raise GateBlocked("CHẶN: chỉ cổng kịch bản được tự duyệt (D-029); hình và video cuối do Owner duyệt.")
+    if not str(by).startswith("auto-review"):
+        raise GateBlocked("CHẶN: tự duyệt phải ghi by='auto-review …'.")
+    if _sha(gated_files(ep, stage, episode_py)) != reviewed_sha:
+        raise GateBlocked("CHẶN: kịch bản đã đổi sau khi chấm; phải chấm lại.")
+    return decide(ep, stage, episode_py, "approved", note=note, by=by)
+
+
 def decide(ep, stage, episode_py, decision, note="", by="owner"):
     wf = load(ep)
     if stage != ORDER[0]:
